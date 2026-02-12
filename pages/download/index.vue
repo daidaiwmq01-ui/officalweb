@@ -1,8 +1,8 @@
 <template>
   <div class="bg-white min-h-screen font-['Noto_Sans_SC']">
     
-    <!-- 🏛️ Hero Section (400px Height) -->
-    <section class="relative h-[400px] overflow-hidden">
+    <!-- 🏛️ Hero Section：移动端自适应高度 -->
+    <section class="relative min-h-[320px] h-[50vh] sm:h-[400px] overflow-hidden">
       <!-- Background Image & Overlay -->
       <div class="absolute inset-0">
         <ImageWithFallback 
@@ -15,33 +15,19 @@
 
       <div class="container mx-auto max-w-[1200px] px-4 lg:px-0 relative z-10 h-full flex flex-col">
         <!-- Breadcrumb - Top Left Fixed -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-          <NuxtLink 
-            to="/"
-            class="hover:text-white transition-colors cursor-pointer"
-          >
-            首页
-          </NuxtLink>
-          <ChevronRight class="w-4 h-4" />
-          <NuxtLink 
-            to="/download"
-            class="hover:text-white transition-colors cursor-pointer text-white/60"
-          >
-            APP下载
-          </NuxtLink>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white font-medium">车拖车客户端</span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
-        <!-- Main Content (Center Aligned) -->
-        <div class="flex-grow flex flex-col items-center justify-center text-center">
+        <!-- Main Content (Center Aligned)，预留面包屑高度避免重叠 -->
+        <div class="flex-grow flex flex-col items-center justify-center text-center pt-14">
           <div
             v-motion
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
             class="flex flex-col items-center"
           >
-            <h1 class="text-[40px] font-bold text-white mb-4 leading-tight">
+            <h1 class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white mb-4 leading-[1.6]">
               车拖车数字化终端下载中心
             </h1>
             <p class="text-[18px] text-white/90 tracking-wide mb-10 max-w-[800px]">
@@ -125,18 +111,36 @@
             <div class="flex items-center gap-8 mb-8">
               <div class="flex flex-col items-center gap-2">
                 <div class="bg-white p-2.5 rounded-2xl border border-gray-100 shadow-md">
-                  <img :src="ASSETS.QR_PLACEHOLDER" alt="QR" class="w-[80px] h-[80px]" />
+                  <ImageWithFallback
+                    v-if="customerQr"
+                    :src="customerQr"
+                    alt="客户端下载二维码"
+                    class="w-[80px] h-[80px]"
+                  />
                 </div>
-                <span class="text-[11px] text-gray-400 font-bold">扫码下载</span>
+                <span class="text-[11px] text-gray-400 font-bold">扫码下载客户端</span>
               </div>
               <div class="flex flex-wrap gap-3">
-                <button @click="handleDownload('ios')" class="h-10 px-4 bg-black hover:bg-gray-900 text-white rounded-xl flex items-center gap-2 text-[13px] font-bold transition-transform hover:-translate-y-0.5 shadow-sm border-none cursor-pointer">
+                <button
+                  @click="setCustomerPlatform('ios')"
+                  :class="customerPlatform === 'ios'
+                    ? 'h-10 px-4 bg-black text-white rounded-xl flex items-center gap-2 text-[13px] font-bold shadow-sm border-none cursor-pointer'
+                    : 'h-10 px-4 bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer'"
+                >
                   <Apple class="w-4 h-4" /> App Store
                 </button>
-                <button @click="handleDownload('android')" class="h-10 px-4 bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold transition-transform hover:-translate-y-0.5 shadow-sm cursor-pointer">
+                <button
+                  @click="setCustomerPlatform('android')"
+                  :class="customerPlatform === 'android'
+                    ? 'h-10 px-4 bg-[#0B2747] text-white rounded-xl flex items-center gap-2 text-[13px] font-bold shadow-sm border-none cursor-pointer'
+                    : 'h-10 px-4 bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer'"
+                >
                   <Smartphone class="w-4 h-4" /> Android
                 </button>
-                <button @click="handleDownload('harmony')" class="h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold transition-transform hover:-translate-y-0.5 shadow-sm cursor-pointer">
+                <button
+                  @click="setCustomerPlatform('android')"
+                  class="h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer"
+                >
                   <DownloadHarmonyOSLogo /> <span class="ml-1">HarmonyOS</span>
                 </button>
               </div>
@@ -220,18 +224,36 @@
             <div class="flex items-center gap-8 mb-8">
               <div class="flex flex-col items-center gap-2">
                 <div class="bg-white p-2.5 rounded-2xl border border-gray-100 shadow-md">
-                  <img :src="ASSETS.QR_PLACEHOLDER" alt="QR" class="w-[80px] h-[80px]" />
+                  <ImageWithFallback
+                    v-if="driverQr"
+                    :src="driverQr"
+                    alt="司机端下载二维码"
+                    class="w-[80px] h-[80px]"
+                  />
                 </div>
-                <span class="text-[11px] text-gray-400 font-bold">扫码接单</span>
+                <span class="text-[11px] text-gray-400 font-bold">扫码下载司机端</span>
               </div>
               <div class="flex flex-wrap gap-3">
-                <button @click="handleDownload('driver-ios')" class="h-10 px-4 bg-[#0B2747] hover:bg-black text-white rounded-xl flex items-center gap-2 text-[13px] font-bold transition-transform hover:-translate-y-0.5 shadow-sm border-none cursor-pointer">
+                <button
+                  @click="setDriverPlatform('ios')"
+                  :class="driverPlatform === 'ios'
+                    ? 'h-10 px-4 bg-[#0B2747] text-white rounded-xl flex items-center gap-2 text-[13px] font-bold shadow-sm border-none cursor-pointer'
+                    : 'h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer'"
+                >
                   <Apple class="w-4 h-4" /> App Store
                 </button>
-                <button @click="handleDownload('driver-android')" class="h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold transition-transform hover:-translate-y-0.5 shadow-sm cursor-pointer">
+                <button
+                  @click="setDriverPlatform('android')"
+                  :class="driverPlatform === 'android'
+                    ? 'h-10 px-4 bg-[#FF6B00] text-white rounded-xl flex items-center gap-2 text-[13px] font-bold shadow-sm border-none cursor-pointer'
+                    : 'h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer'"
+                >
                   <Smartphone class="w-4 h-4" /> Android
                 </button>
-                <button @click="handleDownload('driver-harmony')" class="h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold transition-transform hover:-translate-y-0.5 shadow-sm cursor-pointer">
+                <button
+                  @click="setDriverPlatform('android')"
+                  class="h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer"
+                >
                   <DownloadHarmonyOSLogo /> <span class="ml-1 text-[13px]">HarmonyOS</span>
                 </button>
               </div>
@@ -262,6 +284,14 @@
 </template>
 
 <script setup lang="ts">
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/download'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/download')
+
 import { 
   MapPin, 
   Zap, 
@@ -273,22 +303,53 @@ import {
   Smartphone, 
   ChevronRight
 } from 'lucide-vue-next'
+import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import { onMounted, ref, computed } from 'vue'
+import { useDownloadInfo } from '@/composables/useDownloadInfo'
 
 const ASSETS = {
-  QR_PLACEHOLDER: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://chetuoche.com/download",
   HERO_BG: "https://images.unsplash.com/photo-1737505599162-d9932323a889?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHRlY2glMjBuZXR3b3JrJTIwbWFwJTIwbG9naXN0aWNzJTIwbm9kZXMlMjBibHVlJTIwc2lsdmVyfGVufDF8fHx8MTc2OTY3NDY1Mnww&ixlib=rb-4.1.0&q=80&w=1080"
 }
 
-const handleDownload = (platform: string) => {
-  const messages: Record<string, string> = {
-    'ios': '即将跳转 App Store',
-    'android': '即将下载 Android APK',
-    'harmony': '即将跳转 HarmonyOS 应用市场',
-    'driver-ios': '即将跳转 App Store（司机端）',
-    'driver-android': '即将下载 Android APK（司机端）',
-    'driver-harmony': '即将跳转 HarmonyOS 应用市场（司机端）'
+const {
+  fetchIfNeeded,
+  customerAndroidQr,
+  customerIosQr,
+  driverAndroidQr,
+  driverIosQr,
+  openCustomerApp,
+  openDriverApp,
+} = useDownloadInfo()
+
+onMounted(() => {
+  fetchIfNeeded()
+})
+
+const customerPlatform = ref<'ios' | 'android'>('android')
+const driverPlatform = ref<'ios' | 'android'>('android')
+
+const customerQr = computed(() =>
+  customerPlatform.value === 'ios' ? customerIosQr.value : customerAndroidQr.value
+)
+const driverQr = computed(() =>
+  driverPlatform.value === 'ios' ? driverIosQr.value : driverAndroidQr.value
+)
+
+const isMobile = () =>
+  typeof navigator !== 'undefined' && /iphone|ipad|ipod|android|mobile/i.test(navigator.userAgent)
+
+const setCustomerPlatform = (platform: 'ios' | 'android') => {
+  customerPlatform.value = platform
+  if (isMobile()) {
+    openCustomerApp(platform)
   }
-  alert(messages[platform] || '即将下载')
+}
+
+const setDriverPlatform = (platform: 'ios' | 'android') => {
+  driverPlatform.value = platform
+  if (isMobile()) {
+    openDriverApp(platform)
+  }
 }
 
 useHead({
@@ -298,6 +359,36 @@ useHead({
       name: 'description',
       content: '车拖车数字化终端下载中心，行业领先的 AI 智能调度平台，连接 167 万用户与 45 万运力伙伴。支持iOS、Android及HarmonyOS系统。'
     }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/download' }
   ]
 })
+
+// Schema.org 结构化数据
+const downloadSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      'name': '车拖车客户端 APP',
+      'operatingSystem': 'Android, iOS, HarmonyOS',
+      'applicationCategory': 'BusinessApplication',
+      'downloadUrl': 'https://www.chetuoche.com/download/client',
+      'featureList': 'AI智能发单, 实时位置追踪, 在线电子合同, 违章处理',
+      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'CNY' }
+    },
+    {
+      '@type': 'SoftwareApplication',
+      'name': '车拖车司机端 APP',
+      'operatingSystem': 'Android, iOS, HarmonyOS',
+      'applicationCategory': 'BusinessApplication',
+      'downloadUrl': 'https://www.chetuoche.com/download/driver',
+      'featureList': '海量货源自动听单, 极速结算, 司机课堂, 运费补贴',
+      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'CNY' }
+    }
+  ]
+}
+
+useSchemaOrg(downloadSchema)
 </script>

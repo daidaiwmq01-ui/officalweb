@@ -50,6 +50,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ArrowRight } from 'lucide-vue-next'
 // Import images from images mapping (Agent B's work)
 import { EXTERNAL_ASSETS } from '@/utils/images'
@@ -59,6 +60,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const router = useRouter()
 
 const supplyChainImage = ref(EXTERNAL_ASSETS.PARTNER_B2B_HANDSHAKE)
 const factoryImage = ref(EXTERNAL_ASSETS.FACTORY_HERO)
@@ -72,10 +74,10 @@ const handleFactoryImageError = () => {
 }
 
 const handleSupplyChainClick = () => {
-  props.setActiveId?.('supply-chain')
+  router.push('/solutions')
 }
 
 const handleTruckSalesClick = () => {
-  props.setActiveId?.('truck-sales')
+  router.push('/truck-sales')
 }
 </script>

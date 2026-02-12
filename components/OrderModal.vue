@@ -1,8 +1,8 @@
 <template>
   <Dialog :model-value="modelValue" @update:model-value="handleClose">
-    <DialogContent class="sm:max-w-[600px] bg-white p-0 overflow-hidden rounded-xl">
-      <DialogHeader class="p-6 pb-2 bg-[#0B2747] text-white">
-        <DialogTitle class="text-2xl font-bold flex items-center gap-2">
+    <DialogContent class="w-[calc(100%-2rem)] max-w-[600px] sm:max-w-[600px] bg-white p-0 overflow-hidden rounded-xl">
+      <DialogHeader class="p-4 sm:p-6 pb-2 bg-[#0B2747] text-white">
+        <DialogTitle class="text-xl sm:text-2xl font-bold flex items-center gap-2">
           <Truck class="w-6 h-6 text-[#FF6B00]" />
           立即获取报价
         </DialogTitle>
@@ -11,19 +11,19 @@
         </DialogDescription>
       </DialogHeader>
       
-      <div class="p-6">
+      <div class="p-4 sm:p-6">
         <Tabs v-model="activeTab" class="w-full">
-          <TabsList class="grid w-full grid-cols-4 mb-6 bg-gray-100 p-1 rounded-lg">
-            <TabsTrigger value="small-carrier" class="data-[state=active]:bg-white data-[state=active]:text-[#006EFF] data-[state=active]:shadow-sm rounded-md py-2 text-sm font-medium transition-all">
+          <TabsList class="grid w-full grid-cols-2 sm:grid-cols-4 mb-6 bg-gray-100 p-1 rounded-lg gap-1">
+            <TabsTrigger value="small-carrier" class="data-[state=active]:bg-white data-[state=active]:text-[#006EFF] data-[state=active]:shadow-sm rounded-md py-2 text-xs sm:text-sm font-medium transition-all">
               小板车
             </TabsTrigger>
-            <TabsTrigger value="big-carrier" class="data-[state=active]:bg-white data-[state=active]:text-[#006EFF] data-[state=active]:shadow-sm rounded-md py-2 text-sm font-medium transition-all">
+            <TabsTrigger value="big-carrier" class="data-[state=active]:bg-white data-[state=active]:text-[#006EFF] data-[state=active]:shadow-sm rounded-md py-2 text-xs sm:text-sm font-medium transition-all">
               大板车
             </TabsTrigger>
-            <TabsTrigger value="rescue" class="data-[state=active]:bg-white data-[state=active]:text-[#FF6B00] data-[state=active]:shadow-sm rounded-md py-2 text-sm font-medium transition-all">
+            <TabsTrigger value="rescue" class="data-[state=active]:bg-white data-[state=active]:text-[#FF6B00] data-[state=active]:shadow-sm rounded-md py-2 text-xs sm:text-sm font-medium transition-all">
               道路救援
             </TabsTrigger>
-            <TabsTrigger value="valet" class="data-[state=active]:bg-white data-[state=active]:text-[#006EFF] data-[state=active]:shadow-sm rounded-md py-2 text-sm font-medium transition-all">
+            <TabsTrigger value="valet" class="data-[state=active]:bg-white data-[state=active]:text-[#006EFF] data-[state=active]:shadow-sm rounded-md py-2 text-xs sm:text-sm font-medium transition-all">
               代驾
             </TabsTrigger>
           </TabsList>
@@ -35,7 +35,7 @@
             :value="tab"
             class="space-y-4"
           >
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2">
                 <Label for="start-city">出发城市</Label>
                 <div class="relative">
@@ -79,8 +79,18 @@
               紧急救援，平均 30 分钟到达现场
             </div>
 
-            <Button class="w-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-lg h-12 mt-4">
-              {{ tab === 'rescue' ? '呼叫救援' : '免费获取报价' }}
+            <NuxtLink
+              v-if="tab !== 'rescue'"
+              to="/pricing#pricing-calculator"
+              class="w-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-lg h-12 mt-4 flex items-center justify-center rounded-md"
+            >
+              免费获取报价
+            </NuxtLink>
+            <Button
+              v-else
+              class="w-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-lg h-12 mt-4"
+            >
+              呼叫救援
             </Button>
             
             <p class="text-center text-xs text-gray-400 mt-2">

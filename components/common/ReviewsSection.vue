@@ -17,7 +17,7 @@
           v-motion
           :initial="{ opacity: 0, y: 20 }"
           :visible-once="{ opacity: 1, y: 0 }"
-          class="text-[36px] font-bold text-[#0B2747]"
+          class="text-2xl sm:text-[36px] font-bold text-[#0B2747]"
         >
           {{ title }}
         </h2>
@@ -119,6 +119,8 @@
 import { computed } from 'vue'
 import { Star, Quote } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import Section from '@/components/common/Section.vue'
+import Container from '@/components/common/Container.vue'
 import type { ReviewItem, ThemeColor } from '@/types'
 
 /**

@@ -14,22 +14,8 @@
 
       <div class="container mx-auto max-w-[1200px] px-4 lg:px-0 relative z-10 h-full flex flex-col justify-center">
         <!-- Breadcrumb - Top Left Fixed -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-          <button
-            @click="navigateToHome"
-            class="hover:text-white bg-transparent border-none cursor-pointer transition-colors"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-4 h-4" />
-          <button
-            @click="navigateToAbout"
-            class="text-white/60 hover:text-white bg-transparent border-none cursor-pointer transition-colors"
-          >
-            关于我们
-          </button>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white font-bold">联系我们</span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <div class="max-w-[800px] pt-16 px-4 lg:px-0">
@@ -37,7 +23,7 @@
             v-motion
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0 }"
-            class="text-[40px] font-bold text-white leading-tight mb-6"
+            class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white leading-[1.6] mb-6"
           >
             期待与您的每一次连接
           </h1>
@@ -68,7 +54,7 @@
     <!-- 🏙️ Main Layout: Contact Matrix & Lead Form -->
     <section class="py-24 bg-white">
       <div class="container mx-auto max-w-[1200px] px-4">
-        <div class="grid grid-cols-12 gap-16">
+        <div class="grid grid-cols-12 gap-8 md:gap-16">
           <!-- Left Column: Business Routing Matrix -->
           <div class="col-span-12 lg:col-span-5 space-y-8">
             <div class="mb-10">
@@ -280,7 +266,7 @@
                 <div class="w-32 h-32 bg-gray-50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center">
                   <img
                     src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=wechat_chetuoche"
-                    alt="WeChat QR"
+                    alt="车拖车微信公众号二维码-获取行业资讯与运价动态"
                     class="w-24 h-24 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
                   />
                 </div>
@@ -295,7 +281,7 @@
                 <div class="w-32 h-32 bg-gray-50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center">
                   <img
                     src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=douyin_chetuoche"
-                    alt="Douyin QR"
+                    alt="车拖车抖音官方号二维码-观看发车现场与托运避坑指南"
                     class="w-24 h-24 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
                   />
                 </div>
@@ -310,6 +296,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/contact'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/contact')
 import { useRouter } from 'vue-router'
 import { useHead } from '#app'
 import {
@@ -325,8 +318,10 @@ import {
 } from 'lucide-vue-next'
 import Button from '@/components/ui/Button.vue'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import { useToast } from '@/composables/useToast'
 
 const router = useRouter()
+const toast = useToast()
 
 const formData = ref({
   serviceType: '',
@@ -337,19 +332,29 @@ const formData = ref({
 
 const submitted = ref(false)
 
-const handleSubmit = () => {
-  // Simulate API call
-  setTimeout(() => {
+const handleSubmit = async () => {
+  if (!formData.value.phone) {
+    toast.error('请填写联系电话')
+    return
+  }
+
+  try {
+    const response: any = await $fetch('/api/home/agentConsultationApply', {
+      method: 'POST',
+      body: {
+        phone: formData.value.phone
+      }
+    })
+
+    if (response?.status !== 0 && response?.status !== '0') {
+      toast.error(response?.msg || '提交失败，请稍后重试')
+      return
+    }
+
     submitted.value = true
-  }, 800)
-}
-
-const navigateToHome = () => {
-  router.push('/')
-}
-
-const navigateToAbout = () => {
-  router.push('/about')
+  } catch (error) {
+    toast.error('提交失败，请稍后重试')
+  }
 }
 
 const callPhone = (phone: string) => {
@@ -360,48 +365,18 @@ const sendEmail = (email: string) => {
   window.location.href = `mailto:${email}`
 }
 
-const structuredData = computed(() => {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'ContactPage',
-    name: '联系车拖车 - 数字化汽车物流专家',
-    mainEntity: {
-      '@type': 'Organization',
-      name: '车拖车 (CheTuoChe)',
-      contactPoint: [
-        {
-          '@type': 'ContactPoint',
-          telephone: '400-075-1117',
-          contactType: 'customer support',
-          areaServed: 'CN',
-          availableLanguage: 'Chinese',
-        },
-        {
-          '@type': 'ContactPoint',
-          telephone: '138-XXXX-XXXX',
-          contactType: 'sales',
-          areaServed: 'CN',
-          availableLanguage: 'Chinese',
-        },
-        {
-          '@type': 'ContactPoint',
-          email: 'tech@autotrans.com',
-          contactType: 'technical support',
-          areaServed: 'CN',
-          availableLanguage: 'Chinese',
-        },
-      ],
-    },
-  }
-  return JSON.stringify(schema)
+// SEO Meta Tags
+useHead({
+  title: '联系我们 - 车拖车数字化汽车物流专家',
+  meta: [
+    {
+      name: 'description',
+      content: '联系车拖车获取汽车托运咨询。综合服务热线 400-075-1117，技术支持 tech@autotrans.com，10分钟内响应。'
+    }
+  ],
+  link: [{ rel: 'canonical', href: 'https://www.chetuoche.com/contact' }]
 })
 
-useHead({
-  script: [
-    {
-      type: 'application/ld+json',
-      children: structuredData.value
-    }
-  ]
-})
+// Schema.org 结构化数据（统一使用全局 Organization @id）
+useContactPageSchema()
 </script>

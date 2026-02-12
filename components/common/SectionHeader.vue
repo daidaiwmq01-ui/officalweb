@@ -65,7 +65,7 @@ interface Props {
 
 withDefaults(defineProps<Props>(), {
   containerClass: 'mb-16',
-  titleClass: 'text-[36px] font-bold text-[#0B2747]',
+  titleClass: 'text-2xl sm:text-[36px] font-bold text-[#0B2747]',
   subtitleClass: 'text-[16px] text-gray-500 mt-4'
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <section 
     :class="[
-      'py-24 font-[\'Noto_Sans_SC\']',
+      'py-24 font-[\'Noto_Sans_SC\'] overflow-x-hidden w-full',
       bgClass
     ]"
   >

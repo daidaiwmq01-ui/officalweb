@@ -1,8 +1,8 @@
 <template>
   <div class="bg-white min-h-screen font-['Noto_Sans_SC'] text-[#0B2747]">
 
-    <!-- Hero Section -->
-    <section class="relative w-full h-[400px] overflow-hidden mt-[-80px] pt-[80px]">
+    <!-- Hero Section：移动端预留面包屑空间 -->
+    <section class="relative w-full min-h-[320px] h-[50vh] sm:h-[400px] overflow-hidden mt-[-80px] pt-[80px]">
       <div class="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1764332688472-b970f6ca8915?auto=format&fit=crop&q=80&w=1200"
@@ -12,30 +12,20 @@
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 to-[#0B2747]/40" />
       </div>
 
-      <div class="container mx-auto max-w-[1200px] relative z-10 px-4 h-full flex flex-col justify-center">
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-white/80 text-[14px]">
-          <button
-            @click="navigateToHome"
-            class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white/60">汽车托运</span>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white font-bold">用户指南</span>
+      <div class="container mx-auto max-w-[1200px] relative z-10 px-4 h-full flex flex-col justify-start pt-14">
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <div
           v-motion
           :initial="{ opacity: 0, y: 20 }"
           :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-          class="max-w-[800px]"
+          class="max-w-[800px] pt-6 lg:pt-8"
         >
-          <h1 class="text-[36px] font-bold text-white leading-[1.3] mb-4">
-            车拖车用户指南：
-            <br />
-            汽车托运流程、安全规范与避坑百科
+          <h1 class="text-2xl sm:text-[36px] font-bold text-white mb-4" style="line-height: 1.5;">
+            <div>车拖车用户指南：</div>
+            <div>汽车托运流程、安全规范与避坑百科</div>
           </h1>
           <p class="text-[18px] text-white/90 font-medium mb-8 leading-relaxed">
             为您拆解从询价下单、视频验车到保险理赔的全流程细节，让非标服务变得像标准产品一样可靠。
@@ -206,13 +196,13 @@
             :value="`faq-${idx + 1}`"
             class="bg-white px-6 rounded-2xl border-none shadow-sm overflow-hidden mb-4"
           >
-            <AccordionTrigger class="hover:no-underline py-5 text-[17px] font-bold text-[#0B2747] text-left">
+            <AccordionTrigger :value="`faq-${idx + 1}`" class="hover:no-underline py-5 text-[17px] font-bold text-[#0B2747] text-left">
               <div class="flex items-start gap-4">
                 <HelpCircle class="w-6 h-6 text-[#006EFF] shrink-0" />
                 {{ faq.question }}
               </div>
             </AccordionTrigger>
-            <AccordionContent class="text-[#4B5563] text-[15px] leading-relaxed pb-6 pl-10 border-t border-gray-50 pt-4">
+            <AccordionContent :value="`faq-${idx + 1}`" class="text-[#4B5563] text-[15px] leading-relaxed pb-6 pl-10 border-t border-gray-50 pt-4">
               {{ faq.answer }}
             </AccordionContent>
           </AccordionItem>
@@ -224,7 +214,7 @@
     <section class="py-20 bg-[#0B2747] relative overflow-hidden">
       <div class="absolute top-0 right-0 w-1/3 h-full bg-[#006EFF]/10 skew-x-12 transform translate-x-1/2" />
       <div class="container mx-auto max-w-[1200px] px-4 text-center relative z-10">
-        <h2 class="text-[36px] font-bold text-white mb-6">
+        <h2 class="text-xl sm:text-[36px] font-bold text-white mb-6">
           准备好开始托运了吗？
         </h2>
         <p class="text-white/70 text-[18px] mb-12">
@@ -252,6 +242,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/guide'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/guide')
 import { useRouter } from 'vue-router'
 import { useHead } from '#app'
 import {
@@ -275,12 +272,9 @@ import AccordionContent from '@/components/ui/AccordionContent.vue'
 
 const router = useRouter()
 
-const navigateToHome = () => {
-  router.push('/')
-}
 
 const navigateToPricing = () => {
-  router.push('/pricing')
+  router.push('/pricing#pricing-calculator')
 }
 
 const navigateToDownload = () => {
@@ -433,72 +427,46 @@ const faqs = [
 ]
 
 const schemaMarkup = computed(() => {
-  return [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'HowTo',
-      name: '如何使用车拖车托运您的汽车',
-      description:
-        '车拖车为您提供全流程标准化的汽车托运服务，包含询价下单、视频验车、运输追踪及收车复验。',
-      step: [
-        {
-          '@type': 'HowToStep',
-          name: '准备与下单',
-          text: '选择托运模式（大板车或小板车），核对随车物品限制。',
-        },
-        {
-          '@type': 'HowToStep',
-          name: '交车与验车',
-          text: '第一检测人机制：360° 视频留档，签署电子合同。',
-        },
-        {
-          '@type': 'HowToStep',
-          name: '运输途中',
-          text: '实时查看 LBS/北斗定位追踪。',
-        },
-        {
-          '@type': 'HowToStep',
-          name: '收车复验',
-          text: '核对外观与里程，确认无误后签收。',
-        },
-        {
-          '@type': 'HowToStep',
-          name: '售后保障',
-          text: '一键报损，享受保险理赔服务。',
-        },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: '汽车托运可以放置随车行李吗？',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: '可以。随车行李限重 50-100kg，严禁放置易燃易爆品、现金及贵重物品。',
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        'headline': '2026 汽车托运全攻略：避坑指南与验车标准',
+        'author': { '@id': 'https://www.chetuoche.com/#organization' },
+        'datePublished': '2024-05-20',
+        'description': '深度解析小板车与大板车区别，详解随车行李放置规定及运输保险理赔流程。'
+      },
+      {
+        '@type': 'HowTo',
+        'name': '如何使用车拖车托运您的汽车',
+        'description': '车拖车为您提供全流程标准化的汽车托运服务，包含询价下单、视频验车、运输追踪及收车复验。',
+        'step': [
+          { '@type': 'HowToStep', 'name': '准备与下单', 'text': '选择托运模式（大板车或小板车），核对随车物品限制。' },
+          { '@type': 'HowToStep', 'name': '交车与验车', 'text': '第一检测人机制：360° 视频留档，签署电子合同。' },
+          { '@type': 'HowToStep', 'name': '运输途中', 'text': '实时查看 LBS/北斗定位追踪。' },
+          { '@type': 'HowToStep', 'name': '收车复验', 'text': '核对外观与里程，确认无误后签收。' },
+          { '@type': 'HowToStep', 'name': '售后保障', 'text': '一键报损，享受保险理赔服务。' }
+        ]
+      },
+      {
+        '@type': 'FAQPage',
+        'mainEntity': [
+          {
+            '@type': 'Question',
+            'name': '汽车托运可以放置随车行李吗？',
+            'acceptedAnswer': { '@type': 'Answer', 'text': '可以。随车行李限重 50-100kg，严禁放置易燃易爆品、现金及贵重物品。' }
           },
-        },
-        {
-          '@type': 'Question',
-          name: '为什么有的平台报价极低，中途却加价？',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: '部分不规范平台使用"低价钓鱼"，中途勒索转运费。车拖车承诺一口价，下单即最终费用。',
-          },
-        },
-      ],
-    },
-  ]
+          {
+            '@type': 'Question',
+            'name': '为什么有的平台报价极低，中途却加价？',
+            'acceptedAnswer': { '@type': 'Answer', 'text': '部分不规范平台使用"低价钓鱼"，中途勒索转运费。车拖车承诺一口价，下单即最终费用。' }
+          }
+        ]
+      },
+    ]
+  }
 })
 
-useHead({
-  script: [
-    {
-      type: 'application/ld+json',
-      children: JSON.stringify(schemaMarkup.value)
-    }
-  ]
-})
+useSchemaOrg(schemaMarkup)
 </script>

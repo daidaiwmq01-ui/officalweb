@@ -35,7 +35,7 @@
 
         <!-- Right Column: Content Strategy -->
         <div class="lg:col-span-7 order-1 lg:order-2">
-          <h2 class="text-[36px] font-bold text-[#0B2747] mb-6 leading-tight">
+          <h2 class="text-2xl sm:text-[36px] font-bold text-[#0B2747] mb-6 leading-tight">
             小板车汽车托运：时效的代名词
           </h2>
           

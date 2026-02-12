@@ -36,6 +36,12 @@
 </template>
 
 <script setup lang="ts">
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/personal-travel'))
+
+
 import TravelHero from '@/components/travel/TravelHero.vue'
 import TravelFeatures from '@/components/travel/TravelFeatures.vue'
 import SecurityMoat from '@/components/solutions/SecurityMoat.vue'
@@ -58,6 +64,26 @@ useHead({
       name: 'keywords',
       content: '个人旅游托运,异地运车,汽车托运,自驾游托运,西藏运车,三亚运车,门到门运车'
     }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/personal-travel' }
   ]
 })
+
+// Schema.org 结构化数据 - 个人旅游托运
+const personalTravelSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  'name': '个人旅游托运服务',
+  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'serviceType': 'Car Transport',
+  'description': '专业异地运车，告别长途驾驶疲劳。支持西藏转山、三亚度假、洱海环游等场景，200万车主商业险保障，48小时极速交付。',
+  'areaServed': 'CN',
+  'offers': {
+    '@type': 'Offer',
+    'description': '门到门取送，智能透明报价，360° AI验车存证'
+  }
+}
+
+useSchemaOrg(personalTravelSchema)
 </script>

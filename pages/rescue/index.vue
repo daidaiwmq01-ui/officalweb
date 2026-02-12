@@ -25,6 +25,11 @@
 </template>
 
 <script setup lang="ts">
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/rescue'))
+
 import {
   Construction,
   Zap,
@@ -41,6 +46,43 @@ import ReviewsSection from '@/components/common/ReviewsSection.vue'
 import RescueFaq from '@/components/rescue/RescueFaq.vue'
 import RescueNavigation from '@/components/rescue/RescueNavigation.vue'
 import type { AdvantageItem, ReviewItem } from '@/types'
+
+// SEO Meta Tags
+useHead({
+  title: '24小时道路救援服务_全天候故障/事故车拖车_全状态汽车移动安全底座 - 车拖车官网',
+  meta: [
+    { name: 'description', content: '拖车道路救援提供全场景应急保障，涵盖故障车位移、事故车拖运、地库亏电启动及僵尸车搬迁服务。依托覆盖全国的小板车网络，我们构建了"运输+保障"的闭环体系，解决起运前及到达后"最后一米"的移动难题。救援起步价170元，价格透明，支持全天候快速响应。' },
+    { name: 'keywords', content: '道路救援, 拖车服务, 汽车故障救援, 24小时拖车, 地库拖车救援, 事故车运输, 亏电搭电, 车拖车救援' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/rescue' }
+  ]
+})
+
+// Schema.org 结构化数据
+const rescueSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  'name': '24小时道路救援服务',
+  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'serviceType': 'RoadsideAssistance',
+  'description': '提供故障车拖车、地库亏电搭电、事故车救援服务。安全底座保障。',
+  'areaServed': 'CN',
+  'offers': {
+    '@type': 'Offer',
+    'priceCurrency': 'CNY',
+    'price': '170.00',
+    'description': '救援起步价（含10公里）',
+    'priceValidUntil': '2026-12-31'
+  },
+  'availableChannel': {
+    '@type': 'ServiceChannel',
+    'serviceUrl': 'https://www.chetuoche.com/rescue',
+    'servicePhone': '400-075-1117'
+  }
+}
+
+useSchemaOrg(rescueSchema)
 
 interface Props {
   setActiveId?: (id: string) => void

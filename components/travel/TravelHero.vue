@@ -13,12 +13,8 @@
 
     <div class="container mx-auto max-w-[1200px] relative z-10 px-4 lg:px-0 h-full flex flex-col justify-center">
       <!-- Breadcrumb - Correctly positioned inside Hero area -->
-      <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-white/80 text-[14px]">
-        <NuxtLink to="/" class="hover:text-white transition-colors">首页</NuxtLink>
-        <ChevronRight class="w-4 h-4" />
-        <NuxtLink to="/solutions" class="hover:text-white transition-colors">解决方案</NuxtLink>
-        <ChevronRight class="w-4 h-4" />
-        <span class="text-white">个人旅游托运</span>
+      <div class="absolute top-6 left-4 lg:left-0 z-20">
+        <BreadcrumbNav :items="breadcrumbItems" variant="light" />
       </div>
 
       <div
@@ -34,9 +30,9 @@
         </div>
 
         <!-- Heading - SEO optimized with keywords "托运", "运车" -->
-        <h1 class="text-[40px] font-bold text-white leading-[1.2] mb-6">
-          个人旅游托运：<br />
-          让远方触手可及
+        <h1 class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white mb-6" style="line-height: 1.5;">
+          <div>个人旅游托运：</div>
+          <div>让远方触手可及</div>
         </h1>
 
         <p class="text-[18px] text-white/90 leading-relaxed mb-10">
@@ -47,6 +43,7 @@
           <!-- Safety Orange (#FF6B00) Button -->
           <button 
             class="h-14 px-10 rounded-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-[18px] border-none shadow-lg shadow-orange-500/20 cursor-pointer transition-all"
+            @click="goToPricingCalculator"
           >
             立即计算运费
           </button>
@@ -66,6 +63,17 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronRight, ShieldCheck, Clock } from 'lucide-vue-next'
+import { ShieldCheck, Clock } from 'lucide-vue-next'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+
+const breadcrumbItems = getBreadcrumbsForRoute('/personal-travel')
+import { useRouter } from 'vue-router'
 import { EXTERNAL_ASSETS } from '@/utils/images'
+
+const router = useRouter()
+
+const goToPricingCalculator = () => {
+  router.push('/pricing#pricing-calculator')
+}
 </script>

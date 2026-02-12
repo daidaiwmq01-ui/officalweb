@@ -14,39 +14,29 @@
       <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-[#0B2747]/30" />
     </div>
 
-    <!-- Content Container (1200px centered) -->
-    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-center">
+    <!-- Content Container：始终预留面包屑高度，内容从下方开始避免 PC 端 H1 与面包屑重叠 -->
+    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-start pt-14">
       <!-- Breadcrumb Navigation - Absolute Positioned -->
-      <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-        <button
-          @click="handleHomeClick"
-          class="hover:text-white transition-colors cursor-pointer border-none bg-transparent p-0"
-        >
-          首页
-        </button>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <span class="text-white/60">汽车托运</span>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <span class="text-white font-medium">
-          大板车托运
-        </span>
+      <div class="absolute top-6 left-4 lg:left-0 z-20">
+        <BreadcrumbNav :items="breadcrumbItems" variant="light" />
       </div>
 
-      <div class="max-w-[752px] pt-16 px-4 lg:px-0">
+      <div class="max-w-[752px] pt-6 lg:pt-8 px-4 lg:px-0">
         <!-- Main Title (H1) -->
         <h1
           v-motion
           :initial="{ opacity: 0, y: 32 }"
           :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-          class="text-[42px] font-bold text-white leading-tight tracking-tight drop-shadow-lg"
+          class="text-2xl sm:text-3xl md:text-[42px] font-bold text-white tracking-tight drop-shadow-lg"
+          style="line-height: 1.5;"
         >
-          大板车干线集运：覆盖全国
-          <span class="text-[#FF6B00]">
-            30,000 条线路
-          </span>
-          <br />的
-          <span class="text-[#FF6B00]">高性价比</span>
-          托运方案
+          <div>
+            大板车干线集运：覆盖全国
+            <span class="text-[#FF6B00]">30,000 条线路</span>
+          </div>
+          <div>
+            的<span class="text-[#FF6B00]">高性价比</span>托运方案
+          </div>
         </h1>
 
         <!-- Subtitle -->
@@ -67,21 +57,21 @@
           :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 400 } }"
           class="flex flex-col sm:flex-row gap-4 mt-10"
         >
-          <button
-            @click="handleQuoteClick"
+          <NuxtLink
+            to="/pricing#pricing-calculator"
             class="h-[56px] px-8 rounded-full bg-[#FF6B00] text-white font-bold text-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:shadow-orange-500/30 cursor-pointer border-none"
           >
             <span>获取干线报价</span>
             <Calculator :size="20" />
-          </button>
+          </NuxtLink>
 
-          <button
-            @click="handleViewRoutesClick"
+          <NuxtLink
+            to="/pricing#hot-city-routes"
             class="h-[56px] px-8 rounded-full border-2 border-white text-white font-bold text-lg flex items-center justify-center gap-2 transition-all hover:bg-white hover:text-[#006EFF] cursor-pointer bg-transparent"
           >
             <span>查看热门专线</span>
             <Map :size="20" />
-          </button>
+          </NuxtLink>
         </div>
 
         <!-- Trust Indicators Bar -->
@@ -150,17 +140,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import {
   Calculator,
   Map,
   Truck,
   Satellite,
   ShieldCheck,
-  ChevronRight,
   MessageCircle,
 } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+
+const breadcrumbItems = getBreadcrumbsForRoute('/big-carrier')
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
@@ -176,39 +169,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const isMiniProgramModalOpen = ref(false)
-const isMobile = ref(false)
 
 // Replace figma:asset with EXTERNAL_ASSETS URL
 const heroBg = EXTERNAL_ASSETS.BRANDED_TRUCK
-
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
-
-const handleQuoteClick = () => {
-  if (isMobile.value) {
-    window.location.href = 'weixin://dl/business/?t=chetuoche_quote'
-  } else {
-    isMiniProgramModalOpen.value = true
-  }
-}
-
-const handleViewRoutesClick = () => {
-  document
-    .getElementById('hot-routes')
-    ?.scrollIntoView({ behavior: 'smooth' })
-}
-
-const handleHomeClick = () => {
-  props.setActiveId?.('home')
-}
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
 </script>

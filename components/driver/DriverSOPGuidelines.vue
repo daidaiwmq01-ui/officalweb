@@ -1,11 +1,11 @@
 <template>
-  <section class="py-24 bg-[#0B2747] text-white overflow-hidden relative">
+  <section class="py-24 bg-[#0B2747] text-white overflow-x-hidden w-full relative">
     <!-- Background Watermark -->
     <div class="absolute top-0 right-0 text-[120px] font-black text-white/5 pointer-events-none select-none -translate-y-1/2 translate-x-1/4">
       SOP
     </div>
 
-    <div class="container mx-auto max-w-[1200px] px-4">
+    <div class="container mx-auto max-w-[1200px] px-4 w-full box-border">
       <div class="text-center mb-16">
         <h2 class="text-[32px] font-bold mb-4">
           司机接单规范

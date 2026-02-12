@@ -115,14 +115,14 @@
                 '哈尔滨-海南', '深圳-西安', '杭州-乌鲁木齐'
               ]"
               :key="route"
-              @click="scrollToPricing"
+              @click="navigateToHotRoutes"
               class="text-[12px] text-gray-500 bg-white border border-gray-100 px-2 py-1 rounded hover:border-[#006EFF] hover:text-[#006EFF] transition-colors cursor-pointer"
             >
               {{ route }}
             </button>
           </div>
           <button 
-            @click="scrollToPricing"
+            @click="navigateToHotRoutes"
             class="mt-auto text-xs text-[#006EFF] font-bold flex items-center gap-1 hover:gap-2 transition-all cursor-pointer bg-transparent border-none p-0"
           >
             <span>查看所有干线报价</span>
@@ -144,8 +144,8 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const scrollToPricing = () => {
-  document.getElementById('hot-routes')?.scrollIntoView({ behavior: 'smooth' })
+const navigateToHotRoutes = () => {
+  window.location.href = '/pricing#hot-city-routes'
 }
 
 const handleDriverClick = () => {

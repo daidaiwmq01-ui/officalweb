@@ -106,14 +106,14 @@
             <button
               v-for="city in cities"
               :key="city"
-              @click="scrollToCalculator"
+              @click="navigateToHotRoutes"
               class="text-xs text-gray-500 hover:text-[#006EFF] hover:underline cursor-pointer transition-colors bg-transparent border-none p-0"
             >
               {{ city }}
             </button>
           </div>
           <button
-            @click="scrollToCalculator"
+            @click="navigateToHotRoutes"
             class="mt-4 flex items-center gap-1 text-xs text-[#006EFF] font-bold hover:translate-x-1 transition-transform bg-transparent border-none p-0 cursor-pointer"
           >
             查看该城市最新报价 <ArrowRight :size="12" />
@@ -140,8 +140,8 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const scrollToCalculator = () => {
-  document.getElementById('price-calculator')?.scrollIntoView({ behavior: 'smooth' })
+const navigateToHotRoutes = () => {
+  window.location.href = '/pricing#hot-city-routes'
 }
 
 const linkMap: Record<string, string> = {

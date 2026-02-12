@@ -12,22 +12,22 @@
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B2747]/40 to-[#0B2747]" />
       </div>
 
-      <div class="container mx-auto max-w-[1200px] px-4 relative z-10 text-center h-full flex flex-col justify-center">
+      <div class="container mx-auto max-w-[1200px] px-4 relative z-10 text-center h-full flex flex-col justify-start pt-14">
         <!-- Breadcrumb -->
-        <nav class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/60">
-          <button @click="navigateToHome" class="hover:text-white transition-colors bg-transparent border-none cursor-pointer">首页</button>
-          <ChevronRight class="w-3 h-3" />
-          <span class="text-white font-bold">生态合作</span>
-        </nav>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
+        </div>
 
+        <div class="pt-6 lg:pt-8">
         <h1 
           v-motion
           :initial="{ opacity: 0, y: 30 }"
           :enter="{ opacity: 1, y: 0 }"
-          class="text-[48px] md:text-[56px] font-bold text-white mb-6 leading-tight"
+          class="text-[48px] md:text-[56px] font-bold text-white mb-6"
+          style="line-height: 1.5;"
         >
-          共建数字化运力生态<br />
-          驱动万亿物流新增长
+          <div>共建数字化运力生态</div>
+          <div>驱动万亿物流新增长</div>
         </h1>
         
         <p 
@@ -63,13 +63,16 @@
           >
             我是需求方 (大客户)
           </button>
-          <button 
-            @click="openRescueApp"
-            class="px-8 py-4 rounded-2xl border border-white bg-transparent text-white font-bold hover:bg-white hover:text-[#0B2747] transition-all flex items-center gap-2 cursor-pointer"
+          <a 
+            href="https://rescue.ctcapp.com/rescue-app/#/entrance"
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            class="px-8 py-4 rounded-2xl border border-white bg-transparent text-white font-bold hover:bg-white hover:text-[#0B2747] transition-all flex items-center gap-2 cursor-pointer no-underline"
           >
             <LogIn class="w-5 h-5" />
             企业/救援公司登陆
-          </button>
+          </a>
+        </div>
         </div>
       </div>
     </section>
@@ -129,7 +132,7 @@
             :visible="{ opacity: 1, x: 0 }"
             :visibleOnce="true"
           >
-            <h2 class="text-[36px] font-bold mb-8">城市合伙人计划：零门槛共赢拖车蓝海</h2>
+            <h2 class="text-2xl sm:text-[36px] font-bold mb-8">城市合伙人计划：零门槛共赢拖车蓝海</h2>
             <div class="space-y-10">
               <div class="flex items-start gap-6">
                 <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center shrink-0">
@@ -308,7 +311,7 @@
 
       <div class="container mx-auto max-w-[900px] px-4 relative z-10">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold text-white mb-4">立即加入生态网络</h2>
+          <h2 class="text-2xl sm:text-[36px] font-bold text-white mb-4">立即加入生态网络</h2>
           <p class="text-white/40">提交申请后，我们将在 10 分钟内由专属顾问进行回访响应</p>
         </div>
 
@@ -362,6 +365,13 @@
               </span>
               <span v-else>提交申请</span>
             </Button>
+            <p
+              v-if="statusMessage"
+              :class="statusType === 'success' ? 'text-green-600' : 'text-red-500'"
+              class="text-[14px] text-center"
+            >
+              {{ statusMessage }}
+            </p>
           </form>
         </div>
       </div>
@@ -370,6 +380,15 @@
 </template>
 
 <script setup lang="ts">
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/partners'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/partners')
+
+
 import { ref } from 'vue'
 import { 
   ChevronRight, 
@@ -401,6 +420,8 @@ const props = defineProps<Props>()
 
 const activeTab = ref<'fleet' | 'partner' | 'client'>('fleet')
 const formSubmitted = ref(false)
+const statusMessage = ref('')
+const statusType = ref<'success' | 'error' | ''>('')
 const formData = ref({
   name: '',
   phone: '',
@@ -426,22 +447,91 @@ const scrollToForm = () => {
   document.getElementById('coop-form')?.scrollIntoView({ behavior: 'smooth' })
 }
 
-const handleFormSubmit = () => {
-  formSubmitted.value = true
-  setTimeout(() => {
-    formSubmitted.value = false
-  }, 3000)
-}
+const handleFormSubmit = async () => {
+  statusMessage.value = ''
+  statusType.value = ''
+  if (!formData.value.name || !formData.value.phone) {
+    statusMessage.value = '请完整填写姓名和电话'
+    statusType.value = 'error'
+    return
+  }
 
-const navigateToHome = () => {
-  props.setActiveId?.('home')
+  try {
+    const response: any = await $fetch('/api/home/agentConsultationApply', {
+      method: 'POST',
+      body: {
+        phone: formData.value.phone
+      }
+    })
+
+    if (response?.status !== 0 && response?.status !== '0') {
+      statusMessage.value = response?.msg || '提交失败，请稍后重试'
+      statusType.value = 'error'
+      return
+    }
+
+    formSubmitted.value = true
+    statusMessage.value = '提交成功，我们将尽快联系您'
+    statusType.value = 'success'
+    formData.value = {
+      name: '',
+      phone: '',
+      hasStore: false,
+      fleetSize: '',
+      message: ''
+    }
+    setTimeout(() => {
+      formSubmitted.value = false
+    }, 3000)
+  } catch (error) {
+    statusMessage.value = '提交失败，请稍后重试'
+    statusType.value = 'error'
+  }
 }
 
 const navigateToPartnerRecruit = () => {
   props.setActiveId?.('partner-recruit')
 }
 
-const openRescueApp = () => {
-  window.open('https://rescue.ctcapp.com/rescue-app/#/entrance', '_blank')
+// SEO Meta Tags
+useHead({
+  title: '生态合作 - 共建数字化运力生态 驱动物流增长 - 车拖车',
+  meta: [
+    { name: 'description', content: '诚邀板车车队、救援公司、代驾服务商入驻。提供海量真实货源、极速结算系统及等保三级数据安全保障，助力合作伙伴效率提升。' },
+    { name: 'keywords', content: '承运商入驻, 救援加盟, 大客户合作, 数字化管车, 货源平台' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/partners' }
+  ]
+})
+
+// Schema.org 结构化数据
+const partnersSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  'name': '车拖车运力生态合作伙伴计划',
+  'description': '诚邀板车车队、道路救援公司及代驾服务商入驻。提供海量真实货源与供应链金融支持。',
+  'mainEntity': [
+    {
+      '@type': 'Service',
+      'name': '救援公司加盟',
+      'serviceType': 'B2B Partnership',
+      'offers': {
+        '@type': 'Offer',
+        'description': '共享全国故障车/事故车拖运订单'
+      }
+    },
+    {
+      '@type': 'Service',
+      'name': '承运商车队入驻',
+      'serviceType': 'Logistics Partnership',
+      'offers': {
+        '@type': 'Offer',
+        'description': '获取主机厂一手新车发运货源'
+      }
+    }
+  ]
 }
+
+useSchemaOrg(partnersSchema)
 </script>

@@ -1,9 +1,9 @@
 <template>
-  <section class="py-24 bg-[#F8F9FB]">
-    <div class="container mx-auto max-w-[1200px] px-4">
-      <div class="grid grid-cols-12 gap-12 items-center">
-        <div class="col-span-12 lg:col-span-6 flex justify-center order-2 lg:order-1">
-          <div class="relative w-full max-w-[500px] aspect-square rounded-[40px] overflow-hidden shadow-2xl border-8 border-white">
+  <section class="py-24 bg-[#F8F9FB] overflow-x-hidden w-full">
+    <div class="container mx-auto max-w-[1200px] px-4 w-full box-border">
+      <div class="grid grid-cols-12 gap-8 md:gap-12 items-center min-w-0">
+        <div class="col-span-12 lg:col-span-6 flex justify-center order-2 lg:order-1 min-w-0">
+          <div class="relative w-full max-w-[500px] aspect-square rounded-2xl sm:rounded-[40px] overflow-hidden shadow-2xl border-4 sm:border-8 border-white">
             <div class="absolute inset-0">
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1758224388400-305dfddfbcd9"
@@ -49,13 +49,14 @@
           </div>
         </div>
 
-        <div class="col-span-12 lg:col-span-6 pl-0 lg:pl-10 order-1 lg:order-2">
+        <div class="col-span-12 lg:col-span-6 pl-0 lg:pl-10 order-1 lg:order-2 min-w-0">
           <div
             v-motion
             :initial="{ opacity: 0, x: 30 }"
             :visible-once="{ opacity: 1, x: 0 }"
+            class="min-w-0"
           >
-            <h2 class="text-[32px] font-bold text-[#0B2747] mb-8">
+            <h2 class="text-xl sm:text-[32px] font-bold text-[#0B2747] mb-8">
               司机课堂与标准化履约
             </h2>
 

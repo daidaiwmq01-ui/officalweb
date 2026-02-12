@@ -48,6 +48,9 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue'
 import { useHoverIndex } from '@/composables/useHoverIndex'
+import Section from '@/components/common/Section.vue'
+import Container from '@/components/common/Container.vue'
+import SectionHeader from '@/components/common/SectionHeader.vue'
 import type { AdvantageItem, ThemeColor } from '@/types'
 
 /**

@@ -13,7 +13,7 @@
       ]"
       cta-text="查看供应链方案"
       :image-src="EXTERNAL_ASSETS.SOLUTIONS_DASHBOARD"
-      @cta-click="handleCtaClick('contact')"
+      @cta-click="handleCtaClick('/supply-chain')"
     />
     
     <!-- Solution 2: Commercial & High-End -->
@@ -25,7 +25,7 @@
       :image-src="EXTERNAL_ASSETS.SOLUTIONS_LUXURY"
       :reverse="true"
       bg-color="bg-[#F8F9FB]"
-      @cta-click="handleCtaClick('contact')"
+      @cta-click="handleCtaClick('/luxury-transport')"
     />
 
     <!-- Solution 3: Personal Tourism -->
@@ -39,7 +39,7 @@
       ]"
       cta-text="开始托运"
       :image-src="EXTERNAL_ASSETS.SOLUTIONS_FAMILY"
-      @cta-click="handleCtaClick('pricing')"
+      @cta-click="handleCtaClick('/personal-travel')"
     />
 
     <SecurityMoat />
@@ -49,12 +49,67 @@
 </template>
 
 <script setup lang="ts">
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/solutions'))
+
+
 import SolutionsHero from '@/components/solutions/SolutionsHero.vue'
 import SolutionZigZag from '@/components/solutions/SolutionsZigzag.vue'
 import SecurityMoat from '@/components/solutions/SecurityMoat.vue'
 import SolutionsFAQ from '@/components/solutions/SolutionsFaq.vue'
 import FinalCTABox from '@/components/solutions/FinalCTABox.vue'
 import { EXTERNAL_ASSETS } from '@/utils/images'
+import { useRouter } from 'vue-router'
+
+// SEO Meta Tags
+useHead({
+  title: '汽车托运行业解决方案中心_数字化供应链/商业活动/个人旅游 - 车拖车',
+  meta: [
+    { name: 'description', content: '为主机厂、车展方及个人用户提供全场景物流支撑。涵盖OTD可视化供应链、保姆式特种车托运及等保三级金融级安全防护方案。数字化技术重塑汽车物流信任标准。' },
+    { name: 'keywords', content: '汽车供应链方案, 车展物流托运, 高端车定制运输, 物流数据安全, 托运平台等保三级' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/solutions' }
+  ]
+})
+
+// Schema.org 结构化数据
+const solutionsSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  'name': '车拖车行业解决方案中心',
+  'description': '面向主机厂、商业活动及个人提供全场景物流解决方案。涵盖OTD可视化供应链、保姆式特种车托运及等保三级安全防护。',
+  'mainEntity': {
+    '@type': 'ItemList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': '汽车供应链数字化解决方案',
+        'url': 'https://www.chetuoche.com/supply-chain',
+        'description': '缩短OTD周期，实现"零公里"交付，支持4S店动态调拨。'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': '商业活动特种托运方案',
+        'url': 'https://www.chetuoche.com/luxury-transport',
+        'description': '全封闭厢式车运输，气囊减震，服务车展与超跑巡演。'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': '个人旅游托运方案',
+        'url': 'https://www.chetuoche.com/personal-travel',
+        'description': '让远方触手可及，支持三亚过冬、进藏朝圣等场景。'
+      }
+    ]
+  }
+}
+
+useSchemaOrg(solutionsSchema)
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -62,11 +117,13 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const router = useRouter()
+
 const handleSetActiveId = (id: string) => {
   props.setActiveId?.(id)
 }
 
-const handleCtaClick = (id: string) => {
-  handleSetActiveId(id)
+const handleCtaClick = (path: string) => {
+  router.push(path)
 }
 </script>

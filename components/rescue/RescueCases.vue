@@ -1,6 +1,6 @@
 <template>
-  <section class="bg-[#F8F9FB] py-24 font-['Noto_Sans_SC']">
-    <div class="max-w-[1200px] mx-auto px-4">
+  <section class="bg-[#F8F9FB] py-24 font-['Noto_Sans_SC'] overflow-x-hidden w-full">
+    <div class="w-full max-w-[1200px] mx-auto px-4 box-border">
       <!-- Section Header -->
       <div class="text-center mb-16">
         <h2
@@ -8,7 +8,7 @@
           :initial="{ opacity: 0, y: 20 }"
           :visible="{ opacity: 1, y: 0 }"
           :visibleOnce="true"
-          class="text-[36px] font-bold text-[#0B2747]"
+          class="text-2xl sm:text-[36px] font-bold text-[#0B2747]"
         >
           真实救援场景
         </h2>

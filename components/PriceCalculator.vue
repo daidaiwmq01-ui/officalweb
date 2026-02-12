@@ -7,7 +7,7 @@
             <Calculator class="w-3 h-3" />
             <span>实时查价系统 v4.0</span>
           </div>
-          <h2 class="text-[36px] font-bold text-[#0B2747] leading-tight mb-6">
+          <h2 class="text-2xl sm:text-[36px] font-bold text-[#0B2747] leading-[1.6] mb-6">
             透明计费，
             <br />
             一键获取小板车托运报价
@@ -38,7 +38,7 @@
             :initial="{ opacity: 0, y: 20 }"
             :visible="{ opacity: 1, y: 0 }"
             :visibleOnce="true"
-            class="w-full max-w-[480px] bg-white/98 border border-[#F3F4F6] rounded-2xl p-8 shadow-xl relative"
+            class="w-full max-w-[480px] bg-white/98 border border-[#F3F4F6] rounded-2xl p-4 sm:p-8 shadow-xl relative"
           >
             <!-- Header Section -->
             <div class="mb-8">
@@ -67,22 +67,27 @@
                     placeholder="请输入出发地 (例如: 北京朝阳区)"
                     class="w-full h-12 bg-gray-50 rounded-lg pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-[#006EFF] transition-all"
                     :value="fromCity"
-                    @focus="isLocationFocus = true"
-                    @blur="setTimeout(() => isLocationFocus = false, 200)"
-                    @input="(e: Event) => fromCity = (e.target as HTMLInputElement).value"
+                    @focus="() => openSuggestions('from')"
+                    @blur="closeSuggestions"
+                    @input="(e: Event) => handleLocationInput('from', e)"
                   />
                   <!-- Simulated Dropdown -->
                   <div
-                    v-if="isLocationFocus"
+                    v-if="activeField === 'from' && suggestions.length > 0"
                     class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg z-20 py-1 overflow-hidden"
                   >
                     <div
-                      v-for="item in locationSuggestions"
-                      :key="item"
+                      v-for="item in suggestions"
+                      :key="item.id"
                       class="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer"
-                      @click="() => { fromCity = item; isLocationFocus = false }"
+                      @click="() => handleSuggestionSelect('from', item)"
                     >
-                      {{ item }}
+                      <div class="font-medium text-gray-700">
+                        {{ item.title }}
+                      </div>
+                      <div v-if="item.address" class="text-[11px] text-gray-400 mt-1">
+                        {{ item.address }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -98,8 +103,28 @@
                     placeholder="请输入目的地"
                     class="w-full h-12 bg-gray-50 rounded-lg pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-[#006EFF] transition-all"
                     :value="toCity"
-                    @input="(e: Event) => toCity = (e.target as HTMLInputElement).value"
+                    @focus="() => openSuggestions('to')"
+                    @blur="closeSuggestions"
+                    @input="(e: Event) => handleLocationInput('to', e)"
                   />
+                  <div
+                    v-if="activeField === 'to' && suggestions.length > 0"
+                    class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg z-20 py-1 overflow-hidden"
+                  >
+                    <div
+                      v-for="item in suggestions"
+                      :key="item.id"
+                      class="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 cursor-pointer"
+                      @click="() => handleSuggestionSelect('to', item)"
+                    >
+                      <div class="font-medium text-gray-700">
+                        {{ item.title }}
+                      </div>
+                      <div v-if="item.address" class="text-[11px] text-gray-400 mt-1">
+                        {{ item.address }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -128,21 +153,91 @@
                     v-if="isVehicleOpen"
                     class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-30 p-4"
                   >
-                    <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    <div v-if="vehicleLoading" class="text-xs text-gray-400 py-2">
+                      正在加载车型...
+                    </div>
+                    <div v-else class="grid grid-cols-3 sm:grid-cols-4 gap-2">
                       <button
-                        v-for="type in vehicleTypes"
-                        :key="type"
-                        @click="() => { carType = type; isVehicleOpen = false }"
+                        v-for="type in vehicleOptions"
+                        :key="type.label"
+                        @click="() => { carType = type.label; carTypeCode = type.code; isVehicleOpen = false }"
                         :class="`py-2 rounded-lg text-xs font-medium transition-all border ${
-                          carType === type
+                          carType === type.label
                             ? 'bg-blue-100 border-[#006EFF] text-[#006EFF]'
                             : 'bg-white border-gray-100 text-gray-500 hover:border-gray-200'
                         }`"
                       >
-                        {{ type }}
+                        {{ type.label }}
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- Carrier Board Selector -->
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  承运板车
+                </label>
+                <div class="relative">
+                  <div
+                    @click="!isCarrierLocked && (isCarrierOpen = !isCarrierOpen)"
+                    :class="`h-12 rounded-lg flex items-center justify-between px-4 transition-colors ${
+                      isCarrierLocked ? 'bg-gray-100 cursor-not-allowed text-gray-300' : 'bg-gray-50 cursor-pointer hover:bg-gray-100'
+                    }`"
+                  >
+                    <span
+                      :class="carrierBoard ? 'text-sm font-medium text-gray-700' : 'text-sm text-gray-400'"
+                    >
+                      {{ carrierBoard || (isCarrierLocked ? '请先选择托运车型' : '请选择承运板车') }}
+                    </span>
+                    <ChevronDown
+                      :class="`w-4 h-4 text-gray-400 transition-transform ${isCarrierOpen ? 'rotate-180' : ''}`"
+                    />
+                  </div>
+
+                  <div
+                    v-if="isCarrierOpen && !isCarrierLocked"
+                    class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-30 p-4 max-h-64 overflow-auto"
+                  >
+                    <div v-if="carrierLoading" class="text-xs text-gray-400 py-2">
+                      正在加载板车数据...
+                    </div>
+                    <div v-else-if="carrierOptions.length === 0" class="text-xs text-gray-400 py-2">
+                      暂无可选板车
+                    </div>
+                    <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      <button
+                        v-for="item in carrierOptions"
+                        :key="item.value"
+                        @click="() => handleCarrierSelect(item)"
+                        :class="`py-2 rounded-lg text-xs font-medium transition-all border ${
+                          carrierBoard === item.label
+                            ? 'bg-blue-100 border-[#006EFF] text-[#006EFF]'
+                            : 'bg-white border-gray-100 text-gray-500 hover:border-gray-200'
+                        }`"
+                      >
+                        {{ item.label }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Phone Input -->
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  手机号
+                </label>
+                <div class="relative">
+                  <input
+                    type="tel"
+                    inputmode="numeric"
+                    placeholder="请输入手机号"
+                    class="w-full h-12 bg-gray-50 rounded-lg px-4 text-sm focus:outline-none focus:ring-1 focus:ring-[#006EFF] transition-all"
+                    :value="phoneNumber"
+                    @input="(e: Event) => phoneNumber = (e.target as HTMLInputElement).value"
+                  />
                 </div>
               </div>
 
@@ -150,7 +245,7 @@
               <div class="space-y-4 pt-2">
                 <button
                   @click="handleCalculate"
-                  :disabled="isCalculating || !fromCity || !toCity"
+                  :disabled="isCalculating || !fromCity || !toCity || !carType || !phoneNumber"
                   class="w-full h-[56px] bg-gradient-to-r from-[#FF6B00] to-[#E56000] text-white font-bold text-[18px] rounded-xl transition-all shadow-lg shadow-orange-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
                 >
                   <div
@@ -159,6 +254,10 @@
                   />
                   <span v-else>立即获取报价</span>
                 </button>
+
+                <div v-if="errorMessage" class="text-xs text-red-500 text-center">
+                  {{ errorMessage }}
+                </div>
 
                 <!-- Secondary Action -->
                 <div class="flex items-center justify-center gap-2 text-xs text-gray-400">
@@ -248,7 +347,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import {
   Calculator,
   MapPin,
@@ -264,15 +363,25 @@ import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import { VEHICLE_TYPES, PRICE_CALCULATOR_FEATURES } from '~/config/vehicle-types'
 
 const fromCity = ref('')
 const toCity = ref('')
-const carType = ref('轿车')
+const carType = ref('')
+const carTypeCode = ref<number | null>(null)
+const carrierBoard = ref('')
+const phoneNumber = ref('')
 const isCalculating = ref(false)
 const isVehicleOpen = ref(false)
-const isLocationFocus = ref(false)
+const isCarrierOpen = ref(false)
 const isMiniProgramModalOpen = ref(false)
 const isMobile = ref(false)
+const activeField = ref<'from' | 'to' | null>(null)
+
+const config = useRuntimeConfig()
+const TMAP_KEY = config.public.tmapKey
+const TMAP_SCRIPT_ID = 'tmap-js-sdk'
+const TMAP_SCRIPT_SRC = `https://map.qq.com/api/gljs?v=1.exp&key=${TMAP_KEY}&libraries=service`
 
 interface Result {
   distance: number
@@ -283,32 +392,40 @@ interface Result {
 
 const result = ref<Result | null>(null)
 
-const vehicleTypes = [
-  '摩托车',
-  '轿车',
-  '跑车',
-  'SUV',
-  '面包车',
-  '皮卡',
-  '叉车',
-  '电四轮',
-  '餐车',
-  '房车',
-  '货车',
-  '拖拉机',
-  '挖掘机',
-]
+interface CarrierOption {
+  value: string
+  label: string
+}
 
-const locationSuggestions = [
-  '北京朝阳区建国门外大街 (推荐)',
-  '北京朝阳大悦城',
-]
+interface SuggestionItem {
+  id: string
+  title: string
+  address?: string
+  adcode?: number
+  city?: string
+  province?: string
+}
 
-const features = [
-  '拒绝加价：系统一口价，不包含等待费过路费',
-  '极速调度：下单后最快 5 秒钟接单',
-  '全额保险：太平洋保险实时承保',
-]
+const suggestions = ref<SuggestionItem[]>([])
+const suggestionService = ref<any>(null)
+const tmapLoaded = ref(false)
+let fromDebounceTimer: number | null = null
+let toDebounceTimer: number | null = null
+let blurTimer: number | null = null
+
+const carrierOptions = ref<CarrierOption[]>([])
+const carrierLoading = ref(false)
+const vehicleOptions = ref<{ label: string; code: number }[]>([])
+const vehicleLoading = ref(false)
+const errorMessage = ref('')
+
+const originMeta = ref<{ adcode?: number; city?: string; province?: string }>({})
+const destMeta = ref<{ adcode?: number; city?: string; province?: string }>({})
+
+const fallbackVehicleTypes = VEHICLE_TYPES
+const features = PRICE_CALCULATOR_FEATURES
+
+const isCarrierLocked = computed(() => !carType.value)
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 768
@@ -322,32 +439,347 @@ const handleQRClick = () => {
   }
 }
 
+const normalizeCarrierOptions = (payload: any): CarrierOption[] => {
+  const list: CarrierOption[] = []
+
+  const pushItem = (item: any) => {
+    if (!item) return
+    const value = String(item.id || item.value || item.code || item.key || item.name || item.title || '')
+    const label = String(item.name || item.title || item.label || item.value || '')
+    if (!label) return
+    list.push({ value, label })
+  }
+
+  const walk = (nodes: any[]) => {
+    nodes.forEach((node) => {
+      pushItem(node)
+      const children = node?.children || node?.childList || node?.list
+      if (Array.isArray(children) && children.length > 0) {
+        walk(children)
+      }
+    })
+  }
+
+  if (Array.isArray(payload)) {
+    walk(payload)
+  } else if (Array.isArray(payload?.data)) {
+    walk(payload.data)
+  } else if (Array.isArray(payload?.data?.list)) {
+    walk(payload.data.list)
+  } else if (Array.isArray(payload?.data?.rows)) {
+    walk(payload.data.rows)
+  }
+
+  return list
+}
+
+const normalizeVehicleOptions = (payload: any): { label: string; code: number }[] => {
+  const list: { label: string; code: number }[] = []
+  const pushItem = (item: any) => {
+    if (!item) return
+    const label = String(item.carModel || item.name || item.title || item.label || item.value || item.carType || '')
+    const code = Number(item.carModelCode ?? item.code ?? item.id ?? item.value ?? 0)
+    if (!label) return
+    list.push({ label, code })
+  }
+  if (Array.isArray(payload)) {
+    payload.forEach(pushItem)
+  } else if (Array.isArray(payload?.data)) {
+    payload.data.forEach(pushItem)
+  } else if (Array.isArray(payload?.data?.list)) {
+    payload.data.list.forEach(pushItem)
+  } else if (Array.isArray(payload?.data?.rows)) {
+    payload.data.rows.forEach(pushItem)
+  }
+  const unique = new Map<string, { label: string; code: number }>()
+  list.forEach((item) => {
+    if (!unique.has(item.label)) {
+      unique.set(item.label, item)
+    }
+  })
+  return Array.from(unique.values())
+}
+
+const fetchVehicleOptions = async () => {
+  vehicleLoading.value = true
+  try {
+    const res = await $fetch('/api/order/vehicleCombine/listRecommend', { method: 'GET' })
+    const list = normalizeVehicleOptions(res)
+    vehicleOptions.value = list.length > 0 ? list : fallbackVehicleTypes
+  } catch (error) {
+    vehicleOptions.value = fallbackVehicleTypes
+  } finally {
+    vehicleLoading.value = false
+  }
+}
+
+const fetchCarrierOptions = async () => {
+  carrierLoading.value = true
+  try {
+    const res = await $fetch('/api/order/vehicleCombine/listTree/v2', { method: 'GET' })
+    carrierOptions.value = normalizeCarrierOptions(res)
+  } catch (error) {
+    carrierOptions.value = []
+  } finally {
+    carrierLoading.value = false
+  }
+}
+
+const handleCarrierSelect = (item: CarrierOption) => {
+  carrierBoard.value = item.label
+  isCarrierOpen.value = false
+}
+
+const loadTMap = () => {
+  if (typeof window === 'undefined') {
+    return Promise.reject(new Error('TMap only runs in browser'))
+  }
+  if ((window as any).TMap?.service) {
+    return Promise.resolve((window as any).TMap)
+  }
+
+  const existingScript = document.getElementById(TMAP_SCRIPT_ID) as HTMLScriptElement | null
+  if (existingScript) {
+    return new Promise((resolve, reject) => {
+      existingScript.addEventListener('load', () => resolve((window as any).TMap))
+      existingScript.addEventListener('error', () => reject(new Error('TMap script failed to load')))
+    })
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.id = TMAP_SCRIPT_ID
+    script.src = TMAP_SCRIPT_SRC
+    script.async = true
+    script.onload = () => resolve((window as any).TMap)
+    script.onerror = () => reject(new Error('TMap script failed to load'))
+    document.head.appendChild(script)
+  })
+}
+
+const initSuggestionService = async () => {
+  try {
+    const TMap = await loadTMap()
+    if (!TMap?.service?.Suggestion) {
+      return
+    }
+    suggestionService.value = new TMap.service.Suggestion({
+      pageSize: 6,
+      policy: 1,
+    })
+    tmapLoaded.value = true
+  } catch (error) {
+    console.warn('[PriceCalculator] Tencent map init failed', error)
+  }
+}
+
+const scheduleSuggestionFetch = (field: 'from' | 'to', keyword: string) => {
+  const trimmed = keyword.trim()
+  if (!trimmed) {
+    suggestions.value = []
+    return
+  }
+
+  const timerRef = field === 'from' ? fromDebounceTimer : toDebounceTimer
+  if (timerRef) {
+    window.clearTimeout(timerRef)
+  }
+
+  const timeoutId = window.setTimeout(() => {
+    void fetchSuggestions(field, trimmed)
+  }, 250)
+
+  if (field === 'from') {
+    fromDebounceTimer = timeoutId
+  } else {
+    toDebounceTimer = timeoutId
+  }
+}
+
+const fetchSuggestions = async (field: 'from' | 'to', keyword: string) => {
+  if (!suggestionService.value || !tmapLoaded.value) {
+    return
+  }
+  try {
+    const response = await suggestionService.value.getSuggestions({
+      keyword,
+    })
+    if (activeField.value !== field) {
+      return
+    }
+    if (response?.status === 0 && Array.isArray(response.data)) {
+      suggestions.value = response.data.map((item: any, index: number) => ({
+        id: `${field}-${item.id || item.title || index}`,
+        title: item.title || item.name || keyword,
+        address: item.address || item.district || '',
+        adcode: Number(item.adcode || 0) || undefined,
+        city: item.city || item.cityname || '',
+        province: item.province || item.prov || '',
+      }))
+    } else {
+      suggestions.value = []
+    }
+  } catch (error) {
+    suggestions.value = []
+  }
+}
+
+const openSuggestions = (field: 'from' | 'to') => {
+  if (blurTimer) {
+    window.clearTimeout(blurTimer)
+  }
+  activeField.value = field
+  const currentValue = field === 'from' ? fromCity.value : toCity.value
+  if (currentValue.trim()) {
+    scheduleSuggestionFetch(field, currentValue)
+  }
+}
+
+const closeSuggestions = () => {
+  if (blurTimer) {
+    window.clearTimeout(blurTimer)
+  }
+  blurTimer = window.setTimeout(() => {
+    activeField.value = null
+  }, 200)
+}
+
+const handleLocationInput = (field: 'from' | 'to', event: Event) => {
+  const value = (event.target as HTMLInputElement).value
+  if (field === 'from') {
+    fromCity.value = value
+    originMeta.value = {}
+  } else {
+    toCity.value = value
+    destMeta.value = {}
+  }
+  activeField.value = field
+  scheduleSuggestionFetch(field, value)
+}
+
+const handleSuggestionSelect = (field: 'from' | 'to', item: SuggestionItem) => {
+  if (field === 'from') {
+    fromCity.value = item.title
+    originMeta.value = {
+      adcode: item.adcode,
+      city: item.city,
+      province: item.province,
+    }
+  } else {
+    toCity.value = item.title
+    destMeta.value = {
+      adcode: item.adcode,
+      city: item.city,
+      province: item.province,
+    }
+  }
+  suggestions.value = []
+  activeField.value = null
+}
+
 const handleCalculate = () => {
   if (!fromCity.value || !toCity.value) return
 
   isCalculating.value = true
-  setTimeout(() => {
-    const mockDistance = Math.floor(Math.random() * 2000) + 100
-    const baseRate = 1.5
-    const basePrice = Math.floor(mockDistance * baseRate)
-    const insurance = 200
+  errorMessage.value = ''
+  const originCode = originMeta.value.adcode
+  const destCode = destMeta.value.adcode
 
-    result.value = {
-      distance: mockDistance,
-      basePrice: basePrice,
-      insurance: insurance,
-      total: basePrice + insurance,
-    }
+  if (!carType.value || carTypeCode.value === null) {
+    errorMessage.value = '请选择托运车型'
     isCalculating.value = false
-  }, 800)
+    return
+  }
+
+  if (!originCode || !destCode) {
+    errorMessage.value = '请从下拉建议中选择出发地与目的地'
+    isCalculating.value = false
+    return
+  }
+
+  if (!phoneNumber.value.trim()) {
+    errorMessage.value = '请输入手机号'
+    isCalculating.value = false
+    return
+  }
+
+  const remarkParts = []
+  if (carrierBoard.value) {
+    remarkParts.push(`承运板车:${carrierBoard.value}`)
+  }
+
+  const payload = {
+    channelSource: '3017',
+    orderType: 0,
+    carTypeCode: carTypeCode.value,
+    carType: carType.value,
+    origin: originCode,
+    originCity: originMeta.value.city || '',
+    originProvince: originMeta.value.province || '',
+    destination: destCode,
+    destCity: destMeta.value.city || '',
+    destProvince: destMeta.value.province || '',
+    phone: phoneNumber.value.trim(),
+    remark: remarkParts.join('；'),
+  }
+
+  $fetch('/api/order/orderFeeV4', {
+    method: 'POST',
+    body: payload,
+  })
+    .then((response: any) => {
+      const data = response?.data ?? response?.result ?? response
+      const total =
+        Number(data?.totalFee ?? data?.total ?? data?.amount ?? data?.price ?? data?.fee ?? 0) || 0
+      const distance = Number(data?.distance ?? data?.mile ?? data?.km ?? 0) || 0
+      const insurance = Number(data?.insuranceFee ?? data?.insurance ?? 0) || 0
+      const basePrice = Number(data?.baseFee ?? data?.basePrice ?? Math.max(total - insurance, 0))
+
+      if (!total) {
+        errorMessage.value = response?.msg || response?.message || '未获取到有效运费'
+        result.value = null
+        return
+      }
+
+      result.value = {
+        distance,
+        basePrice,
+        insurance,
+        total,
+      }
+    })
+    .catch((error) => {
+      errorMessage.value = error?.message || '运费请求失败'
+      result.value = null
+    })
+    .finally(() => {
+      isCalculating.value = false
+    })
 }
 
 onMounted(() => {
   checkMobile()
+  void initSuggestionService()
+  void fetchVehicleOptions()
+  void fetchCarrierOptions()
   window.addEventListener('resize', checkMobile)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
+  if (fromDebounceTimer) window.clearTimeout(fromDebounceTimer)
+  if (toDebounceTimer) window.clearTimeout(toDebounceTimer)
+  if (blurTimer) window.clearTimeout(blurTimer)
 })
+
+watch(
+  () => carType.value,
+  () => {
+    if (!carType.value) {
+      carTypeCode.value = null
+    }
+    carrierBoard.value = ''
+    isCarrierOpen.value = false
+  }
+)
 </script>

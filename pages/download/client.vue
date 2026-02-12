@@ -1,41 +1,27 @@
 <template>
   <article class="bg-white min-h-screen font-['Noto_Sans_SC']">
     
-    <!-- 🚀 Hero Section: Standardized -->
-    <section class="relative h-[680px] overflow-hidden bg-gradient-to-b from-[#F0F7FF] to-[#FFFFFF]">
-      <div class="container mx-auto max-w-[1200px] px-4 h-full relative flex flex-col justify-center">
+    <!-- 🚀 Hero Section: 移动端隐藏右侧手机画框 -->
+    <section class="relative min-h-[480px] h-auto lg:h-[680px] overflow-hidden bg-gradient-to-b from-[#F0F7FF] to-[#FFFFFF]">
+      <div class="container mx-auto max-w-[1200px] px-4 py-8 lg:py-0 lg:h-full relative flex flex-col justify-center">
         <!-- Breadcrumb - Absolute Positioned (Dark Text for Light BG) -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-[#4B5563]">
-          <NuxtLink
-            to="/"
-            class="hover:text-[#006EFF] transition-colors cursor-pointer"
-          >
-            首页
-          </NuxtLink>
-          <ChevronRight class="w-4 h-4 text-[#9CA3AF]" />
-          <NuxtLink
-            to="/download"
-            class="hover:text-[#006EFF] transition-colors cursor-pointer"
-          >
-            APP下载
-          </NuxtLink>
-          <ChevronRight class="w-4 h-4 text-[#9CA3AF]" />
-          <span class="text-[#0B2747] font-bold">
-            车拖车客户端
-          </span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="dark" />
         </div>
 
-        <div class="flex items-stretch pt-16">
-          <!-- Left Column (50%) -->
-          <div class="w-1/2 flex flex-col justify-center">
+        <div class="flex flex-col lg:flex-row items-stretch pt-16">
+          <!-- Left Column：移动端全宽，桌面端 50% -->
+          <div class="w-full lg:w-1/2 flex flex-col justify-center">
             <div>
               <h1
                 v-motion
                 :initial="{ opacity: 0, y: 20 }"
                 :enter="{ opacity: 1, y: 0 }"
-                class="text-[40px] font-bold text-[#0B2747] leading-tight mb-4"
+                class="text-2xl sm:text-3xl md:text-[40px] font-bold text-[#0B2747] mb-4"
+                style="line-height: 1.5;"
               >
-                车拖车 APP：国内领先的<br />AI 智能调度汽车托运平台
+                <div>车拖车 APP：国内领先的</div>
+                <div>AI 智能调度汽车托运平台</div>
               </h1>
 
               <p
@@ -51,7 +37,10 @@
               </p>
 
               <div class="flex items-center gap-4 mt-8">
-                <button class="h-14 px-10 bg-[#FF6B00] hover:bg-[#E56000] text-white rounded-2xl font-bold text-[18px] border-none shadow-xl shadow-orange-500/20 cursor-pointer">
+                <button
+                  class="h-14 px-10 bg-[#FF6B00] hover:bg-[#E56000] text-white rounded-2xl font-bold text-[18px] border-none shadow-xl shadow-orange-500/20 cursor-pointer"
+                  @click="handleDownloadClick"
+                >
                   下载车拖车 APP
                 </button>
                 <NuxtLink
@@ -60,6 +49,44 @@
                 >
                   阅读用户指南 <ChevronRight class="w-4 h-4" />
                 </NuxtLink>
+              </div>
+
+              <div class="flex items-center gap-8 mt-8">
+                <div class="flex flex-col items-center gap-2">
+                  <div class="bg-white p-2.5 rounded-2xl border border-gray-100 shadow-md">
+                    <ImageWithFallback
+                      v-if="customerQr"
+                      :src="customerQr"
+                      alt="客户端下载二维码"
+                      class="w-[90px] h-[90px]"
+                    />
+                  </div>
+                  <span class="text-[11px] text-gray-400 font-bold">扫码下载客户端</span>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                  <button
+                    @click="setCustomerPlatform('ios')"
+                    :class="customerPlatform === 'ios'
+                      ? 'h-10 px-4 bg-black text-white rounded-xl flex items-center gap-2 text-[13px] font-bold shadow-sm border-none cursor-pointer'
+                      : 'h-10 px-4 bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer'"
+                  >
+                    <Apple class="w-4 h-4" /> App Store
+                  </button>
+                  <button
+                    @click="setCustomerPlatform('android')"
+                    :class="customerPlatform === 'android'
+                      ? 'h-10 px-4 bg-[#0B2747] text-white rounded-xl flex items-center gap-2 text-[13px] font-bold shadow-sm border-none cursor-pointer'
+                      : 'h-10 px-4 bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer'"
+                  >
+                    <Smartphone class="w-4 h-4" /> Android
+                  </button>
+                  <button
+                    @click="setCustomerPlatform('android')"
+                    class="h-10 px-4 bg-white hover:bg-gray-50 text-[#0B2747] border border-gray-200 rounded-xl flex items-center gap-2 text-[13px] font-bold cursor-pointer"
+                  >
+                    <Globe class="w-4 h-4" /> HarmonyOS
+                  </button>
+                </div>
               </div>
 
               <div class="flex items-center gap-6 mt-12 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
@@ -79,8 +106,8 @@
             </div>
           </div>
 
-          <!-- Right Column (50%) -->
-          <div class="w-1/2 flex items-center justify-center relative">
+          <!-- Right Column：手机端隐藏手机画框，仅桌面端显示 -->
+          <div class="hidden lg:flex w-1/2 items-center justify-center relative">
             <div
               v-motion
               :initial="{ opacity: 0, scale: 0.9, rotate: 5 }"
@@ -121,6 +148,14 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref, computed } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/download/client'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/download/client')
 import { 
   ChevronRight,
   Apple,
@@ -128,6 +163,7 @@ import {
   Globe
 } from 'lucide-vue-next'
 import HeroChatMockup from '@/components/client/HeroChatMockup.vue'
+import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import ClientAIPricing from '@/components/client/ClientAIPricing.vue'
 import ClientSecurityEcosystem from '@/components/client/ClientSecurityEcosystem.vue'
 import ClientSupportedEntities from '@/components/client/ClientSupportedEntities.vue'
@@ -135,6 +171,7 @@ import ClientAppFunctions from '@/components/client/ClientAppFunctions.vue'
 import ClientUserGuide from '@/components/client/ClientUserGuide.vue'
 import ClientReviews from '@/components/client/ClientReviews.vue'
 import ClientFooter from '@/components/client/ClientFooter.vue'
+import { useDownloadInfo } from '@/composables/useDownloadInfo'
 
 const schemaMarkup = JSON.stringify({
   "@context": "https://schema.org",
@@ -154,6 +191,35 @@ const schemaMarkup = JSON.stringify({
     priceCurrency: "CNY",
   },
 })
+
+const { fetchIfNeeded, openCustomerApp, customerAndroidQr, customerIosQr } = useDownloadInfo()
+
+onMounted(() => {
+  fetchIfNeeded()
+})
+
+const handleDownloadClick = () => {
+  if (typeof navigator !== 'undefined' && /iphone|ipad|ipod/i.test(navigator.userAgent)) {
+    openCustomerApp('ios')
+  } else {
+    openCustomerApp('android')
+  }
+}
+
+const customerPlatform = ref<'ios' | 'android'>('android')
+const customerQr = computed(() =>
+  customerPlatform.value === 'ios' ? customerIosQr.value : customerAndroidQr.value
+)
+
+const isMobile = () =>
+  typeof navigator !== 'undefined' && /iphone|ipad|ipod|android|mobile/i.test(navigator.userAgent)
+
+const setCustomerPlatform = (platform: 'ios' | 'android') => {
+  customerPlatform.value = platform
+  if (isMobile()) {
+    openCustomerApp(platform)
+  }
+}
 
 useHead({
   title: '车拖车客户端 - AI智能汽车托运平台 | 车拖车',

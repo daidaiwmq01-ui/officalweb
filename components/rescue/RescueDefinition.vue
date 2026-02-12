@@ -14,7 +14,7 @@
           <span class="text-sm font-bold tracking-widest text-[#FF6B00]">
             SERVICE DEFINITION / 服务定义
           </span>
-          <h2 class="text-[36px] font-bold text-[#0B2747] mt-4 mb-6 leading-tight">
+          <h2 class="text-[36px] font-bold text-[#0B2747] mt-4 mb-6 leading-[1.6]">
             汽车托运的"安全底座"：<br />构建全状态移动链路
           </h2>
           <div class="space-y-6">

@@ -115,14 +115,14 @@
                 '成都-重庆', '上海-苏州', '北京-天津'
               ]"
               :key="route"
-              @click="scrollToPricing"
+              @click="navigateToHotRoutes"
               class="text-[12px] text-gray-500 bg-white border border-gray-100 px-2 py-1 rounded hover:border-[#006EFF] hover:text-[#006EFF] transition-colors cursor-pointer"
             >
               {{ route }}
             </button>
           </div>
           <button 
-            @click="scrollToPricing"
+            @click="navigateToHotRoutes"
             class="mt-auto text-xs text-[#006EFF] font-bold flex items-center gap-1 hover:gap-2 transition-all cursor-pointer bg-transparent border-none p-0"
           >
             <span>查看专车托运报价</span>
@@ -166,11 +166,8 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const scrollToPricing = () => {
-  const pricingElement = document.getElementById('small-carrier-pricing')
-  if (pricingElement) {
-    pricingElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+const navigateToHotRoutes = () => {
+  window.location.href = '/pricing#hot-city-routes'
 }
 
 const handleBigCarrierClick = () => {

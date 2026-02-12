@@ -14,36 +14,25 @@
       <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-[#0B2747]/30" />
     </div>
 
-    <!-- Content Container (1200px centered) -->
-    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-center">
+    <!-- Content Container：始终预留面包屑高度，避免 PC 端 H1 与面包屑重叠 -->
+    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-start pt-14">
       <!-- Breadcrumb Navigation - Absolute Positioned -->
-      <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-        <button
-          @click="() => setActiveId?.('home')"
-          class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
-        >
-          首页
-        </button>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <span class="text-white/60">汽车托运</span>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <span class="text-white font-medium">
-          道路救援
-        </span>
+      <div class="absolute top-6 left-4 lg:left-0 z-20">
+        <BreadcrumbNav :items="breadcrumbItems" variant="light" />
       </div>
 
       <div
         v-motion
         :initial="{ opacity: 0, y: 32 }"
         :enter="{ opacity: 1, y: 0, transition: { duration: 600, ease: 'easeOut' } }"
-        class="max-w-[752px] pt-16 px-4 lg:px-0"
+        class="max-w-[752px] pt-6 lg:pt-8 px-4 lg:px-0"
       >
         <!-- Main Title (H1) - White with Brand Orange highlights -->
-        <h1 class="text-[40px] font-bold text-white leading-tight mb-4 drop-shadow-lg">
-          <span class="text-[#FF6B00]">24 小时</span>
-          道路救援：
-          <br class="hidden md:block" />
-          针对故障与事故车辆的全天候应急保障
+        <h1 class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white mb-4 drop-shadow-lg" style="line-height: 1.5;">
+          <div>
+            <span class="text-[#FF6B00]">24 小时</span>道路救援：
+          </div>
+          <div>针对故障与事故车辆的全天候应急保障</div>
         </h1>
 
         <!-- Subtitle - Gray-100 for readability on dark BG -->
@@ -139,6 +128,10 @@ import {
   ChevronRight,
 } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+
+const breadcrumbItems = getBreadcrumbsForRoute('/rescue')
 import Button from '@/components/ui/Button.vue'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'

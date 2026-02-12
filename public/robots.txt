@@ -1,0 +1,33 @@
+# 车拖车官网 - Robots.txt
+# 更新时间: 2026-02-11
+
+User-agent: *
+Allow: /
+
+# 禁止抓取的路径
+Disallow: /api/
+Disallow: /admin/
+Disallow: /test-hero
+Disallow: /_nuxt/
+Disallow: /valet/seoTDK
+
+# 允许抓取重要资源
+Allow: /assets/
+Allow: /*.css$
+Allow: /*.js$
+
+# 搜索引擎特定规则
+User-agent: Googlebot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap 位置
+Sitemap: https://www.chetuoche.com/sitemap.xml
+
+# 爬取频率建议
+Crawl-delay: 1

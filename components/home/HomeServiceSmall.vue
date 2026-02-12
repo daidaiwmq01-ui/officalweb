@@ -18,7 +18,7 @@
 
         <!-- Text Right -->
         <div class="w-full lg:w-1/2">
-          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6 leading-tight">
+          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6 leading-[1.6]">
             小板车尊享托运：<br />
             <span class="text-[#FF6B00]">5秒接单</span>，门到门专车直送
           </h2>
@@ -37,13 +37,13 @@
             </div>
           </div>
 
-          <button
-            @click="handleQuoteClick"
+          <NuxtLink
+            to="/pricing#pricing-calculator"
             class="group bg-transparent hover:bg-[#FFF5EB] text-[#FF6B00] border-2 border-[#FF6B00] rounded-full px-8 py-6 text-lg font-bold transition-all"
           >
             小板车精准估价
             <ArrowRight class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline-block" />
-          </button>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { ArrowRight, CheckCircle2, MessageCircle } from 'lucide-vue-next'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
@@ -100,34 +100,11 @@ import DialogDescription from '@/components/ui/DialogDescription.vue'
 import { SERVICE_SMALL_CARRIER, EXTERNAL_ASSETS } from '@/utils/images'
 
 const isMiniProgramModalOpen = ref(false)
-const isMobile = ref(false)
 const tags = ['5秒极速接单', '38万+ 运力覆盖', '全程保险']
 const serviceImage = ref(SERVICE_SMALL_CARRIER || EXTERNAL_ASSETS.LUXURY_SHOW)
-
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
 
 const handleImageError = () => {
   serviceImage.value = EXTERNAL_ASSETS.LUXURY_SHOW
 }
 
-const handleQuoteClick = () => {
-  if (isMobile.value) {
-    // Mobile: Deep Link (WeChat)
-    window.location.href = 'weixin://dl/business/?t=chetuoche_quote'
-  } else {
-    // Desktop: Open Modal
-    isMiniProgramModalOpen.value = true
-  }
-}
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
 </script>

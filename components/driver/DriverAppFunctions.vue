@@ -1,6 +1,6 @@
 <template>
-  <section class="py-24 bg-white">
-    <div class="container mx-auto max-w-[1200px] px-4">
+  <section class="py-24 bg-white overflow-x-hidden w-full">
+    <div class="container mx-auto max-w-[1200px] px-4 w-full box-border">
       <div class="text-center mb-16 max-w-[800px] mx-auto">
         <h2 class="text-[32px] font-bold text-[#0B2747] mb-6">
           车拖车司机端可以做什么

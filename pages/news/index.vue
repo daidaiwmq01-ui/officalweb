@@ -5,7 +5,7 @@
       <div class="absolute inset-0 z-0">
         <img 
           :src="ASSETS.HERO" 
-          alt="News Hero" 
+          alt="车拖车新闻资讯中心-汽车物流行业深度解析与技术公告" 
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-[#0B2747]/80" />
@@ -13,15 +13,8 @@
 
       <div class="container mx-auto max-w-[1200px] relative z-10 px-4 lg:px-0 h-full flex flex-col justify-center">
         <!-- Breadcrumb -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-white/80 text-[14px]">
-          <button 
-            @click="handleSetActiveId('home')" 
-            class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white font-bold">信息资讯</span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <div class="text-center max-w-[800px] mx-auto mt-8">
@@ -29,7 +22,7 @@
             v-motion
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0 }"
-            class="text-[40px] font-bold text-white mb-4"
+            class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white mb-4"
           >
             新闻资讯
           </h1>
@@ -84,7 +77,7 @@
       <div class="flex flex-col lg:flex-row gap-12">
         <!-- Left Column: News Feed (800px) -->
         <main class="lg:w-[800px] shrink-0">
-          <NewsFeedContainer />
+          <NewsFeedContainer :active-type-id="activeTypeId" />
         </main>
 
         <!-- Right Column: Sidebar (350px) -->
@@ -101,8 +94,16 @@
                   v-for="cat in SIDEBAR_CATEGORIES"
                   :key="cat.name"
                   class="w-full flex justify-between items-center px-4 py-3 rounded-xl hover:bg-[#F0F7FF] group transition-all cursor-pointer text-left"
+                  @click="handleCategoryClick(cat)"
                 >
-                  <span class="text-[15px] text-[#4B5563] group-hover:text-[#006EFF] transition-colors">{{ cat.name }}</span>
+                  <span
+                    :class="[
+                      'text-[15px] transition-colors',
+                      cat.id === activeTypeId ? 'text-[#006EFF] font-semibold' : 'text-[#4B5563] group-hover:text-[#006EFF]'
+                    ]"
+                  >
+                    {{ cat.name }}
+                  </span>
                   <span class="text-[12px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full group-hover:bg-[#E6F2FF] group-hover:text-[#006EFF] transition-colors">{{ cat.count }}</span>
                 </button>
               </div>
@@ -136,6 +137,7 @@
                   v-for="(article, idx) in HOT_READS"
                   :key="article.id"
                   class="group cursor-pointer flex gap-4"
+                  @click="handleHotReadClick(article)"
                 >
                   <span :class="`shrink-0 w-6 h-6 rounded flex items-center justify-center text-[12px] font-bold ${idx < 3 ? 'bg-[#E6F2FF] text-[#006EFF]' : 'bg-gray-50 text-gray-400'}`">
                     {{ idx + 1 }}
@@ -154,7 +156,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/news'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/news')
 import { 
   Search, 
   ChevronRight, 
@@ -164,23 +173,78 @@ import {
 import Input from '@/components/ui/Input.vue'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import NewsFeedContainer from '@/components/news/NewsFeedContainer.vue'
+import { useRouter } from 'vue-router'
+import { makeNewsPath } from '@/utils/slug'
+
+// SEO Meta Tags
+useHead({
+  title: '汽车托运资讯 - 行业深度、技术公告与物流攻略 - 车拖车',
+  meta: [
+    { name: 'description', content: '来自车拖车的权威新闻与资讯。汇总行业趋势、数字化物流算法公告、清障车销售动态，通过结构化数据（JSON-LD）建立专业可信的品牌形象。' },
+    { name: 'keywords', content: '物流资讯, 行业新闻, 托运百科, 数字化物流, 车拖车动态' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/news' }
+  ]
+})
+
+// Schema.org 结构化数据
+const newsListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  'name': '车拖车行业资讯与技术公告',
+  'description': '汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。',
+  'url': 'https://www.chetuoche.com/news',
+  'mainEntity': {
+    '@type': 'ItemList',
+    'itemListElement': [
+      {
+        '@type': 'SiteNavigationElement',
+        'position': 1,
+        'name': '行业深度',
+        'url': 'https://www.chetuoche.com/news'
+      },
+      {
+        '@type': 'SiteNavigationElement',
+        'position': 2,
+        'name': '技术公告',
+        'url': 'https://www.chetuoche.com/news'
+      }
+    ]
+  }
+}
+
+useSchemaOrg(newsListSchema)
 
 // --- Global Assets & Sidebar Constants ---
 const ASSETS = {
   HERO: "https://images.unsplash.com/photo-1733948351315-688870d89e66?auto=format&fit=crop&q=80&w=1200",
 }
 
-const SIDEBAR_CATEGORIES = [
-  { name: "全部资讯 (All)", count: 42 },
-  { name: "行业深度 (B端供应链)", count: 15 },
-  { name: "技术公告 (网络安全)", count: 8 },
-  { name: "产品资讯 (清障车/板车)", count: 12 },
-  { name: "公司动态", count: 7 }
+interface NewsTypeItem {
+  id?: number | string
+  newsType?: string
+  name?: string
+}
+
+interface NewsItemRaw {
+  id?: number | string
+  title?: string
+  tags?: string
+  pageView?: number
+  uniqueVisitor?: number
+  newsTypeId?: number
+  newsTypeID?: number
+  typeId?: number
+}
+
+const FALLBACK_CATEGORIES = [
+  { id: 0, name: "全部资讯", count: 0 }
 ]
 
-const TAGS = ["#数字化物流", "#等保三级", "#清障车价格", "#供应链优化", "#新能源运输"]
+const FALLBACK_TAGS = ["#数字化物流", "#等保三级", "#清障车价格", "#供应链优化", "#新能源运输"]
 
-const HOT_READS = [
+const FALLBACK_HOT_READS = [
   { id: 1, title: "深度：2026年临沂汽车物流数字化转型白皮书" },
   { id: 2, title: "车拖车是如何实现 100% 运输轨迹全实时覆盖的？" },
   { id: 3, title: "干货：B端客户选择承运商的 5 大维度考核标准" },
@@ -195,8 +259,98 @@ interface Props {
 const props = defineProps<Props>()
 
 const searchQuery = ref("")
+const router = useRouter()
+const activeTypeId = ref<number | string | undefined>(undefined)
 
 const handleSetActiveId = (id: string) => {
   props.setActiveId?.(id)
 }
+
+const handleCategoryClick = (cat: { id?: number | string }) => {
+  if (cat?.id === undefined || cat?.id === null) return
+  activeTypeId.value = cat.id
+}
+
+const handleHotReadClick = (article: { id: number | string; typeId?: number | string }) => {
+  router.push({ path: makeNewsPath(article.id) })
+}
+
+const { data: sidebarData } = await useAsyncData('news-sidebar', async () => {
+  const typeResponse = await $fetch('/api/home/getAllNewsType')
+  const types = Array.isArray(typeResponse)
+    ? (typeResponse as NewsTypeItem[])
+    : ((typeResponse as { data?: NewsTypeItem[] })?.data || [])
+
+  const categories = types
+    .filter((item) => item?.id !== undefined && item?.id !== null)
+    .map((item) => ({
+      id: item.id as number | string,
+      name: item.newsType || item.name || '新闻资讯',
+      count: 0
+    }))
+
+  const tagSet = new Set<string>()
+  const hotCandidates: Array<{ id: number | string; title: string; views: number; typeId?: number | string }> = []
+  await Promise.all(
+    categories.map(async (cat) => {
+      try {
+        const listResponse = await $fetch('/api/home/newsList/1/50', {
+          method: 'POST',
+          body: { newsTypeId: Number(cat.id) }
+        })
+        const rawList = Array.isArray(listResponse)
+          ? (listResponse as NewsItemRaw[])
+          : ((listResponse as { data?: { list?: NewsItemRaw[] } | NewsItemRaw[]; list?: NewsItemRaw[] })?.data as
+              | { list?: NewsItemRaw[] }
+              | NewsItemRaw[]
+              | undefined)?.list ||
+            (listResponse as { list?: NewsItemRaw[] })?.list ||
+            ((listResponse as { data?: NewsItemRaw[] })?.data || [])
+
+        ;(rawList as NewsItemRaw[]).forEach((item) => {
+          if (item?.id && item?.title) {
+            const views = Number(item.pageView ?? item.uniqueVisitor ?? 0)
+            const typeId = item.newsTypeId ?? item.newsTypeID ?? item.typeId ?? cat.id
+            hotCandidates.push({ id: item.id, title: item.title, views, typeId })
+          }
+          if (!item?.tags) return
+          item.tags
+            .split(/[,，\s]+/)
+            .map((tag) => tag.trim())
+            .filter(Boolean)
+            .forEach((tag) => tagSet.add(tag.startsWith('#') ? tag : `#${tag}`))
+        })
+      } catch {
+        // Ignore per-category failure
+      }
+    })
+  )
+
+  const hotReads = hotCandidates
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5)
+    .map((item) => ({ id: item.id, title: item.title, typeId: item.typeId }))
+
+  return {
+    categories: categories.length > 0 ? categories : FALLBACK_CATEGORIES,
+    tags: tagSet.size > 0 ? Array.from(tagSet).slice(0, 20) : FALLBACK_TAGS,
+    hotReads: hotReads.length > 0 ? hotReads : FALLBACK_HOT_READS
+  }
+})
+
+const SIDEBAR_CATEGORIES = computed(() => sidebarData.value?.categories || FALLBACK_CATEGORIES)
+const TAGS = computed(() => sidebarData.value?.tags || FALLBACK_TAGS)
+const HOT_READS = computed(() => sidebarData.value?.hotReads || FALLBACK_HOT_READS)
+
+watch(
+  SIDEBAR_CATEGORIES,
+  (cats) => {
+    if (activeTypeId.value !== undefined) return
+    const first = cats?.[0]
+    if (first?.id !== undefined && first?.id !== null) {
+      activeTypeId.value = first.id
+    }
+  },
+  { immediate: true }
+)
 </script>

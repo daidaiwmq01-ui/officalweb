@@ -4,13 +4,6 @@
       <h2 class="text-[24px] font-bold text-[#0B2747]">最新资讯</h2>
     </div>
 
-    <!-- Category Tabs -->
-    <NewsCategoryTabs 
-      :categories="newsTypes" 
-      :active-tab="activeTab" 
-      @tab-change="handleTabChange"
-    />
-
     <!-- Article List -->
     <div v-if="error" class="p-6 bg-red-50 text-red-600 rounded-lg text-sm">
       {{ error }}
@@ -18,56 +11,29 @@
     </div>
     <NewsArticleList v-else :loading="loading" :news-list="newsList" />
 
-    <!-- Pagination Controls -->
-    <div 
-      v-if="!loading && !error && newsList.length > 0"
-      class="flex items-center justify-center gap-4 mt-8 pt-8 border-t border-gray-100"
-    >
-      <button 
-        @click="handlePrevPage"
-        :disabled="page === 1"
-        class="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-      >
-        <ChevronLeft class="w-4 h-4" />
-        上一页
-      </button>
-      
-      <span class="text-sm font-medium text-[#0B2747]">
-        第 {{ page }} 页
-      </span>
-      
-      <button 
-        @click="handleNextPage"
-        class="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all"
-      >
-        下一页
-        <ChevronRight class="w-4 h-4" />
-      </button>
-    </div>
+    <Pagination
+      :show="!loading && !error && newsList.length > 0"
+      :page="page"
+      :total-pages="totalPages"
+      @prev="handlePrevPage"
+      @next="handleNextPage"
+      @goto="handleGotoPage"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import NewsCategoryTabs from './NewsCategoryTabs.vue'
+import { ref, watch } from 'vue'
 import NewsArticleList from './NewsArticleList.vue'
+import Pagination from '@/components/ui/Pagination.vue'
 
 import type { NewsItem, NewsItemAPI } from '@/types'
 
-// --- Types ---
-interface NewsType {
-  id: string
-  name: string
+interface Props {
+  activeTypeId?: number | string
 }
 
-// --- Mock Data for Fallback ---
-const MOCK_NEWS_TYPES: NewsType[] = [
-  { id: '1', name: '全部' },
-  { id: '2', name: '行业深度' },
-  { id: '3', name: '技术公告' },
-  { id: '4', name: '产品资讯' },
-]
+const props = defineProps<Props>()
 
 const MOCK_NEWS_LIST: NewsItem[] = [
   {
@@ -104,97 +70,63 @@ const MOCK_NEWS_LIST: NewsItem[] = [
   }
 ]
 
-// --- API Configuration ---
-const API_CONFIG = {
-  BASE_URL: "https://git.chetuoche.net/official-website-server",
-  HEADERS: {
-    "userType": "web",
-    "Content-Language": "zh-CN",
-    "channelSource": "3017",
-    "Content-Type": "application/json"
-  }
-}
-
-// Helper to generate dynamic headers
-const getAuthHeaders = () => {
-  const timestamp = Date.now().toString()
-  const sign = `mock_sign_${timestamp}_web`
-  
-  return {
-    ...API_CONFIG.HEADERS,
-    timestamp,
-    sign
-  }
-}
-
 // --- State ---
 const loading = ref(true)
-const activeTab = ref('')
 const page = ref(1)
+const pageSize = 10
+const totalPages = ref(1)
 const newsList = ref<NewsItem[]>([])
-const newsTypes = ref<NewsType[]>([])
 const error = ref<string | null>(null)
 
 // --- API Functions ---
-const fetchCategories = async () => {
-  try {
-    const response = await $fetch(`${API_CONFIG.BASE_URL}/api/home/getAllNewsType`, {
-      method: 'GET',
-      headers: getAuthHeaders()
-    })
-    
-    const categories = Array.isArray(response) ? response : (response?.data || [])
-    newsTypes.value = categories as NewsType[]
-    if (categories.length > 0) {
-      activeTab.value = categories[0].id
-    }
-  } catch (err) {
-    // Fallback to mock data
-    newsTypes.value = MOCK_NEWS_TYPES
-    activeTab.value = MOCK_NEWS_TYPES[0].id
-  }
-}
-
 const fetchNews = async () => {
-  if (!activeTab.value) return
+  if (!props.activeTypeId) return
 
   loading.value = true
   error.value = null
   
   try {
-    const response = await $fetch(`${API_CONFIG.BASE_URL}/api/home/newsList/${page.value}/10`, {
+    const response = await $fetch(`/api/home/newsList/${page.value}/${pageSize}`, {
       method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({ newsTypeId: activeTab.value })
+      body: { newsTypeId: Number(props.activeTypeId) }
     })
     
-    const rawList = Array.isArray(response) ? response : (response?.data?.list || response?.list || [])
+    const rawList = Array.isArray(response)
+      ? response
+      : (response?.data?.list || response?.list || response?.data || [])
+
+    const total = Number((response as { total?: number })?.total ?? (response as { data?: { total?: number } })?.data?.total)
+    if (Number.isFinite(total) && total > 0) {
+      totalPages.value = Math.max(1, Math.ceil(total / pageSize))
+    } else {
+      const pages = Number((response as { pages?: number })?.pages ?? (response as { data?: { pages?: number } })?.data?.pages)
+      totalPages.value = Number.isFinite(pages) && pages > 0 ? pages : 1
+    }
     
     // Map API fields to UI fields
     const mappedList: NewsItem[] = rawList.map((item: NewsItemAPI) => ({
       id: item.id,
       title: item.title,
-      summary: item.desc || item.summary || "暂无简介",
-      createTime: item.createTime || new Date().toISOString().split('T')[0],
-      author: item.author || "官方发布",
-      imgUrl: item.imgUrl || item.cover || "https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&q=80&w=800"
+      summary: (item as { briefIntroduction?: string }).briefIntroduction || item.desc || item.summary || "暂无简介",
+      createTime: (item as { publishTime?: string }).publishTime || item.createTime || new Date().toISOString().split('T')[0],
+      author: (item as { source?: string }).source || item.author || "官方发布",
+      imgUrl: (item as { coverImg?: string }).coverImg || item.imgUrl || item.cover || "https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&q=80&w=800",
+      typeId: (item as { newsTypeId?: number; newsTypeID?: number; typeId?: number }).newsTypeId
+        ?? (item as { newsTypeID?: number }).newsTypeID
+        ?? (item as { typeId?: number }).typeId
     }))
     
     newsList.value = mappedList
   } catch (err) {
     // Fallback to mock data
     newsList.value = MOCK_NEWS_LIST
+    totalPages.value = 1
   } finally {
     loading.value = false
   }
 }
 
 // --- Handlers ---
-const handleTabChange = (id: string) => {
-  activeTab.value = id
-  page.value = 1
-}
-
 const handlePrevPage = () => {
   if (page.value > 1) {
     page.value = page.value - 1
@@ -205,13 +137,25 @@ const handleNextPage = () => {
   page.value = page.value + 1
 }
 
-// --- Lifecycle ---
-onMounted(() => {
-  fetchCategories()
-})
+const handleGotoPage = (nextPage: number) => {
+  if (nextPage === page.value) return
+  if (nextPage < 1 || nextPage > totalPages.value) return
+  page.value = nextPage
+}
 
-// Watch for tab and page changes
-watch([activeTab, page], () => {
+watch(
+  () => props.activeTypeId,
+  (nextId, prevId) => {
+    if (!nextId) return
+    if (nextId !== prevId) {
+      page.value = 1
+    }
+    fetchNews()
+  },
+  { immediate: true }
+)
+
+watch(page, () => {
   fetchNews()
-}, { immediate: false })
+})
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <footer class="py-20 bg-[#0B2747] text-white border-t border-white/5">
-    <div class="container mx-auto max-w-[1200px] px-4">
+  <footer class="py-20 bg-[#0B2747] text-white border-t border-white/5 overflow-x-hidden w-full">
+    <div class="container mx-auto max-w-[1200px] px-4 w-full box-border">
       <div class="flex flex-col md:flex-row items-center justify-between gap-10 opacity-70">
         <div class="text-[14px] leading-relaxed max-w-[600px]">
           <div class="font-bold mb-4 flex items-center gap-2">
@@ -11,9 +11,10 @@
         <div class="flex gap-10 text-[12px]">
           <div class="flex flex-col items-center gap-2">
             <div class="bg-white p-2 rounded-lg">
-              <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://chetuoche.com/driver"
-                alt="QR"
+              <ImageWithFallback
+                v-if="driverAndroidQr || driverIosQr"
+                :src="driverAndroidQr || driverIosQr"
+                alt="司机端下载二维码"
                 class="w-20 h-20"
               />
             </div>
@@ -28,5 +29,14 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { Globe } from 'lucide-vue-next'
+import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import { useDownloadInfo } from '@/composables/useDownloadInfo'
+
+const { fetchIfNeeded, driverAndroidQr, driverIosQr } = useDownloadInfo()
+
+onMounted(() => {
+  fetchIfNeeded()
+})
 </script>

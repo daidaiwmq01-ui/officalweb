@@ -11,32 +11,24 @@
       <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-[#0B2747]/30" />
     </div>
 
-    <!-- Content Container (1200px centered) -->
-    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-center">
+    <!-- Content Container：始终预留面包屑高度，避免 PC 端 H1 与面包屑重叠 -->
+    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-start pt-14">
       <!-- Breadcrumb Navigation - Absolute Positioned -->
-      <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-        <button 
-          @click="handleHomeClick" 
-          class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
-        >
-          首页
-        </button>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <span class="text-white/60">汽车托运</span>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <span class="text-white font-medium">代驾取送车</span>
+      <div class="absolute top-6 left-4 lg:left-0 z-20">
+        <BreadcrumbNav :items="breadcrumbItems" variant="light" />
       </div>
 
-      <div class="max-w-[752px] pt-16 px-4 lg:px-0">
+      <div class="max-w-[752px] pt-6 lg:pt-8 px-4 lg:px-0">
         <!-- Main Title (H1) -->
         <h1
           v-motion
           :initial="{ opacity: 0, y: 32 }"
           :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-          class="text-[42px] font-bold text-white leading-tight tracking-tight drop-shadow-lg"
+          class="text-2xl sm:text-3xl md:text-[42px] font-bold text-white tracking-tight drop-shadow-lg"
+          style="line-height: 1.5;"
         >
-          专业代驾取送服务：打通汽车托运<br />
-          "<span class="text-[#FF6B00]">最后一公里</span>"的数字化桥梁
+          <div>专业代驾取送服务：打通汽车托运</div>
+          <div>"<span class="text-[#FF6B00]">最后一公里</span>"的数字化桥梁</div>
         </h1>
 
         <!-- Subtitle -->
@@ -126,7 +118,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, h } from 'vue'
-import { Calculator, MapPin, UserCheck, Zap, ChevronRight, MessageCircle } from 'lucide-vue-next'
+import { Calculator, MapPin, UserCheck, Zap, MessageCircle } from 'lucide-vue-next'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+
+const breadcrumbItems = getBreadcrumbsForRoute('/valet')
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
@@ -185,10 +181,6 @@ const scrollToPricing = () => {
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' })
   }
-}
-
-const handleHomeClick = () => {
-  props.setActiveId?.('home')
 }
 
 onMounted(() => {

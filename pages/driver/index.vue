@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white min-h-screen font-['Noto_Sans_SC']">
     <!-- 1. Hero Section (High Impact) -->
-    <section class="relative w-full h-[500px] overflow-hidden">
+    <section class="relative w-full h-[500px] pt-[80px] overflow-hidden">
       <div class="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1688619101855-396f4f06710e?q=80&w=2000" 
@@ -14,22 +14,19 @@
 
       <div class="container mx-auto max-w-[1200px] relative z-10 px-4 h-full flex flex-col justify-center">
         <!-- Breadcrumb - Top Left -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-white/80 text-[14px]">
-          <button @click="navigateToHome" class="hover:text-white transition-colors cursor-pointer bg-transparent border-none">首页</button>
-          <ChevronRight class="w-4 h-4" />
-          <button @click="navigateToPartners" class="hover:text-white transition-colors cursor-pointer bg-transparent border-none">合作伙伴</button>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white">司机入驻</span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <div
           v-motion
           :initial="{ opacity: 0, x: -30 }"
           :enter="{ opacity: 1, x: 0, transition: { duration: 800 } }"
-          class="max-w-[700px]"
+          class="max-w-[700px] pt-16"
         >
-          <h1 class="text-[40px] font-bold text-white leading-[1.2] mb-6">
-            车拖车司机端：<br />全国最大的板车司机接单平台
+          <h1 class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white mb-6" style="line-height: 1.5;">
+            <div>车拖车司机端：</div>
+            <div>全国最大的板车司机接单平台</div>
           </h1>
           <p class="text-[18px] text-white/90 leading-relaxed mb-10 max-w-[600px]">
             汇聚 38 万+ 认证司机，已完成 2000 万次托运。海量真实货源，自动听单，极速结算。
@@ -227,8 +224,15 @@
 </template>
 
 <script setup lang="ts">
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/driver'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/driver')
+
 import { 
-  ChevronRight, 
   Smartphone, 
   ShieldCheck, 
   Zap, 
@@ -264,11 +268,32 @@ const scrollToStandards = () => {
   document.getElementById('driver-standards')?.scrollIntoView({ behavior: 'smooth' })
 }
 
-const navigateToHome = () => {
-  props.setActiveId?.('home')
+// Schema.org 结构化数据 - 司机招募
+const driverSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  'title': '板车司机/代驾司机招募 (全国接单)',
+  'hiringOrganization': { '@id': 'https://www.chetuoche.com/#organization' },
+  'datePosted': '2024-01-01',
+  'validThrough': '2026-12-31',
+  'employmentType': 'CONTRACTOR',
+  'jobLocationType': 'TELECOMMUTE',
+  'jobLocation': {
+    '@type': 'Place',
+    'address': { '@type': 'PostalAddress', 'addressCountry': 'CN' }
+  },
+  'baseSalary': {
+    '@type': 'MonetaryAmount',
+    'currency': 'CNY',
+    'value': {
+      '@type': 'QuantitativeValue',
+      'value': 15000,
+      'unitText': 'MONTH'
+    }
+  },
+  'description': '车拖车平台招募小板车、大板车及代驾司机。提供海量货源、自动听单系统及极速结算服务。已有38万司机加入。',
+  'incentiveCompensation': '新司机入驻免保证金，享有车贴补贴及运费奖励。'
 }
 
-const navigateToPartners = () => {
-  props.setActiveId?.('partners')
-}
+useSchemaOrg(driverSchema)
 </script>

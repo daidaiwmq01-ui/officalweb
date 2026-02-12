@@ -30,6 +30,11 @@
 </template>
 
 <script setup lang="ts">
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/valet'))
+
 import { UserCheck, MapPin, Zap, Route, Satellite, TrendingDown } from 'lucide-vue-next'
 import { Truck, Navigation, Store } from 'lucide-vue-next'
 import ValetHero from '@/components/valet/ValetHero.vue'
@@ -43,6 +48,46 @@ import ValetFaq from '@/components/valet/ValetFaq.vue'
 import ValetSemanticBlock from '@/components/valet/ValetSemanticBlock.vue'
 import { EXTERNAL_ASSETS } from '@/utils/images'
 import type { AdvantageItem, CaseItemTypeA, ReviewItem } from '@/types'
+
+// SEO Meta Tags
+useHead({
+  title: '汽车代驾取送服务_解决托运最后一公里_长途代驾专人直达 - 车拖车',
+  meta: [
+    { name: 'description', content: '打通汽车托运末端服务盲区，代驾员充当"第一检测人"进行标准化验车。无论是大板车市区接驳，还是专人专车的长途代驾，提供GPS/北斗全流程监控，随停随走，安全无忧。' },
+    { name: 'keywords', content: '汽车代驾取送, 托运末端接驳, 长途代驾价格, 门到门送车服务, 代驾验车' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/valet' }
+  ]
+})
+
+// Schema.org 结构化数据
+const valetSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  'name': '专业汽车代驾取送服务',
+  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'serviceType': 'Designated Driving',
+  'description': '解决汽车托运"最后一公里"接驳难题。代驾员作为"第一检测人"执行标准化验车，支持长途专人专车直达，点火即走。',
+  'serviceOutput': '标准化验车报告',
+  'areaServed': 'CN',
+  'offers': {
+    '@type': 'Offer',
+    'priceCurrency': 'CNY',
+    'priceSpecification': {
+      '@type': 'UnitPriceSpecification',
+      'price': '75.6',
+      'referenceQuantity': {
+        '@type': 'QuantitativeValue',
+        'value': '20',
+        'unitCode': 'KMT'
+      },
+      'name': '代驾起步价（含20公里）'
+    }
+  }
+}
+
+useSchemaOrg(valetSchema)
 
 interface Props {
   setActiveId?: (id: string) => void

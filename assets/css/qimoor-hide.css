@@ -1,0 +1,17 @@
+/* 隐藏七陌默认的客服按钮 */
+#qimoChatBtn,
+.qimo-chatbtn,
+[id*="qimoChatBtn"],
+[class*="qimo-chatbtn"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 隐藏七陌可能创建的浮动按钮 */
+img[src*="7moor"],
+img[src*="qimo"],
+a[href*="7moor"]:not(iframe) {
+  display: none !important;
+}

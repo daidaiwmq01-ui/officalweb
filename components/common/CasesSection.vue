@@ -121,6 +121,9 @@
 import { computed } from 'vue'
 import { MapPin, Gauge, ArrowRight } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import Section from '@/components/common/Section.vue'
+import Container from '@/components/common/Container.vue'
+import SectionHeader from '@/components/common/SectionHeader.vue'
 import type { CaseItemTypeA, CaseItemTypeB, ThemeColor } from '@/types'
 
 /**

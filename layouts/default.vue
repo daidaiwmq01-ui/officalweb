@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white font-['Noto_Sans_SC']">
+  <div class="min-h-screen flex flex-col bg-white font-['Noto_Sans_SC'] overflow-x-hidden">
     <TheHeader :active-id="activeId" @update:active-id="handleSetActiveId" />
     <main class="flex-grow pt-[80px]">
       <slot />

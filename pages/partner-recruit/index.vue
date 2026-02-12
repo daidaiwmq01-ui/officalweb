@@ -14,21 +14,8 @@
 
       <div class="container mx-auto max-w-[1200px] relative z-10 px-4 lg:px-0 h-full flex flex-col justify-center">
         <!-- Breadcrumb -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-white/80 text-[14px]">
-          <button
-            @click="navigateToHome"
-            class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-4 h-4" />
-          <span class="hover:text-white transition-colors">
-            生态合作
-          </span>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white font-bold">
-            城市合伙人招募
-          </span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <div
@@ -37,10 +24,9 @@
           :enter="{ opacity: 1, x: 0, transition: { duration: 800 } }"
           class="max-w-[800px] pt-16 px-4 lg:px-0"
         >
-          <h1 class="text-[48px] font-bold text-white leading-[1.2] mb-6">
-            共享万亿级拖车蓝海：
-            <br />
-            车拖车城市合伙人招募计划
+          <h1 class="text-2xl sm:text-3xl md:text-[48px] font-bold text-white mb-6" style="line-height: 1.5;">
+            <div>共享万亿级拖车蓝海：</div>
+            <div>车拖车城市合伙人招募计划</div>
           </h1>
           <p class="text-[24px] text-white/90 font-medium mb-12">
             零门槛准入 · 全维度扶持 · 收益上不封顶
@@ -87,7 +73,7 @@
     <section class="py-24 bg-white">
       <div class="container mx-auto max-w-[1200px] px-4">
         <div class="text-center mb-20">
-          <h2 class="text-[36px] font-bold text-[#0B2747] mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold text-[#0B2747] mb-4">
             打破行业壁垒，三大核心权益
           </h2>
           <div class="w-20 h-1.5 bg-[#006EFF] mx-auto rounded-full" />
@@ -120,7 +106,7 @@
     <section class="py-24 bg-[#F8F9FB]">
       <div class="container mx-auto max-w-[1200px] px-4">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold mb-4">
             多重收益管道，盈利空间无上限
           </h2>
           <p class="text-[#4B5563]">
@@ -274,7 +260,7 @@
                   </div>
                 </div>
                 <div
-                  :class="`text-[36px] font-black ${
+                  :class="`text-2xl sm:text-[36px] font-black ${
                     commissionData.tierIndex === index
                       ? tier.isPremium
                         ? 'text-[#FFD700]'
@@ -306,7 +292,7 @@
     <section class="py-24 bg-[#0B2747] text-white">
       <div class="container mx-auto max-w-[1000px] px-4">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold mb-4">
             晋升正式代理商，赢取公司股权
           </h2>
           <p class="text-gray-400 text-[18px]">
@@ -317,7 +303,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
           <div class="p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-            <div class="text-[48px] font-black text-[#FF6B00] mb-2">
+            <div class="text-3xl sm:text-[48px] font-black text-[#FF6B00] mb-2">
               90%
             </div>
             <div class="text-[18px] font-bold mb-2">
@@ -337,7 +323,7 @@
             </p>
           </div>
           <div class="p-8 rounded-3xl bg-white/5 border border-[#FFD700]/30 hover:bg-white/10 transition-colors">
-            <div class="text-[48px] font-black text-[#FFD700] mb-2">
+            <div class="text-3xl sm:text-[48px] font-black text-[#FFD700] mb-2">
               股权
             </div>
             <div class="text-[18px] font-bold mb-2">
@@ -355,7 +341,7 @@
     <section class="py-24 bg-white">
       <div class="container mx-auto max-w-[1200px] px-4">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold mb-4">
             准入标准
           </h2>
           <p class="text-[#4B5563]">
@@ -386,7 +372,7 @@
     <section class="py-24 bg-[#F0F7FF]">
       <div class="container mx-auto max-w-[1200px] px-4">
         <div class="text-center mb-20">
-          <h2 class="text-[36px] font-bold text-[#0B2747] mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold text-[#0B2747] mb-4">
             您的后盾，车拖车全程护航
           </h2>
           <div class="w-20 h-1.5 bg-[#006EFF] mx-auto rounded-full" />
@@ -437,7 +423,7 @@
     <section class="py-24 bg-white">
       <div class="container mx-auto max-w-[1200px] px-4">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold mb-4">
             优秀合伙人风采
           </h2>
         </div>
@@ -480,27 +466,27 @@
           class="w-full"
         >
           <AccordionItem value="item-1">
-            <AccordionTrigger class="text-[18px] font-bold">
+            <AccordionTrigger value="item-1" class="text-[18px] font-bold">
               真的不需要任何加盟费吗？
             </AccordionTrigger>
-            <AccordionContent class="text-[#4B5563]">
+            <AccordionContent value="item-1" class="text-[#4B5563]">
               是的。我们推行"城市合伙人"模式，初级阶段完全免收加盟费、保证金。我们更看重合伙人在当地的市场拓展能力与服务质量。
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
-            <AccordionTrigger class="text-[18px] font-bold">
+            <AccordionTrigger value="item-2" class="text-[18px] font-bold">
               佣金结算周期是多久？
             </AccordionTrigger>
-            <AccordionContent class="text-[#4B5563]">
+            <AccordionContent value="item-2" class="text-[#4B5563]">
               平台采用 T+1
               实时入账模式。当运单状态变更为"已完成"且客户确认支付后，返佣金额将即时进入您的合伙人钱包，您可以随时申请提现。
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
-            <AccordionTrigger class="text-[18px] font-bold">
+            <AccordionTrigger value="item-3" class="text-[18px] font-bold">
               没有物流经验可以加入吗？
             </AccordionTrigger>
-            <AccordionContent class="text-[#4B5563]">
+            <AccordionContent value="item-3" class="text-[#4B5563]">
               完全可以。我们提供"保姆级"扶持体系，从系统培训到实战带教。只要您有创业热情和本地人脉资源，剩下的专业活儿由总部后台完成。
             </AccordionContent>
           </AccordionItem>
@@ -512,7 +498,7 @@
     <section id="recruit-form" class="py-24 bg-[#0B2747]">
       <div class="container mx-auto max-w-[1200px] px-4">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold text-white mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold text-white mb-4">
             立即申请，抢占城市名额
           </h2>
           <p class="text-white/60">
@@ -564,6 +550,13 @@
             >
               提交加盟申请
             </Button>
+            <p
+              v-if="statusMessage"
+              :class="statusType === 'success' ? 'text-green-300' : 'text-red-300'"
+              class="text-[14px] md:col-span-2 lg:col-span-3 text-center"
+            >
+              {{ statusMessage }}
+            </p>
           </form>
         </div>
       </div>
@@ -573,6 +566,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/partner-recruit'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/partner-recruit')
 import { useHead } from '#app'
 import {
   ChevronRight,
@@ -613,6 +613,8 @@ const formData = ref({
   area: '',
   teamSize: ''
 })
+const statusMessage = ref('')
+const statusType = ref<'success' | 'error' | ''>('')
 
 // 将 useMemo 转换为 computed
 const commissionData = computed(() => {
@@ -665,29 +667,39 @@ const tiers = [
   },
 ]
 
-const structuredData = computed(() => {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "BusinessEvent",
-    name: "车拖车城市合伙人招募计划",
-    description:
-      "共享万亿级拖车蓝海，零门槛准入，全维度扶持，高比例返佣。",
-    organizer: {
-      "@type": "Organization",
-      name: "车拖车",
-    },
-  }
-  return JSON.stringify(schema)
-})
-
+// SEO Meta Tags
 useHead({
-  script: [
+  title: '城市合伙人招募 - 零门槛共享拖车蓝海 | 车拖车',
+  meta: [
     {
-      type: 'application/ld+json',
-      children: structuredData.value
+      name: 'description',
+      content: '车拖车城市合伙人计划，零费准入、全维扶持、最高70%阶梯返利。共享万亿级拖车蓝海，年度成单达标可转公司股权。'
+    },
+    {
+      name: 'keywords',
+      content: '城市合伙人,拖车加盟,汽车物流创业,车拖车招募'
     }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/partner-recruit' }
   ]
 })
+
+// Schema.org 结构化数据 - 城市合伙人招募（使用全局 Organization @id）
+const partnerRecruitSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  'name': '车拖车城市合伙人招募计划',
+  'description': '共享万亿级拖车蓝海，零门槛准入，全维度扶持，高比例返佣。',
+  'mainEntity': {
+    '@type': 'Service',
+    'name': '城市合伙人招募',
+    'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+    'description': '零费准入、全维扶持、股权激励。阶梯返利最高70%，年度成单达标可转公司股权。'
+  }
+}
+
+useSchemaOrg(partnerRecruitSchema)
 
 const scrollToForm = () => {
   document
@@ -695,11 +707,42 @@ const scrollToForm = () => {
     ?.scrollIntoView({ behavior: "smooth" })
 }
 
-const handleFormSubmit = () => {
-  alert("申请已提交，我们将尽快联系您！")
+const handleFormSubmit = async () => {
+  statusMessage.value = ''
+  statusType.value = ''
+  if (!formData.value.phone) {
+    statusMessage.value = '请填写联系电话'
+    statusType.value = 'error'
+    return
+  }
+
+  try {
+    const response: any = await $fetch('/api/home/agentConsultationApply', {
+      method: 'POST',
+      body: {
+        phone: formData.value.phone
+      }
+    })
+
+    if (response?.status !== 0 && response?.status !== '0') {
+      statusMessage.value = response?.msg || '提交失败，请稍后重试'
+      statusType.value = 'error'
+      return
+    }
+
+    statusMessage.value = '申请已提交，我们将尽快联系您！'
+    statusType.value = 'success'
+    formData.value = {
+      companyName: '',
+      contactName: '',
+      phone: '',
+      area: '',
+      teamSize: ''
+    }
+  } catch (error) {
+    statusMessage.value = '提交失败，请稍后重试'
+    statusType.value = 'error'
+  }
 }
 
-const navigateToHome = () => {
-  props.setActiveId?.('home')
-}
 </script>

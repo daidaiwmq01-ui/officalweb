@@ -74,23 +74,23 @@
 
       <!-- Footer / CTA Area -->
       <div class="flex flex-col items-center mt-12">
-        <button
+        <NuxtLink
           v-motion
           :while-hover="{ scale: 1.02 }"
           :while-tap="{ scale: 0.98 }"
-          @click="handleQuoteClick"
+          to="/pricing#pricing-calculator"
           class="bg-[#006EFF] text-white px-8 py-4 h-14 rounded-full font-bold shadow-lg flex items-center gap-2 hover:bg-blue-600 transition-colors border-none cursor-pointer"
         >
           获取精准干线报价
           <Calculator :size="18" />
-        </button>
+        </NuxtLink>
         
-        <button 
-          @click="handleQuoteClick"
+        <NuxtLink 
+          to="/pricing#hot-city-routes"
           class="text-[#4B5563] text-sm mt-6 hover:text-[#006EFF] transition-colors border-none bg-transparent cursor-pointer"
         >
           查看更多城市价格 &gt;
-        </button>
+        </NuxtLink>
         
         <p class="text-[12px] text-gray-400 mt-4 text-center">
           *注：以上价格仅供参考，实际费用受季节、车型及燃油费波动影响，以系统实时报价为准。
@@ -133,7 +133,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { ArrowRight, Calculator, MessageCircle } from 'lucide-vue-next'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
@@ -188,26 +188,4 @@ const pricingData = [
 ]
 
 const isMiniProgramModalOpen = ref(false)
-const isMobile = ref(false)
-
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
-
-const handleQuoteClick = () => {
-  if (isMobile.value) {
-    window.location.href = 'weixin://dl/business/?t=chetuoche_quote'
-  } else {
-    isMiniProgramModalOpen.value = true
-  }
-}
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
 </script>

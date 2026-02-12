@@ -1,11 +1,11 @@
 <template>
   <nav class="sticky top-[80px] z-40 w-full bg-[#FFFFFF] border-b border-[#E5E7EB] shadow-sm h-[60px] flex items-center">
-    <div class="max-w-[1200px] mx-auto w-full px-4 flex justify-center gap-12 h-full">
+    <div class="max-w-[1200px] mx-auto w-full px-4 flex justify-center gap-6 sm:gap-12 h-full overflow-x-auto scrollbar-hide">
       <button
         v-for="item in navItems"
         :key="item.id"
         @click="handleNavClick(item.id)"
-        class="group relative h-full flex items-center text-[16px] font-medium text-[#6B7280] hover:text-[#006EFF] active:text-[#004BB5] active:scale-98 active:opacity-80 transition-all duration-300 cursor-pointer whitespace-nowrap"
+        class="group relative h-full flex items-center text-[14px] sm:text-[16px] font-medium text-[#6B7280] hover:text-[#006EFF] active:text-[#004BB5] active:scale-98 active:opacity-80 transition-all duration-300 cursor-pointer whitespace-nowrap flex-shrink-0"
       >
         {{ item.label }}
         <!-- No persistent underline or background per stateless requirement -->

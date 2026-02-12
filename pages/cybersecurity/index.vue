@@ -24,23 +24,9 @@
 
       <div class="container mx-auto max-w-[1200px] px-4 lg:px-0 relative z-10 text-center h-full flex flex-col justify-center">
         <!-- Breadcrumb -->
-        <nav class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-[#9CA3AF]">
-          <button
-            @click="navigateToHome"
-            class="hover:text-white transition-colors bg-transparent border-none cursor-pointer"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-3 h-3" />
-          <button
-            @click="navigateToSolutions"
-            class="hover:text-white transition-colors bg-transparent border-none cursor-pointer"
-          >
-            解决方案
-          </button>
-          <ChevronRight class="w-3 h-3" />
-          <span class="text-white">网络安全防护</span>
-        </nav>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
+        </div>
 
         <!-- Trust Badge -->
         <div
@@ -68,7 +54,7 @@
           v-motion
           :initial="{ opacity: 0, y: 20 }"
           :enter="{ opacity: 1, y: 0 }"
-          class="text-[48px] font-bold text-white mb-6 leading-[1.2]"
+          class="text-2xl sm:text-3xl md:text-[48px] font-bold text-white mb-6 leading-[1.6]"
         >
           金融级数据安全：为每一笔托运订单保驾护航
         </h1>
@@ -268,6 +254,15 @@
 </template>
 
 <script setup lang="ts">
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/cybersecurity'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/cybersecurity')
+
+
 import { useRouter } from 'vue-router'
 import {
   ChevronRight,
@@ -286,17 +281,24 @@ import ImageWithFallback from '@/components/ImageWithFallback.vue'
 
 const router = useRouter()
 
-const navigateToHome = () => {
-  router.push('/')
-}
-
-const navigateToSolutions = () => {
-  router.push('/solutions')
-}
 
 const navigateToContact = () => {
   router.push('/contact')
 }
+
+// Schema.org 结构化数据 - 网络安全防护
+const cybersecuritySchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  'name': '托运平台网络安全防护服务',
+  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'serviceType': 'Cybersecurity',
+  'description': '基于国家等保三级标准构建的物流数据安全堡垒。提供隐私脱敏、真实运力风控及T级抗DDoS防护。',
+  'certification': '国家信息安全等级保护三级认证',
+  'areaServed': 'CN'
+}
+
+useSchemaOrg(cybersecuritySchema)
 
 const pillars = [
   {

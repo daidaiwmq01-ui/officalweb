@@ -13,31 +13,15 @@
 
       <div class="container mx-auto max-w-[1200px] px-4 lg:px-0 relative z-10 text-center h-full flex flex-col justify-center">
         <!-- Breadcrumb - Top Left Fixed -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-          <button
-            @click="navigateToHome"
-            class="hover:text-white cursor-pointer bg-transparent border-none p-0"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-4 h-4" />
-          <button
-            @click="navigateToAbout"
-            class="hover:text-white cursor-pointer bg-transparent border-none p-0 text-white/60"
-          >
-            关于我们
-          </button>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white font-bold">
-            人才招聘
-          </span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <h1
           v-motion
           :initial="{ opacity: 0, y: 20 }"
           :enter="{ opacity: 1, y: 0 }"
-          class="text-[48px] font-bold text-white mb-6 leading-tight mt-16"
+          class="text-2xl sm:text-3xl md:text-[48px] font-bold text-white mb-6 leading-[1.6] mt-16"
         >
           加入我们，连接汽车物流的下一个时代
         </h1>
@@ -88,7 +72,7 @@
             class="p-10 rounded-[32px] border border-gray-100 hover:shadow-xl transition-all group"
             :class="item.bgClass"
           >
-            <div :class="`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 transition-all ${item.iconBgClass}`">
+            <div :class="['w-16 h-16 rounded-2xl flex items-center justify-center mb-8 transition-all', item.iconBgClass]">
               <component :is="item.icon" class="w-8 h-8" :class="item.iconClass" />
             </div>
             <h3 class="text-[22px] font-bold text-[#0B2747] mb-4">
@@ -112,7 +96,7 @@
             :visible="{ opacity: 1, x: 0 }"
             :visibleOnce="true"
           >
-            <h2 class="text-[36px] font-bold text-[#0B2747] mb-6">
+            <h2 class="text-2xl sm:text-[36px] font-bold text-[#0B2747] mb-6">
               校招专项：‘智运生’计划
             </h2>
             <div class="space-y-6 text-gray-600 leading-relaxed text-[16px]">
@@ -176,27 +160,47 @@
           <div class="w-16 h-1 bg-[#FF6B00] mx-auto rounded-full" />
         </div>
 
-        <Tabs v-model="activeTab" class="w-full">
-          <TabsList class="flex flex-wrap justify-center gap-4 bg-transparent mb-12 h-auto">
-            <TabsTrigger
+        <div class="w-full">
+          <div v-if="tabs && tabs.length > 0" class="flex flex-wrap justify-center gap-4 bg-transparent mb-12">
+            <button
               v-for="tab in tabs"
               :key="tab.value"
-              :value="tab.value"
-              class="px-8 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 data-[state=active]:bg-[#006EFF] data-[state=active]:text-white data-[state=active]:border-transparent transition-all shadow-sm"
+              :class="[
+                'px-8 py-3 rounded-xl border transition-all shadow-sm',
+                activeTab === tab.value
+                  ? 'bg-[#006EFF] text-white border-transparent'
+                  : 'border-gray-100 bg-gray-50 text-gray-500 hover:bg-gray-100'
+              ]"
+              @click="activeTab = tab.value"
             >
               {{ tab.label }}
-            </TabsTrigger>
-          </TabsList>
+            </button>
+          </div>
 
-          <TabsContent :value="activeTab" class="space-y-6">
-            <div
-              v-for="(job, idx) in filteredJobs"
-              :key="job.id"
-              v-motion
-              :initial="{ opacity: 0, y: 20 }"
-              :enter="{ opacity: 1, y: 0, transition: { delay: idx * 50 } }"
-              class="flex flex-col md:flex-row items-center justify-between p-8 rounded-[32px] bg-white border border-gray-100 hover:shadow-xl hover:shadow-gray-200/50 hover:border-blue-100 transition-all group relative"
-            >
+          <div class="space-y-6">
+            <!-- Loading 状态 -->
+            <div v-if="loading" class="space-y-6">
+              <div v-for="i in 3" :key="i" class="p-8 rounded-[32px] bg-gray-50 animate-pulse">
+                <div class="h-6 bg-gray-200 rounded w-2/3 mb-4" />
+                <div class="h-4 bg-gray-200 rounded w-1/2 mb-2" />
+                <div class="h-4 bg-gray-200 rounded w-3/4" />
+              </div>
+            </div>
+            
+            <!-- 职位列表 -->
+            <template v-else>
+              <div
+                v-for="(job, idx) in filteredJobs"
+                :key="job.id"
+                v-motion
+                :initial="{ opacity: 0, y: 20 }"
+                :enter="{ opacity: 1, y: 0, transition: { delay: Math.min(idx * 50, 500) } }"
+                class="flex flex-col md:flex-row items-center justify-between p-8 rounded-[32px] bg-white border border-gray-100 hover:shadow-xl hover:shadow-gray-200/50 hover:border-blue-100 transition-all group relative cursor-pointer"
+                role="button"
+                tabindex="0"
+                @click="openJobDetail(job)"
+                @keydown.enter.prevent="openJobDetail(job)"
+              >
               <div class="flex-1 mb-6 md:mb-0">
                 <div class="flex items-center gap-4 mb-4">
                   <h3 class="text-[20px] font-bold text-[#0B2747] group-hover:text-[#006EFF] transition-colors">
@@ -226,20 +230,94 @@
               </div>
               <div class="flex items-center gap-4">
                 <Button
-                  @click="sendEmail('hr@chetuoche.com')"
+                  class="h-12 px-8 bg-white border border-blue-100 text-[#006EFF] rounded-xl font-bold shadow-sm hover:bg-blue-50"
+                  @click.stop="openJobDetail(job)"
+                >
+                  查看详情
+                </Button>
+                <Button
+                  @click.stop="sendEmail('hr@chetuoche.com')"
                   class="h-12 px-8 bg-[#006EFF] hover:bg-[#0058CC] text-white rounded-xl border-none font-bold shadow-lg shadow-blue-500/20 cursor-pointer"
                 >
                   投递简历
                 </Button>
               </div>
-            </div>
-            <div v-if="filteredJobs.length === 0" class="py-20 text-center text-gray-400">
+              </div>
+            </template>
+            
+            <!-- 空状态 -->
+            <div v-if="!loading && filteredJobs.length === 0" class="py-20 text-center text-gray-400">
               暂时没有该类别的热招岗位，换个分类看看吧。
             </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
     </section>
+
+    <Dialog v-model="isJobDialogOpen">
+      <DialogContent v-if="selectedJob" class="sm:max-w-[720px] bg-white rounded-[32px] p-0 overflow-hidden">
+        <div class="p-10">
+          <div class="flex items-start justify-between gap-6">
+            <div>
+              <div class="text-[12px] text-[#006EFF] font-semibold bg-blue-50 inline-flex px-3 py-1 rounded-full mb-4">
+                {{ selectedJob.type || '社招' }}
+              </div>
+              <DialogHeader class="space-y-2">
+                <DialogTitle class="text-[26px] font-bold text-[#0B2747]">
+                  {{ selectedJob.title || '职位详情' }}
+                </DialogTitle>
+                <DialogDescription class="text-gray-500 text-[14px]">
+                  {{ selectedJob.dept || '所属部门' }} · {{ selectedJob.location || '工作地点待定' }} · {{ selectedJob.date || '' }}
+                </DialogDescription>
+              </DialogHeader>
+            </div>
+            <div class="text-right">
+              <div class="text-[18px] font-bold text-[#FF6B00]">
+                {{ selectedJob.salary || '薪资面议' }}
+              </div>
+              <Button
+                class="mt-4 h-10 px-6 bg-[#006EFF] hover:bg-[#0058CC] text-white rounded-xl border-none font-bold"
+                @click="sendEmail('hr@chetuoche.com')"
+              >
+                立即投递
+              </Button>
+            </div>
+          </div>
+
+          <div class="mt-8 space-y-6">
+            <div v-if="selectedJob.desc" class="bg-[#F8F9FB] rounded-2xl p-6 text-[14px] text-gray-600 leading-relaxed whitespace-pre-line">
+              {{ selectedJob.desc }}
+            </div>
+
+            <div v-if="selectedJob.duty" class="">
+              <h4 class="text-[16px] font-bold text-[#0B2747] mb-3">岗位职责</h4>
+              <div class="text-[14px] text-gray-600 leading-relaxed whitespace-pre-line">
+                {{ selectedJob.duty }}
+              </div>
+            </div>
+
+            <div v-if="selectedJob.requirement" class="">
+              <h4 class="text-[16px] font-bold text-[#0B2747] mb-3">任职要求</h4>
+              <div class="text-[14px] text-gray-600 leading-relaxed whitespace-pre-line">
+                {{ selectedJob.requirement }}
+              </div>
+            </div>
+
+            <div v-if="selectedJob.benefits" class="">
+              <h4 class="text-[16px] font-bold text-[#0B2747] mb-3">福利待遇</h4>
+              <div class="text-[14px] text-gray-600 leading-relaxed whitespace-pre-line">
+                {{ selectedJob.benefits }}
+              </div>
+            </div>
+
+            <div v-if="!selectedJob.duty && !selectedJob.requirement && selectedJob.detailHtml" class="">
+              <h4 class="text-[16px] font-bold text-[#0B2747] mb-3">职位详情</h4>
+              <div class="prose max-w-none prose-p:text-gray-600 prose-li:text-gray-600" v-html="selectedJob.detailHtml" />
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
 
     <!-- ❓ Section D: FAQ -->
     <section class="py-24 bg-[#F8F9FB]">
@@ -258,12 +336,12 @@
             :value="`item-${idx + 1}`"
             class="bg-white border border-gray-100 rounded-[24px] px-8 overflow-hidden"
           >
-            <AccordionTrigger class="hover:no-underline py-6">
+            <AccordionTrigger :value="`item-${idx + 1}`" class="hover:no-underline py-6">
               <span class="text-[18px] font-bold text-[#0B2747] text-left">
                 {{ faq.question }}
               </span>
             </AccordionTrigger>
-            <AccordionContent class="pb-8 text-gray-500 leading-relaxed">
+            <AccordionContent :value="`item-${idx + 1}`" class="pb-8 text-gray-500 leading-relaxed">
               {{ faq.answer }}
             </AccordionContent>
           </AccordionItem>
@@ -308,7 +386,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/careers'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/careers')
 import { useRouter } from 'vue-router'
 import { useHead } from '#app'
 import {
@@ -323,14 +408,15 @@ import {
 } from 'lucide-vue-next'
 import Button from '@/components/ui/Button.vue'
 import Input from '@/components/ui/Input.vue'
-import Tabs from '@/components/ui/Tabs.vue'
-import TabsList from '@/components/ui/TabsList.vue'
-import TabsTrigger from '@/components/ui/TabsTrigger.vue'
-import TabsContent from '@/components/ui/TabsContent.vue'
 import Accordion from '@/components/ui/Accordion.vue'
 import AccordionItem from '@/components/ui/AccordionItem.vue'
 import AccordionTrigger from '@/components/ui/AccordionTrigger.vue'
 import AccordionContent from '@/components/ui/AccordionContent.vue'
+import Dialog from '@/components/ui/Dialog.vue'
+import DialogContent from '@/components/ui/DialogContent.vue'
+import DialogHeader from '@/components/ui/DialogHeader.vue'
+import DialogTitle from '@/components/ui/DialogTitle.vue'
+import DialogDescription from '@/components/ui/DialogDescription.vue'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import type { Job } from '@/types'
 
@@ -338,84 +424,215 @@ const router = useRouter()
 const searchQuery = ref('')
 const activeTab = ref('all')
 
-const tabs = [
-  { label: '全部', value: 'all' },
-  { label: '技术与算法', value: 'tech' },
-  { label: '产品经理', value: 'product' },
-  { label: '运营类', value: 'ops' },
-  { label: '客户服务类', value: 'service' },
-  { label: '销售类', value: 'sales' },
-]
+interface JobRaw {
+  [key: string]: unknown
+}
 
-const JOBS = [
-  {
-    id: 'JOB-2024-001',
-    title: '高级 Java 开发工程师',
-    category: 'tech',
-    dept: '技术部',
-    type: '社招',
-    location: '临沂/北京',
-    desc: '负责车拖车核心调度系统的架构设计与性能优化，确保金融级高可用性。',
-    date: '1天前发布',
-    salary: '20k-40k',
-  },
-  {
-    id: 'JOB-2024-002',
-    title: '高级算法工程师',
-    category: 'tech',
-    dept: '技术部',
-    type: '社招',
-    location: '北京/临沂',
-    desc: '负责车拖车 AI 智能调度系统的核心算法优化，提升车辆周转效率。',
-    date: '3天前发布',
-    salary: '30k-60k',
-  },
-  {
-    id: 'JOB-2024-003',
-    title: '资深产品经理',
-    category: 'product',
-    dept: '产品部',
-    type: '社招',
-    location: '临沂',
-    desc: '定义下一代数字化托运产品形态，协调研发与业务实现高效迭代。',
-    date: '2天前发布',
-    salary: '15k-30k',
-  },
-  {
-    id: 'JOB-2024-004',
-    title: '物流运营专家',
-    category: 'ops',
-    dept: '运营部',
-    type: '社招',
-    location: '全国',
-    desc: '统筹区域运力池建设，优化供应商 SOP 流程，提升整体服务质量。',
-    date: '5天前发布',
-    salary: '12k-25k',
-  },
-  {
-    id: 'JOB-2024-005',
-    title: '客户成功顾问',
-    category: 'service',
-    dept: '客户部',
-    type: '社招',
-    location: '临沂',
-    desc: '为 B 端大客户提供全流程物流咨询服务，建立长期合作伙伴关系。',
-    date: '1周前发布',
-    salary: '8k-15k',
-  },
-]
+interface PostTypeItem {
+  postType?: string
+  postTypeName?: string
+  postTypeId?: number | string
+  postList?: JobRaw[]
+  _postTypeValue?: string
+}
+
+interface JobDetail extends Job {
+  duty?: string
+  requirement?: string
+  benefits?: string
+  detailHtml?: string
+  raw: JobRaw
+}
+
+const pickString = (value: unknown, fallback = '') => {
+  if (value === null || value === undefined) return fallback
+  const text = String(value).trim()
+  return text || fallback
+}
+
+const stripHtml = (value: string) => {
+  if (!value) return ''
+  return String(value)
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+const summarize = (value: string, limit = 90) => {
+  if (!value) return ''
+  const plain = stripHtml(value)
+  if (plain.length <= limit) return plain
+  return `${plain.slice(0, limit)}...`
+}
+
+const formatDateLabel = (value: unknown) => {
+  const text = pickString(value)
+  if (!text) return ''
+  if (text.includes('发布')) return text
+  const numeric = Number(text)
+  if (!Number.isNaN(numeric) && numeric > 1000000000) {
+    try {
+      const date = new Date(numeric)
+      if (!Number.isNaN(date.getTime())) {
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`
+      }
+    } catch (error) {
+      console.warn('🔍 [Careers] 日期格式化失败:', value, error)
+    }
+  }
+  return text
+}
+
+const normalizeJobs = (rows: JobRaw[]): JobDetail[] => {
+  // 防御性检查：确保 rows 是数组
+  if (!Array.isArray(rows)) {
+    console.warn('🔍 [Careers] normalizeJobs 接收到非数组参数:', rows)
+    return []
+  }
+  
+  return rows.filter(row => row && typeof row === 'object').map((row, index) => {
+    const title = pickString(row.postName || row.title || row.name, '职位名称待定')
+    const dept = pickString(
+      row.dept || row.department || row.departmentName || row.postDepartment || row.postTypeName || row._postTypeLabel,
+      '用人部门待定'
+    )
+    const type = pickString(row.type || row.recruitType || row.jobType, '社招')
+    const location = pickString(row.location || row.workSite || row.workPlace || row.workAddress || row.city, '工作地点待定')
+    const detailHtml = pickString(row.postRequirement || row.requirementHtml || row.jobDetail)
+    const desc = pickString(
+      row.desc || row.description || row.postDesc || row.brief || row.summary,
+      detailHtml ? summarize(detailHtml) : ''
+    )
+    const date = formatDateLabel(row.publishTime || row.createTime || row.updateTime)
+    const salaryMin = pickString(row.salaryMin || row.minSalary)
+    const salaryMax = pickString(row.salaryMax || row.maxSalary)
+    const salaryUnit = pickString(row.salaryUnit || row.salaryUnitName)
+    const salary =
+      salaryMin && salaryMax
+        ? `${salaryMin}-${salaryMax}${salaryUnit ? ` ${salaryUnit}` : ''}`
+        : pickString(row.salary || row.payRange || row.compensation, '薪资面议')
+    const id = pickString(row.id || row.postId || row.code, `JOB-${String(index + 1).padStart(3, '0')}`)
+    const category = pickString(row._postTypeValue || row.category, 'all')
+
+    return {
+      id,
+      title,
+      category,
+      dept,
+      type,
+      location,
+      desc,
+      date,
+      salary,
+      duty: pickString(row.duty || row.responsibility || row.postDuty || row.jobDuty),
+      requirement: pickString(row.requirement || row.requirements || row.qualifications || row.jobRequire),
+      benefits: pickString(row.benefits || row.welfare || row.benefit),
+      detailHtml,
+      raw: row,
+    }
+  })
+}
+
+// --- State ---
+const loading = ref(true)
+const allJobs = ref<JobDetail[]>([])
+const tabs = ref<Array<{ label: string; value: string }>>([{ label: '全部', value: 'all' }])
+
+// --- API Functions ---
+const fetchJobs = async () => {
+  loading.value = true
+  
+  try {
+    const response = await $fetch('/api/home/getAllPost')
+    console.log('🔍 [Careers] API 原始响应:', response)
+    
+    // 解析响应：兼容多种数据结构
+    const res = response as Record<string, unknown>
+    let root: Record<string, unknown> = {}
+    
+    // 尝试多种解析路径
+    if (Array.isArray(res?.data) && res.data.length > 0) {
+      root = res.data[0] as Record<string, unknown>
+    } else if (Array.isArray(response) && (response as unknown[]).length > 0) {
+      root = (response as unknown[])[0] as Record<string, unknown>
+    } else if (res?.data && typeof res.data === 'object') {
+      root = res.data as Record<string, unknown>
+    } else if (res && typeof res === 'object') {
+      root = res
+    }
+    
+    console.log('🔍 [Careers] 解析得到的 root:', root)
+    
+    const postTypeList = Array.isArray(root.postTypeList) ? (root.postTypeList as PostTypeItem[]) : []
+    console.log('🔍 [Careers] postTypeList 数量:', postTypeList.length)
+    
+    // 解析职位列表和分类
+    const rows: JobRaw[] = []
+    const parsedTabs: Array<{ label: string; value: string }> = [{ label: '全部', value: 'all' }]
+    
+    postTypeList.forEach((typeItem, index) => {
+      const label = pickString(typeItem.postType || typeItem.postTypeName, `类型${index + 1}`)
+      const value = `type-${typeItem.postTypeId ?? index + 1}`
+      typeItem._postTypeValue = value
+      
+      parsedTabs.push({ label, value })
+      
+      const posts = Array.isArray(typeItem.postList) ? typeItem.postList : []
+      console.log(`🔍 [Careers] 类型 "${label}" 下有 ${posts.length} 个职位`)
+      
+      posts.forEach((post) => {
+        rows.push({ ...post, _postTypeLabel: label, _postTypeValue: value })
+      })
+    })
+    
+    // 兜底：如果没有数据，尝试其他解析方式
+    if (rows.length === 0 && Array.isArray(response)) {
+      console.log('🔍 [Careers] 使用兜底解析')
+      rows.push(...(response as JobRaw[]))
+    }
+    
+    console.log('🔍 [Careers] 最终 rows 数量:', rows.length)
+    
+    allJobs.value = normalizeJobs(rows)
+    tabs.value = parsedTabs
+    
+  } catch (error) {
+    console.error('❌ [Careers] API 请求失败:', error)
+    allJobs.value = []
+    tabs.value = [{ label: '全部', value: 'all' }]
+  } finally {
+    loading.value = false
+  }
+}
+
+// 页面加载时获取数据
+onMounted(() => {
+  console.log('🔍 [Careers] 组件挂载，开始获取职位数据')
+  fetchJobs()
+})
 
 const filteredJobs = computed(() => {
-  let jobs = activeTab.value === 'all' ? JOBS : JOBS.filter((j) => j.category === activeTab.value)
+  if (loading.value || !allJobs.value) return []
+  
+  let jobs = activeTab.value === 'all' ? allJobs.value : allJobs.value.filter((j) => j && j.category === activeTab.value)
+  console.log(`🔍 [Careers] filteredJobs - activeTab: ${activeTab.value}, 过滤后: ${jobs.length} 个`)
+  
   if (searchQuery.value) {
     jobs = jobs.filter(
       (j) =>
-        j.title.includes(searchQuery.value) ||
-        j.desc.includes(searchQuery.value) ||
-        j.dept.includes(searchQuery.value)
+        j && (
+          (j.title && j.title.includes(searchQuery.value)) ||
+          (j.desc && j.desc.includes(searchQuery.value)) ||
+          (j.dept && j.dept.includes(searchQuery.value))
+        )
     )
+    console.log(`🔍 [Careers] filteredJobs - 搜索"${searchQuery.value}"后: ${jobs.length} 个`)
   }
-  return jobs
+  
+  return jobs.filter(j => j !== null && j !== undefined)
 })
 
 const evpItems = [
@@ -480,27 +697,27 @@ const sendEmail = (email: string) => {
 }
 
 const getJobSchema = (job: Job) => {
+  // 安全解析地点信息
+  const locationParts = job.location ? String(job.location).split('/') : []
+  const addressLocality = locationParts.length > 0 ? locationParts[0].trim() : '待定'
+  
   const schema = {
     '@context': 'https://schema.org/',
     '@type': 'JobPosting',
-    title: job.title,
-    description: job.desc,
+    title: job.title || '职位名称',
+    description: job.desc || '职位描述',
     identifier: {
       '@type': 'PropertyValue',
       name: 'CheTuoChe',
-      value: job.id,
+      value: job.id || 'unknown',
     },
-    hiringOrganization: {
-      '@type': 'Organization',
-      name: '车拖车',
-      sameAs: 'https://www.chetuoche.com',
-    },
+    hiringOrganization: { '@id': 'https://www.chetuoche.com/#organization' },
     employmentType: 'FULL_TIME',
     jobLocation: {
       '@type': 'Place',
       address: {
         '@type': 'PostalAddress',
-        addressLocality: job.location.split('/')[0],
+        addressLocality,
         addressRegion: '山东',
         addressCountry: 'CN',
       },
@@ -510,15 +727,28 @@ const getJobSchema = (job: Job) => {
 }
 
 const allJobSchemas = computed(() => {
+  // 只在有数据且不在加载中时生成 schema
+  if (loading.value || !filteredJobs.value || filteredJobs.value.length === 0) {
+    return []
+  }
   return filteredJobs.value.map(job => getJobSchema(job))
 })
 
-useHead({
-  script: [
+const isJobDialogOpen = ref(false)
+const selectedJob = ref<JobDetail | null>(null)
+
+const openJobDetail = (job: JobDetail) => {
+  selectedJob.value = job
+  isJobDialogOpen.value = true
+}
+
+// 只在有 schema 数据时才添加到 head
+useHead(() => ({
+  script: allJobSchemas.value.length > 0 ? [
     {
       type: 'application/ld+json',
       children: JSON.stringify(allJobSchemas.value)
     }
-  ]
-})
+  ] : []
+}))
 </script>

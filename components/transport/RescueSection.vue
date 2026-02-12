@@ -35,7 +35,7 @@
 
         <!-- Left Column: Content -->
         <div class="lg:col-span-7 order-1">
-          <h2 class="text-[36px] font-bold text-[#0B2747] mb-6 leading-tight">
+          <h2 class="text-2xl sm:text-[36px] font-bold text-[#0B2747] mb-6 leading-tight">
             道路救援：您的应急保障专家
           </h2>
           

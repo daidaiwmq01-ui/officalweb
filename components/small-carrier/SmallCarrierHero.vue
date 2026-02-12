@@ -11,38 +11,25 @@
       <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-[#0B2747]/30" />
     </div>
 
-    <!-- Content Container (1200px centered) -->
-    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-center">
+    <!-- Content Container：始终预留面包屑高度，避免 PC 端 H1 与面包屑重叠 -->
+    <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-start pt-14">
       <!-- Breadcrumb Navigation - Absolute Positioned -->
-      <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-        <button 
-          @click="handleHomeClick"
-          class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
-        >
-          首页
-        </button>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <button class="text-white/60 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0">
-          汽车托运
-        </button>
-        <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-        <span class="text-white font-medium">
-          小板车托运
-        </span>
+      <div class="absolute top-6 left-4 lg:left-0 z-20">
+        <BreadcrumbNav :items="breadcrumbItems" variant="light" />
       </div>
 
       <div
         v-motion
         :initial="{ opacity: 0, y: 32 }"
         :enter="{ opacity: 1, y: 0, transition: { duration: 600, ease: 'easeOut' } }"
-        class="max-w-[752px] pt-16 px-4 lg:px-0"
+        class="max-w-[752px] pt-6 lg:pt-8 px-4 lg:px-0"
       >
         <!-- Main Title (H1) - White with Brand Orange highlights -->
-        <h1 class="text-[42px] font-bold text-white leading-tight mb-4 drop-shadow-lg">
-          小板车尊享托运：
-          <span class="text-[#FF6B00]">5 秒接单</span>
-          <br class="hidden md:block" />
-          门到门专车直送的时效标杆
+        <h1 class="text-2xl sm:text-3xl md:text-[42px] font-bold text-white mb-4 drop-shadow-lg" style="line-height: 1.5;">
+          <div>
+            小板车尊享托运：<span class="text-[#FF6B00]">5 秒接单</span>
+          </div>
+          <div>门到门专车直送的时效标杆</div>
         </h1>
 
         <!-- Subtitle - Gray-100 for readability on dark BG -->
@@ -60,12 +47,12 @@
             立即下单
           </Button>
 
-          <button
-            @click="scrollToCalculator"
+          <NuxtLink
+            to="/pricing#pricing-calculator"
             class="w-full sm:w-auto rounded-full bg-transparent border-2 border-white text-white px-8 py-4 h-14 text-lg font-bold transition-all duration-300 hover:bg-white hover:text-[#006EFF] cursor-pointer"
           >
             价格查询
-          </button>
+          </NuxtLink>
         </div>
 
         <div class="mt-16 flex flex-wrap items-center gap-8 border-t border-white/10 pt-8">
@@ -120,7 +107,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { ShieldCheck, Users, ChevronRight, MessageCircle } from 'lucide-vue-next'
+import { ShieldCheck, Users, MessageCircle } from 'lucide-vue-next'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+
+const breadcrumbItems = getBreadcrumbsForRoute('/small-carrier')
 import Button from '@/components/ui/Button.vue'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
@@ -151,17 +142,6 @@ const handleOrderClick = () => {
   } else {
     isMiniProgramModalOpen.value = true
   }
-}
-
-const scrollToCalculator = () => {
-  const element = document.getElementById('price-calculator')
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-  }
-}
-
-const handleHomeClick = () => {
-  props.setActiveId?.('home')
 }
 
 onMounted(() => {

@@ -12,25 +12,9 @@
       </div>
 
       <div class="container mx-auto max-w-[1200px] px-4 relative z-10 h-full flex flex-col justify-center">
-        <nav class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/60">
-          <button
-            @click="navigateToHome"
-            class="hover:text-white transition-colors bg-transparent border-none cursor-pointer"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-3 h-3" />
-          <button
-            @click="navigateToSolutions"
-            class="hover:text-white transition-colors bg-transparent border-none cursor-pointer"
-          >
-            解决方案
-          </button>
-          <ChevronRight class="w-3 h-3" />
-          <span class="text-white font-bold">
-            司机之家
-          </span>
-        </nav>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
+        </div>
 
         <div
           v-motion
@@ -42,17 +26,17 @@
             <div class="w-2 h-2 rounded-full bg-[#FF6B00] animate-pulse" />
             计划 2026 年底构建 500+ 处
           </div>
-          <h1 class="text-[48px] font-bold text-white mb-6 leading-tight">
-            司机之家：全国驿站补给网络
-            <br />
-            关怀每一位运力伙伴
+          <h1 class="text-2xl sm:text-3xl md:text-[48px] font-bold text-white mb-6" style="line-height: 1.5;">
+            <div>司机之家：全国驿站补给网络</div>
+            <div>关怀每一位运力伙伴</div>
           </h1>
           <p class="text-[18px] text-white/90 mb-10 leading-relaxed">
-            全面铺设服务驿站，为货运司机提供 24h
-            热水淋浴、免费
-            Wi-Fi、车辆自助检测及温暖生活补给。不仅仅是歇脚的地方，更是人车双补给的能量站。
+            全面铺设服务驿站，为货运司机提供 24h 热水淋浴、免费 Wi-Fi、车辆自助检测及温暖生活补给。不仅仅是歇脚的地方，更是人车双补给的能量站。
           </p>
-          <Button class="h-16 px-10 rounded-2xl bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-[18px] border-none shadow-xl shadow-orange-500/30">
+          <Button
+            class="h-16 px-10 rounded-2xl bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-[18px] border-none shadow-xl shadow-orange-500/30"
+            @click="scrollToStations"
+          >
             查找附近驿站
           </Button>
         </div>
@@ -176,7 +160,7 @@
 
       <div class="container mx-auto max-w-[1200px] px-4 relative z-10">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold mb-4">
+          <h2 class="text-2xl sm:text-[36px] font-bold mb-4">
             全国驿站布局蓝图
           </h2>
           <div class="w-20 h-1 bg-[#FF6B00] mx-auto rounded-full" />
@@ -217,7 +201,101 @@
       </div>
     </section>
 
-    <!-- 5. Section D: How to Access (App Integration) -->
+    <!-- 5. Section D: Driver Station List (API Driven) -->
+    <section
+      id="driver-stations"
+      class="py-24 bg-[#F8F9FB]"
+    >
+      <div class="container mx-auto max-w-[1200px] px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-[32px] font-bold text-[#0B2747] mb-4">
+            全国司机之家驿站一览
+          </h2>
+          <p class="text-[15px] text-[#4B5563] max-w-[720px] mx-auto leading-relaxed">
+            以下数据来自车拖车官方后台，全国站点信息将持续更新中。认证司机可优先前往附近驿站，享受免费休息、洗漱与基础车辆关怀服务。
+          </p>
+        </div>
+
+        <!-- Loading & Error States -->
+        <div v-if="loadingSites" class="flex justify-center py-10">
+          <p class="text-gray-500 text-[15px]">
+            正在加载全国驿站信息，请稍候...
+          </p>
+        </div>
+        <div v-else-if="siteError" class="max-w-[800px] mx-auto mb-8">
+          <div class="rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-[14px] text-red-700">
+            {{ siteError }}
+          </div>
+        </div>
+
+        <!-- Station List -->
+        <div
+          v-if="!loadingSites && flattenedSites.length"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <article
+            v-for="station in flattenedSites"
+            :key="station.id"
+            class="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-all p-6 flex flex-col gap-3"
+          >
+            <header class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-[18px] font-bold text-[#0B2747] mb-1">
+                  {{ station.siteName || '未命名驿站' }}
+                </h3>
+                <p class="text-[13px] text-gray-500">
+                  {{ station.siteAddress || '地址信息待更新' }}
+                </p>
+              </div>
+              <span
+                v-if="station.siteType !== undefined && station.siteType !== null"
+                class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-blue-50 text-[#006EFF]"
+              >
+                驿站类型 {{ station.siteType }}
+              </span>
+            </header>
+
+            <p
+              v-if="station.remark"
+              class="text-[13px] text-gray-600 leading-relaxed line-clamp-3"
+            >
+              {{ station.remark }}
+            </p>
+
+            <dl class="mt-1 space-y-1 text-[13px] text-gray-600">
+              <div v-if="station.siteHeadPerson">
+                <dt class="inline text-gray-500">负责人：</dt>
+                <dd class="inline">
+                  {{ station.siteHeadPerson }}
+                </dd>
+              </div>
+              <div v-if="station.linkPhone">
+                <dt class="inline text-gray-500">联系电话：</dt>
+                <dd class="inline">
+                  {{ station.linkPhone }}
+                </dd>
+              </div>
+            </dl>
+
+            <p
+              v-if="station.siteLola"
+              class="mt-1 text-[12px] text-gray-400"
+            >
+              坐标：{{ station.siteLola }}
+            </p>
+          </article>
+        </div>
+
+        <div
+          v-else-if="!loadingSites && !flattenedSites.length && !siteError"
+          class="text-center py-10 text-[14px] text-gray-500"
+        >
+          暂无驿站数据，请稍后再试或联系平台管理员。
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Section E: How to Access (App Integration) -->
     <section class="py-24 bg-white">
       <div class="container mx-auto max-w-[1200px] px-4">
         <div class="max-w-[1000px] mx-auto border-2 border-[#FF6B00] rounded-[40px] p-10 md:p-16 flex flex-col md:flex-row items-center gap-16">
@@ -254,7 +332,7 @@
       </div>
     </section>
 
-    <!-- 6. Section E: FAQ (SEO Schema Content) -->
+    <!-- 7. Section F: FAQ (SEO Schema Content) -->
     <section class="py-24 bg-[#F8F9FB]">
       <div class="container mx-auto max-w-[800px] px-4">
         <div class="text-center mb-16">
@@ -278,14 +356,22 @@
     </section>
 
     <footer class="py-20 bg-white border-t border-gray-100 text-center">
-      <p class="text-gray-400 text-[14px]">
-        车拖车·司机之家 | 全国伙伴热线：400-XXX-XXXX
-      </p>
+      <p class="text-gray-400 text-[14px]">车拖车·司机之家 | 全国伙伴热线：400-XXX-XXXX</p>
     </footer>
   </article>
 </template>
 
 <script setup lang="ts">
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/driver/home'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/driver/home')
+
+
+import { computed, onMounted, ref } from 'vue'
 import {
   ChevronRight,
   Bath,
@@ -306,12 +392,82 @@ import ServiceCard from '@/components/driver-home/ServiceCard.vue'
 import VehicleFeature from '@/components/driver-home/VehicleFeature.vue'
 import StepItem from '@/components/driver-home/StepItem.vue'
 import AccordionItem from '@/components/driver-home/AccordionItem.vue'
+import { useApi } from '@/composables/useApi'
 
 interface Props {
   setActiveId?: (id: string) => void
 }
 
 const props = defineProps<Props>()
+
+interface SiteItem {
+  id: number
+  siteName: string
+  siteAddress: string
+  linkPhone: string
+  siteHeadPerson: string
+  remark: string
+  siteLola: string
+  siteType: number
+}
+
+const { apiBase, getAuthHeaders } = useApi()
+
+const loadingSites = ref(true)
+const siteGroups = ref<any[]>([])
+const siteError = ref<string | null>(null)
+
+const flattenedSites = computed<SiteItem[]>(() =>
+  (siteGroups.value || []).flatMap((group: any) => {
+    // 标准结构：[{ siteType, siteList: SiteItem[] }]
+    if (Array.isArray(group.siteList)) {
+      return group.siteList
+    }
+
+    // 如果后端直接返回 SiteItem[]
+    if (!group.siteList && group.id && group.siteName) {
+      return [group as SiteItem]
+    }
+
+    return []
+  })
+)
+
+const fetchSites = async () => {
+  loadingSites.value = true
+  siteError.value = null
+
+  try {
+    const response = await $fetch<any>(`${apiBase}/api/home/getAllSite`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    })
+
+    // 兼容多种返回结构：数组 / { data } / { list } / { data: { list } }
+    let raw = response
+
+    if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+      if (Array.isArray(raw.data)) {
+        raw = raw.data
+      } else if (Array.isArray(raw.list)) {
+        raw = raw.list
+      } else if (raw.data && Array.isArray(raw.data.list)) {
+        raw = raw.data.list
+      }
+    }
+
+    siteGroups.value = Array.isArray(raw) ? raw : []
+  } catch (error) {
+    siteError.value = '驿站数据获取失败，请稍后重试。'
+    siteGroups.value = []
+  } finally {
+    loadingSites.value = false
+  }
+}
+
+onMounted(() => {
+  fetchSites()
+})
 
 const faqData = [
   {
@@ -324,11 +480,32 @@ const faqData = [
   },
 ]
 
-const navigateToHome = () => {
-  props.setActiveId?.('home')
+const scrollToStations = () => {
+  document
+    .getElementById('driver-stations')
+    ?.scrollIntoView({ behavior: 'smooth' })
 }
 
-const navigateToSolutions = () => {
-  props.setActiveId?.('solutions')
+// Schema.org 结构化数据 - 司机之家
+const driverHomeSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CivicStructure',
+  'name': '车拖车司机之家 (服务驿站)',
+  'description': '为全国货运司机提供免费洗漱、24h休息区及车辆自助检测服务的补给网络。',
+  'telephone': '400-075-1117',
+  'openingHoursSpecification': {
+    '@type': 'OpeningHoursSpecification',
+    'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    'opens': '00:00',
+    'closes': '23:59'
+  },
+  'amenityFeature': [
+    { '@type': 'LocationFeatureSpecification', 'name': '免费热水淋浴' },
+    { '@type': 'LocationFeatureSpecification', 'name': '高速Wi-Fi' },
+    { '@type': 'LocationFeatureSpecification', 'name': '自助洗衣' },
+    { '@type': 'LocationFeatureSpecification', 'name': '车辆自助检测' }
+  ]
 }
+
+useSchemaOrg(driverHomeSchema)
 </script>

@@ -17,12 +17,12 @@
             加入车拖车数字化物流网络，体验安全、高效、透明的汽车托运服务。专业团队 24 小时在线，为您定制专属物流方案。
           </p>
           <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button 
-              @click="handlePricingClick"
+            <NuxtLink 
+              to="/pricing#pricing-calculator"
               class="h-14 px-10 rounded-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-[18px] transition-all hover:-translate-y-1 shadow-lg shadow-orange-500/20 cursor-pointer"
             >
               获取实时报价
-            </Button>
+            </NuxtLink>
             <Button 
               variant="outline"
               @click="handleContactClick"
@@ -39,6 +39,7 @@
 
 <script setup lang="ts">
 import Button from '@/components/ui/Button.vue'
+import { useRouter } from 'vue-router'
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -46,11 +47,9 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const handlePricingClick = () => {
-  props.setActiveId?.('pricing')
-}
+const router = useRouter()
 
 const handleContactClick = () => {
-  props.setActiveId?.('contact')
+  router.push('/contact')
 }
 </script>

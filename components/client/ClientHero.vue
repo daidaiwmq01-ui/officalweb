@@ -30,11 +30,11 @@
               v-motion
               :initial="{ opacity: 0, y: 20 }"
               :enter="{ opacity: 1, y: 0 }"
-              class="text-[40px] font-bold text-[#0B2747] leading-tight mb-4"
+              class="text-2xl sm:text-3xl md:text-[40px] font-bold text-[#0B2747] mb-4"
+              style="line-height: 1.5;"
             >
-              车拖车 APP：国内领先的
-              <br />
-              AI 智能调度汽车托运平台
+              <div>车拖车 APP：国内领先的</div>
+              <div>AI 智能调度汽车托运平台</div>
             </h1>
 
             <p
@@ -50,7 +50,10 @@
             </p>
 
             <div class="flex items-center gap-4 mt-8">
-              <Button class="h-14 px-10 bg-[#FF6B00] hover:bg-[#E56000] text-white rounded-2xl font-bold text-[18px] border-none shadow-xl shadow-orange-500/20">
+              <Button
+                class="h-14 px-10 bg-[#FF6B00] hover:bg-[#E56000] text-white rounded-2xl font-bold text-[18px] border-none shadow-xl shadow-orange-500/20"
+                @click="handleDownloadClick"
+              >
                 下载车拖车 APP
               </Button>
               <button
@@ -104,9 +107,11 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { ChevronRight, Apple, Smartphone, Globe } from 'lucide-vue-next'
 import Button from '@/components/ui/Button.vue'
 import HeroChatMockup from '@/components/client/HeroChatMockup.vue'
+import { useDownloadInfo } from '@/composables/useDownloadInfo'
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -114,7 +119,22 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const { fetchIfNeeded, openCustomerApp } = useDownloadInfo()
+
+onMounted(() => {
+  fetchIfNeeded()
+})
+
 const handleSetActiveId = (id: string) => {
   props.setActiveId?.(id)
+}
+
+const handleDownloadClick = () => {
+  // 简单按设备类型选择 iOS / Android 链接
+  if (typeof navigator !== 'undefined' && /iphone|ipad|ipod/i.test(navigator.userAgent)) {
+    openCustomerApp('ios')
+  } else {
+    openCustomerApp('android')
+  }
 }
 </script>

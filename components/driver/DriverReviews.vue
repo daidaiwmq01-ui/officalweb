@@ -1,6 +1,6 @@
 <template>
-  <section class="py-24 bg-gray-50">
-    <div class="container mx-auto max-w-[1200px] px-4">
+  <section class="py-24 bg-gray-50 overflow-x-hidden w-full">
+    <div class="container mx-auto max-w-[1200px] px-4 w-full box-border">
       <div class="text-center mb-16">
         <h2 class="text-[32px] font-bold text-[#0B2747] mb-4">
           司机原声

@@ -4,7 +4,7 @@
       <div class="flex flex-col-reverse lg:flex-row items-center gap-16">
         <!-- Text Left -->
         <div class="w-full lg:w-1/2">
-          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6 leading-tight">
+          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6 leading-[1.6]">
             大板车干线集运：<br />
             30,000+ 线路的<span class="text-[#FF6B00]">高性价比</span>之选
           </h2>
@@ -23,13 +23,13 @@
             </div>
           </div>
 
-          <button
-            @click="handleViewRoutes"
+          <NuxtLink
+            to="/pricing#hot-city-routes"
             class="group bg-transparent hover:bg-white text-[#0B2747] border-2 border-[#0B2747] rounded-full px-8 py-6 text-lg font-bold transition-all"
           >
             查看干线班次
             <ArrowRight class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform inline-block" />
-          </button>
+          </NuxtLink>
         </div>
 
         <!-- Image Right -->
@@ -67,14 +67,4 @@ const handleImageError = () => {
   serviceImage.value = EXTERNAL_ASSETS.TRUCK_FLATBED_FULL
 }
 
-const handleViewRoutes = () => {
-  props.setActiveId?.('big-carrier')
-  // Scroll to the pricing section (hot-routes) after navigation
-  setTimeout(() => {
-    const element = document.getElementById('hot-routes')
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, 100)
-}
 </script>

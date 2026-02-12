@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-white font-sans text-[#0B2747]">
     <!-- Hero Section -->
-    <section class="relative h-[720px] overflow-hidden">
+    <section class="relative min-h-[420px] h-[60vh] sm:h-[720px] overflow-hidden">
       <!-- Background Image with Navy Gradient Overlay -->
       <div class="absolute inset-0 z-0">
         <ImageWithFallback
@@ -12,36 +12,25 @@
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747] via-[#0B2747]/90 to-transparent z-10" />
       </div>
 
-      <div class="relative z-20 max-w-[1200px] w-full mx-auto px-4 lg:px-0 pb-48 h-full flex flex-col justify-center">
+      <div class="relative z-20 max-w-[1200px] w-full mx-auto px-4 lg:px-0 pb-48 h-full flex flex-col justify-start pt-14">
         <!-- Breadcrumb Navigation - Absolute Positioned -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/80">
-          <button
-            @click="() => setActiveId('home')"
-            class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-          <span class="text-white/60">汽车托运</span>
-          <ChevronRight class="w-3.5 h-3.5 text-white/40" />
-          <span class="text-white font-medium">价格查询</span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <div
           v-motion
           :initial="{ opacity: 0, x: -50 }"
           :enter="{ opacity: 1, x: 0, transition: { duration: 800 } }"
-          class="max-w-2xl px-4 lg:px-0"
+          class="max-w-2xl pt-6 lg:pt-8 px-4 lg:px-0"
         >
           <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#006EFF] text-white text-[10px] font-black uppercase tracking-widest rounded-full mb-6">
             <Zap :size="12" fill="currentColor" />
             2026 数字化物流升级版
           </div>
-          <h2 class="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
-            托运价格透明 <br />
-            <span class="text-[#006EFF]">
-              全程数字监管
-            </span>
+          <h2 class="text-5xl md:text-6xl font-black text-white mb-6" style="line-height: 1.5;">
+            <div>托运价格透明</div>
+            <div class="text-[#006EFF]">全程数字监管</div>
           </h2>
           <p class="text-gray-300 text-lg font-medium leading-relaxed max-w-lg">
             车拖车整合全国 50,000+ 运力资源，通过 AI
@@ -76,13 +65,13 @@
               车拖车物流价格计算器 - 2026 托运费用查询系统
             </h1>
           </div>
-          <!-- Calculator Tabs -->
-          <div class="grid grid-cols-4 border-b border-gray-50">
+          <!-- Calculator Tabs：小屏可横向滑动 -->
+          <div class="grid grid-cols-4 border-b border-gray-50 min-w-0">
             <button
               v-for="tab in TABS"
               :key="tab.id"
               @click="activeTab = tab.id"
-              :class="`flex flex-col items-center justify-center py-8 gap-3 transition-all relative group ${
+              :class="`flex flex-col items-center justify-center py-4 sm:py-8 gap-2 sm:gap-3 transition-all relative group flex-shrink-0 ${
                 activeTab === tab.id
                   ? 'text-[#006EFF]'
                   : 'text-gray-400 hover:text-[#0B2747]'
@@ -93,7 +82,7 @@
                 :size="24"
                 :class="`transition-transform duration-500 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`"
               />
-              <span class="text-sm font-bold tracking-tight">
+              <span class="text-xs sm:text-sm font-bold tracking-tight">
                 {{ tab.label }}
               </span>
               <div
@@ -106,7 +95,7 @@
           </div>
 
           <!-- Content Area -->
-          <div class="p-8 lg:p-12">
+          <div class="p-4 sm:p-8 lg:p-12">
             <!-- Small Carrier Calculator -->
             <div v-if="activeTab === 'small'" class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
               <div class="space-y-6">
@@ -730,7 +719,7 @@
               <Activity :size="14" />
               Live Network Status
             </div>
-            <h2 class="text-4xl font-bold text-white mb-8">
+            <h2 class="text-2xl sm:text-4xl font-bold text-white mb-8">
               全国实时运单动态报告
             </h2>
 
@@ -1018,7 +1007,7 @@
     <section class="bg-[#F8F9FB] py-24">
       <div class="max-w-[1200px] mx-auto px-4">
         <div class="text-center mb-16">
-          <h2 class="text-[36px] font-bold text-[#0B2747]">
+          <h2 class="text-xl sm:text-[36px] font-bold text-[#0B2747]">
             汽车托运避坑指南：拒绝隐形消费与黑中介
           </h2>
           <p class="text-gray-500 mt-4 max-w-2xl mx-auto">
@@ -1337,6 +1326,14 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/pricing'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/pricing')
+
 import {
   ChevronDown,
   Headphones,
@@ -1761,4 +1758,22 @@ watch(activeZoneTab, (newZone) => {
   selectedProvince.value = data.defaultProvince
   selectedDistrict.value = data.defaultDistrict
 })
+
+// Schema.org 结构化数据 - 价格计算器
+const pricingSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  'name': '2026 汽车托运价格计算器',
+  'applicationCategory': 'UtilitiesApplication',
+  'operatingSystem': 'Web',
+  'offers': {
+    '@type': 'AggregateOffer',
+    'priceCurrency': 'CNY',
+    'lowPrice': '200',
+    'offerCount': '30000',
+    'description': '支持小板车阶梯里程计费、大板车热门专线报价。一口价模式拒绝隐形消费。'
+  }
+}
+
+useSchemaOrg(pricingSchema)
 </script>

@@ -197,6 +197,7 @@
  * - 高度固定为 80px
  */
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ChevronDown, Menu, X } from 'lucide-vue-next'
 import Button from './ui/Button.vue'
 import OrderModal from './OrderModal.vue'
@@ -229,6 +230,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const router = useRouter()
 
 /**
  * 组件事件定义
@@ -261,7 +263,7 @@ const menuItems: MenuItem[] = [
       { label: '大板车托运', href: '#', id: 'big-carrier' },
       { label: '汽车救援', href: '#', id: 'rescue' },
       { label: '代驾', href: '#', id: 'driver' },
-      { label: '价格查询', href: '#', id: 'pricing' },
+      { label: '价格查询', href: '/pricing#pricing-calculator', id: 'pricing' },
       { label: '用户指南', href: '#', id: 'guide' },
       { label: '常见问题', href: '#', id: 'faq' },
     ]
@@ -394,6 +396,13 @@ const handleChildClick = (child: { href?: string; id?: string }) => {
   // 如果是外部链接，打开新窗口
   if (child.href?.startsWith('http')) {
     window.open(child.href, '_blank', 'noopener,noreferrer')
+    activeDropdown.value = null
+    isMobileMenuOpen.value = false
+    return
+  }
+  // 内部链接（忽略占位符 '#')
+  if (child.href && child.href !== '#') {
+    router.push(child.href)
     activeDropdown.value = null
     isMobileMenuOpen.value = false
     return

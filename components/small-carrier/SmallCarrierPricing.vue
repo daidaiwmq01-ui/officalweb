@@ -89,15 +89,16 @@
         :visible-once="{ opacity: 1, y: 0, transition: { delay: 400 } }"
         class="flex flex-col items-center mt-12"
       >
-        <button
+        <NuxtLink
           v-motion
           :while-hover="{ scale: 1.02 }"
           :while-tap="{ scale: 0.98 }"
+          to="/pricing#pricing-calculator"
           class="px-10 py-4 bg-[#006EFF] hover:bg-[#0056CC] text-white rounded-full font-bold shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2 border-none cursor-pointer"
         >
           <Calculator :size="20" />
           <span>AI智能报价 - 3秒获取精准价格</span>
-        </button>
+        </NuxtLink>
         <p class="mt-4 text-sm text-gray-400">
           * 以上价格为参考区间，实际价格以系统智能测算为准
         </p>

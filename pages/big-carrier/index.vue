@@ -35,6 +35,11 @@
 </template>
 
 <script setup lang="ts">
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/big-carrier'))
+
 import {
   TrendingDown,
   Satellite,
@@ -56,6 +61,43 @@ import BigCarrierSemanticBlock from '@/components/big-carrier/BigCarrierSemantic
 import { EXTERNAL_ASSETS } from '@/utils/images'
 import type { AdvantageItem, CaseItemTypeB, ReviewItem } from '@/types'
 
+// SEO Meta Tags
+useHead({
+  title: '大板车集运_高性价比长途汽车托运_30000+干线物流网点 - 车拖车',
+  meta: [
+    { name: 'description', content: '针对长途搬迁、自驾返程及二手车流转，车拖车大板车托运通过规模效应大幅降低运输成本，提供批量运输方案。1000多家网点覆盖全国，30000条运输线路，支持国家交通局系统实时定位查看。' },
+    { name: 'keywords', content: '大板车托运, 笼车运输价格, 私家车长途集运, 二手车跨省托运, 运车专线' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/big-carrier' }
+  ]
+})
+
+// Schema.org 结构化数据
+useServiceSchema({
+  name: '大板车干线集运 (笼车托运)',
+  description: '提供高性价比的长途汽车批量运输服务。覆盖全国30,000+条线路，1000+网点，支持国家交通局系统实时定位。',
+  serviceType: 'Car Transport',
+  areaServed: 'CN',
+  offers: {
+    '@type': 'AggregateOffer',
+    'priceCurrency': 'CNY',
+    'lowPrice': '800',
+    'offerCount': '30000',
+    'description': '基于起终点与车型（如SUV/轿车）的动态阶梯报价，量大更优。'
+  },
+  faq: [
+    {
+      question: '大板车托运多久能到？',
+      answer: '大板车需配载发车，跨省干线通常需3-7天。核心城市（如京沪、广深）开通了每日直达专线，时效更快。'
+    },
+    {
+      question: '能查到车辆位置吗？',
+      answer: '可以。车拖车大板车接入国家交通局运输系统，提供官方级实时GPS/北斗定位查询，轨迹透明。'
+    }
+  ]
+})
+
 interface Props {
   setActiveId?: (id: string) => void
   navigateToPricing?: (tab: string) => void
@@ -72,7 +114,7 @@ const handleSetActiveId = (id: string) => {
 
 const handleNavigateToPricing = (tab?: string) => {
   props.navigateToPricing?.(tab || '')
-  document.getElementById('hot-routes')?.scrollIntoView({ behavior: 'smooth' })
+  navigateTo('/pricing#hot-city-routes')
 }
 
 const advantages: AdvantageItem[] = [

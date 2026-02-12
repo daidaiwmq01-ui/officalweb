@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>七陌客服配置验证</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .info {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #006EFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #0052CC;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>七陌客服配置验证页面</h1>
+  
+  <div class="info">
+    <h3>当前配置：</h3>
+    <p><strong>AccessID:</strong> 3c38c910-64d9-11ef-b60c-533c8e6a8982</p>
+    <p><strong>SDK URL:</strong> https://ykf-weixin01.7moor.com/javascripts/7moorInit.js</p>
+    <p><strong>AutoShow:</strong> true (用于测试)</p>
+    <p><strong>Language:</strong> ZHCN</p>
+  </div>
+  
+  <div>
+    <button onclick="testOpen()">测试打开客服</button>
+    <button onclick="checkElements()">检查页面元素</button>
+  </div>
+  
+  <div id="result" class="info" style="display:none;"></div>
+  
+  <!-- 使用官方推荐的方式加载七陌 SDK -->
+  <script>
+    (function() {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = 'https://ykf-weixin01.7moor.com/javascripts/7moorInit.js?accessId=3c38c910-64d9-11ef-b60c-533c8e6a8982&autoShow=true&language=ZHCN';
+      
+      script.onload = function() {
+        console.log('✓ 七陌 SDK 加载成功');
+        showResult('success', '七陌 SDK 已加载，请等待3-5秒查看客服窗口是否自动弹出');
+        
+        // 3秒后检查
+        setTimeout(function() {
+          checkElements();
+        }, 3000);
+      };
+      
+      script.onerror = function() {
+        console.error('✗ 七陌 SDK 加载失败');
+        showResult('error', '七陌 SDK 加载失败，请检查网络连接');
+      };
+      
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(script, s);
+    })();
+    
+    function showResult(type, message) {
+      var result = document.getElementById('result');
+      result.style.display = 'block';
+      result.className = 'info ' + type;
+      result.innerHTML = '<p>' + message + '</p>';
+    }
+    
+    function testOpen() {
+      console.log('尝试打开客服窗口');
+      
+      // 方法1: 点击七陌按钮
+      var btn = document.getElementById('qimoChatBtn');
+      if (btn) {
+        console.log('找到七陌按钮，点击');
+        btn.click();
+        showResult('success', '已触发七陌按钮');
+        return;
+      }
+      
+      // 方法2: 显示父容器
+      var container = document.getElementById('qimo_chatpup');
+      if (container) {
+        console.log('找到父容器，设置显示');
+        container.style.display = 'block';
+        showResult('success', '已显示七陌容器');
+        return;
+      }
+      
+      showResult('error', '未找到七陌客服组件，请检查 SDK 是否加载成功');
+    }
+    
+    function checkElements() {
+      console.log('=== 检查页面元素 ===');
+      
+      var html = '<h3>页面元素检查结果：</h3>';
+      
+      // 检查 iframe
+      var iframes = document.querySelectorAll('iframe');
+      html += '<p><strong>iframe 数量:</strong> ' + iframes.length + '</p>';
+      
+      if (iframes.length > 0) {
+        html += '<ul>';
+        for (var i = 0; i < iframes.length; i++) {
+          var iframe = iframes[i];
+          html += '<li>iframe ' + i + ': ';
+          html += 'ID=' + (iframe.id || '无') + ', ';
+          html += 'SRC=' + (iframe.src ? iframe.src.substring(0, 80) + '...' : '无');
+          html += '</li>';
+          console.log('iframe ' + i + ':', iframe);
+        }
+        html += '</ul>';
+      }
+      
+      // 检查七陌按钮
+      var btn = document.getElementById('qimoChatBtn');
+      html += '<p><strong>七陌按钮 (#qimoChatBtn):</strong> ' + (btn ? '✓ 存在' : '✗ 不存在') + '</p>';
+      
+      // 检查父容器
+      var container = document.getElementById('qimo_chatpup');
+      html += '<p><strong>七陌容器 (#qimo_chatpup):</strong> ' + (container ? '✓ 存在' : '✗ 不存在') + '</p>';
+      
+      if (container) {
+        html += '<p style="margin-left: 20px;">容器状态: display=' + container.style.display + '</p>';
+      }
+      
+      // 检查全局对象
+      html += '<p><strong>全局对象:</strong></p><ul>';
+      var keys = Object.keys(window).filter(function(key) {
+        return key.toLowerCase().indexOf('moor') >= 0 || 
+               key.toLowerCase().indexOf('qimo') >= 0;
+      });
+      
+      if (keys.length > 0) {
+        keys.forEach(function(key) {
+          html += '<li>window.' + key + '</li>';
+        });
+      } else {
+        html += '<li>未找到七陌相关的全局对象</li>';
+      }
+      html += '</ul>';
+      
+      // 显示结果
+      var result = document.getElementById('result');
+      result.style.display = 'block';
+      result.className = 'info';
+      result.innerHTML = html;
+      
+      console.log('======================');
+    }
+    
+    // 监听 iframe 加载
+    window.addEventListener('load', function() {
+      console.log('页面加载完成');
+    });
+  </script>
+  
+  <div style="margin-top: 40px; padding: 20px; background: #fff3cd; border-radius: 8px;">
+    <h3>如果出现"无法创建对话"错误，可能的原因：</h3>
+    <ol>
+      <li><strong>AccessID 配置错误</strong> - 请确认七陌后台的 AccessID 是否正确</li>
+      <li><strong>没有在线客服</strong> - 请确认七陌后台有客服在线接待</li>
+      <li><strong>域名白名单</strong> - 请在七陌后台添加当前域名到白名单：
+        <ul>
+          <li>localhost:3001</li>
+          <li>您的实际域名</li>
+        </ul>
+      </li>
+      <li><strong>接待组配置</strong> - 请确认七陌后台配置了接待组</li>
+      <li><strong>账号状态</strong> - 请确认七陌账号状态正常，未欠费</li>
+    </ol>
+    
+    <h3>解决步骤：</h3>
+    <ol>
+      <li>登录七陌管理后台：<a href="https://admin.7moor.com/" target="_blank">https://admin.7moor.com/</a></li>
+      <li>检查 [设置] → [接入管理] → [Web 在线客服]</li>
+      <li>确认 AccessID: <code>3c38c910-64d9-11ef-b60c-533c8e6a8982</code></li>
+      <li>检查 [域名白名单] 设置</li>
+      <li>确认有客服账号处于 [在线] 状态</li>
+      <li>检查接待组是否配置正确</li>
+    </ol>
+  </div>
+</body>
+</html>

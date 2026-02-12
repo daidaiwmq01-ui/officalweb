@@ -1,5 +1,5 @@
 <template>
-  <section class="py-24 bg-white font-['Noto_Sans_SC']">
+  <section id="luxury-quote-form" class="py-24 bg-white font-['Noto_Sans_SC']">
     <div class="container mx-auto max-w-[1200px] px-4">
       <div class="flex flex-col lg:flex-row items-center gap-20">
         
@@ -10,7 +10,7 @@
             :initial="{ opacity: 0, x: -30 }"
             :visible-once="{ opacity: 1, x: 0, transition: { duration: 600 } }"
           >
-            <h2 class="text-[40px] font-bold text-[#0B2747] mb-6 leading-[1.2]">
+            <h2 class="text-2xl sm:text-3xl md:text-[40px] font-bold text-[#0B2747] mb-6 leading-[1.2]">
               开启您的定制托运方案
             </h2>
             <p class="text-[20px] text-[#4B5563] leading-relaxed max-w-[500px]">
@@ -92,6 +92,73 @@
 
       </div>
     </div>
+
+    <div v-if="showCaptcha" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
+      <div class="bg-white rounded-2xl w-full max-w-[420px] p-6 shadow-2xl">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-[18px] font-bold text-[#0B2747]">短信验证</h3>
+          <button class="text-gray-400 hover:text-gray-600" @click="showCaptcha = false">✕</button>
+        </div>
+        <p class="text-[13px] text-gray-500 mb-4">验证码将发送至：{{ formData.phone }}</p>
+
+        <div class="space-y-3">
+          <div v-if="captchaEnabled" class="space-y-3">
+            <div class="flex items-center gap-3">
+              <input
+                v-model="captchaCode"
+                type="text"
+                placeholder="输入图片验证码"
+                class="flex-1 h-11 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#006EFF]"
+              />
+              <button
+                class="w-[120px] h-11 rounded-xl border border-gray-200 bg-gray-50 text-sm"
+                @click="openCaptcha"
+                :disabled="captchaLoading"
+              >
+                {{ captchaLoading ? '加载中...' : '刷新' }}
+              </button>
+            </div>
+            <div class="flex items-center gap-3">
+              <img
+                v-if="captchaImg"
+                :src="captchaImg"
+                alt="验证码"
+                class="h-11 rounded-lg border border-gray-200"
+              />
+              <span v-else class="text-xs text-gray-400">暂无验证码图片</span>
+            </div>
+          </div>
+          <div v-else class="text-xs text-gray-400">
+            当前无需图形验证码
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input
+              v-model="smsCode"
+              type="text"
+              placeholder="输入短信验证码"
+              class="flex-1 h-11 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#006EFF]"
+            />
+            <button
+              class="w-[120px] h-11 rounded-xl bg-[#006EFF] text-white text-sm font-bold disabled:opacity-60"
+              @click="handleSendSms"
+              :disabled="smsSending"
+            >
+              {{ smsSending ? '发送中...' : '获取验证码' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 mt-6">
+          <button class="px-4 h-10 rounded-xl border border-gray-200 text-gray-600" @click="showCaptcha = false">
+            取消
+          </button>
+          <button class="px-5 h-10 rounded-xl bg-[#FF6B00] text-white font-bold" @click="handleConfirm">
+            确认提交
+          </button>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -99,8 +166,12 @@
 import { ref } from 'vue'
 import Button from '@/components/ui/Button.vue'
 import { useToast } from '@/composables/useToast'
+import { useOrderFee } from '@/composables/useOrderFee'
+import { useOrderCaptcha } from '@/composables/useOrderCaptcha'
 
 const toast = useToast()
+const { submitOrderFee } = useOrderFee()
+const { fetchCaptchaImage, sendSmsCode, checkCaptchaImage } = useOrderCaptcha()
 
 const formData = ref({
   name: "",
@@ -109,12 +180,111 @@ const formData = ref({
   date: ""
 })
 
-const handleSubmit = () => {
+const showCaptcha = ref(false)
+const captchaLoading = ref(false)
+const captchaImg = ref("")
+const captchaUuid = ref("")
+const captchaCode = ref("")
+const smsCode = ref("")
+const smsSending = ref(false)
+const captchaEnabled = ref(true)
+
+const openCaptcha = async () => {
+  showCaptcha.value = true
+  captchaCode.value = ""
+  smsCode.value = ""
+  captchaLoading.value = true
+  try {
+    const res = await fetchCaptchaImage()
+    captchaImg.value = res.img
+    captchaUuid.value = res.uuid
+    captchaEnabled.value = Boolean(res.img)
+  } catch (error) {
+    toast.error("获取验证码失败，请稍后重试")
+    captchaEnabled.value = false
+  } finally {
+    captchaLoading.value = false
+  }
+}
+
+const handleSubmit = async () => {
   if (!formData.value.name || !formData.value.phone) {
     toast.error("请完整填写联系信息")
     return
   }
-  toast.success("定制方案申请已提交，高级专家将尽快联系您！")
-  formData.value = { name: "", phone: "", model: "", date: "" }
+  await openCaptcha()
+}
+
+const handleSendSms = async () => {
+  if (!formData.value.phone) {
+    toast.error("请先填写手机号")
+    return
+  }
+  if (captchaEnabled.value && (!captchaCode.value || !captchaUuid.value)) {
+    toast.error("请先填写图片验证码")
+    return
+  }
+  smsSending.value = true
+  try {
+    if (captchaEnabled.value) {
+      const checkRes: any = await checkCaptchaImage(captchaUuid.value, captchaCode.value)
+      if (checkRes?.status !== 0 && checkRes?.status !== '0') {
+        toast.error(checkRes?.msg || "图片验证码校验失败")
+        return
+      }
+    }
+    const response: any = await sendSmsCode({
+      phone: formData.value.phone,
+      captchaCode: captchaEnabled.value ? captchaCode.value : "",
+      userType: "customer",
+      uuid: captchaEnabled.value ? captchaUuid.value : ""
+    })
+    if (response?.status !== 0 && response?.status !== '0') {
+      toast.error(response?.msg || "发送验证码失败")
+      return
+    }
+    toast.success("短信验证码已发送")
+    if (response?.data?.uuid) {
+      captchaUuid.value = response.data.uuid
+    }
+  } catch (error) {
+    toast.error("发送验证码失败")
+  } finally {
+    smsSending.value = false
+  }
+}
+
+const handleConfirm = async () => {
+  if (!smsCode.value) {
+    toast.error("请输入短信验证码")
+    return
+  }
+  try {
+    const response: any = await submitOrderFee({
+      channelSource: "3017",
+      orderType: 0,
+      carTypeCode: 1,
+      carType: "轿车",
+      origin: 110000,
+      originCity: "北京",
+      originProvince: "北京",
+      destination: 440000,
+      destCity: "广州",
+      destProvince: "广东",
+      phone: formData.value.phone,
+      remark: `联系人：${formData.value.name}; 车型：${formData.value.model || '未填写'}; 日期：${formData.value.date || '未填写'}`
+    })
+
+    if (response?.status !== 0 && response?.status !== '0') {
+      toast.error(response?.msg || "提交失败，请稍后重试")
+      return
+    }
+
+    toast.success("定制方案申请已提交，高级专家将尽快联系您！")
+    formData.value = { name: "", phone: "", model: "", date: "" }
+    showCaptcha.value = false
+  } catch (error) {
+    toast.error("提交失败，请稍后重试")
+  }
 }
 </script>

@@ -13,10 +13,8 @@
 
       <div class="container mx-auto max-w-[1200px] relative z-10 px-4 lg:px-0 h-full flex flex-col justify-center">
         <!-- Breadcrumb - Top Left Fixed -->
-        <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-white/80 text-[14px]">
-          <button @click="navigateToHome" class="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0">首页</button>
-          <ChevronRight class="w-4 h-4" />
-          <span class="text-white font-bold">清障车销售</span>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
         <div class="max-w-[800px] pt-16 px-4 lg:px-0">
@@ -24,10 +22,11 @@
             v-motion
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-            class="text-[40px] leading-[1.2] font-bold text-white mb-6"
+            class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white mb-6"
+            style="line-height: 1.5;"
           >
-            车拖车装备制造：<br />
-            源头工厂直销，赋能运力升级
+            <div>车拖车装备制造：</div>
+            <div>源头工厂直销，赋能运力升级</div>
           </h1>
           
           <p 
@@ -45,12 +44,12 @@
             :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 400 } }"
             class="flex flex-wrap gap-4"
           >
-            <Button 
-              @click="scrollToForm"
-              class="h-14 px-10 rounded-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-[18px] border-none shadow-lg shadow-orange-500/20 cursor-pointer"
+            <NuxtLink 
+              to="/pricing#pricing-calculator"
+              class="h-14 px-10 rounded-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-[18px] border-none shadow-lg shadow-orange-500/20 cursor-pointer inline-flex items-center justify-center"
             >
               获取底盘报价
-            </Button>
+            </NuxtLink>
             <Button 
               @click="scrollToForm"
               class="h-14 px-10 rounded-full bg-transparent border-white text-white hover:bg-white/10 font-bold text-[18px] cursor-pointer"
@@ -207,18 +206,27 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/truck-sales'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/truck-sales')
 import { ChevronRight, Factory, Truck, Award, ShieldCheck, TrendingUp, BadgeCheck, Phone, CheckCircle2 } from 'lucide-vue-next'
 import Button from '@/components/ui/Button.vue'
 import ProductCard from '@/components/truck-sales/ProductCard.vue'
 import StatItem from '@/components/truck-sales/StatItem.vue'
 import PartnerLogo from '@/components/truck-sales/PartnerLogo.vue'
 import EcosystemStep from '@/components/truck-sales/EcosystemStep.vue'
+import { useToast } from '@/composables/useToast'
 
 interface Props {
   setActiveId?: (id: string) => void
 }
 
 const props = defineProps<Props>()
+const toast = useToast()
 
 const formSubmitted = ref(false)
 const formData = ref({
@@ -231,14 +239,70 @@ const scrollToForm = () => {
   document.getElementById('sales-lead-form')?.scrollIntoView({ behavior: 'smooth' })
 }
 
-const handleFormSubmit = () => {
-  formSubmitted.value = true
-  setTimeout(() => {
-    formSubmitted.value = false
-  }, 3000)
+const handleFormSubmit = async () => {
+  if (!formData.value.name || !formData.value.phone || formData.value.vehicleType === '意向车型') {
+    toast.error('请完整填写信息')
+    return
+  }
+
+  try {
+    const response: any = await $fetch('/api/home/buyCarLine', {
+      method: 'POST',
+      body: {
+        phone: formData.value.phone,
+        source: 3017
+      }
+    })
+
+    if (response?.status !== 0 && response?.status !== '0') {
+      toast.error(response?.msg || '提交失败，请稍后重试')
+      return
+    }
+
+    formSubmitted.value = true
+    toast.success('已提交，销售经理将尽快联系您')
+    formData.value = { name: '', phone: '', vehicleType: '意向车型' }
+    setTimeout(() => {
+      formSubmitted.value = false
+    }, 3000)
+  } catch (error) {
+    toast.error('提交失败，请稍后重试')
+  }
 }
 
-const navigateToHome = () => {
-  props.setActiveId?.('home')
+
+// SEO Meta Tags
+useHead({
+  title: '清障车销售 - 源头工厂直销 购车享平台订单 | 车拖车',
+  meta: [
+    {
+      name: 'description',
+      content: '车拖车装备制造，山东临沂/湖北随州两大生产基地年产1500台。3吨蓝牌、全落地液压板、厢式运输车等热销车型，购车即享平台优选订单权益。'
+    },
+    {
+      name: 'keywords',
+      content: '清障车销售,板车销售,轿运车,救援车,车拖车装备'
+    }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/truck-sales' }
+  ]
+})
+
+// Schema.org 结构化数据 - 清障车/装备销售
+const truckSalesSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  'name': '车拖车清障车装备直销',
+  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'serviceType': 'Vehicle Sales',
+  'description': '山东临沂/湖北随州两大生产基地，年产1500台。购车即享平台优选订单权益，助您开启高效物流事业。',
+  'areaServed': 'CN',
+  'offers': {
+    '@type': 'Offer',
+    'description': '3吨蓝牌一拖二、全落地液压板、厢式运输车等热销车型，支持金融方案'
+  }
 }
+
+useSchemaOrg(truckSalesSchema)
 </script>

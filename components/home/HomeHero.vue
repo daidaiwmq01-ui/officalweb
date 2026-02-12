@@ -4,7 +4,7 @@
     <div class="absolute inset-0 z-0">
       <img
         :src="heroBackgroundImage"
-        alt="Hero Background"
+        alt="车拖车智能汽车物流生态平台-全国覆盖的托运调度服务"
         class="w-full h-full object-cover"
         @error="handleImageError"
       />
@@ -26,7 +26,7 @@
         class="max-w-[800px] text-white text-left"
       >
         <h1
-          class="text-5xl md:text-[56px] font-bold leading-tight mb-6 text-white"
+          class="text-5xl md:text-[56px] font-bold leading-[1.6] mb-6 text-white"
           style="text-shadow: 0 4px 10px rgba(0,0,0,0.2)"
         >
           智能汽车物流生态平台
@@ -36,20 +36,16 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <button
-            @click="handleQuoteClick"
+          <NuxtLink
+            to="/pricing#pricing-calculator"
             class="bg-[#FF6B00] hover:bg-[#E56000] text-white rounded-full h-[56px] px-12 shadow-[0_10px_20px_-5px_rgba(255,107,0,0.5)] transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2 text-lg font-bold"
           >
             <Zap class="w-5 h-5 fill-current" />
             立即获取报价
-          </button>
-          <button
-            @click="handleDemoClick"
-            class="flex items-center text-white hover:text-[#FF6B00] transition-colors group bg-transparent border-none cursor-pointer"
-          >
-            <PlayCircle class="w-6 h-6 mr-2" />
-            <span class="border-b border-transparent group-hover:border-[#FF6B00] pb-1 font-medium">观看 5 秒极速接单演示</span>
-          </button>
+          </NuxtLink>
+          <div class="text-white/80 text-sm font-medium">
+            7×24 小时智能调度，5 秒内生成报价
+          </div>
         </div>
       </div>
     </div>
@@ -89,7 +85,7 @@
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
             <img
               src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
-              alt="WeChat Mini Program QR"
+              alt="车拖车微信小程序二维码-扫码获取报价"
               class="w-full h-full p-2"
             />
             <!-- Center Icon Overlay -->
@@ -116,8 +112,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { ShieldCheck, Lock, Factory, Zap, MessageCircle, PlayCircle } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { ShieldCheck, Lock, Factory, Zap, MessageCircle } from 'lucide-vue-next'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
@@ -126,41 +122,11 @@ import DialogTitle from '@/components/ui/DialogTitle.vue'
 const props = defineProps<{}>()
 
 const isMiniProgramModalOpen = ref(false)
-const isMobile = ref(false)
 const heroBackgroundImage = ref('https://images.unsplash.com/photo-1644442076205-627648a62844?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMHNlbWklMjB0cnVjayUyMGhpZ2h3YXklMjBzdW5ueXxlbnwxfHx8fDE3NzAwMDQ3NzN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral')
-
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
 
 const handleImageError = () => {
   // Fallback image handling
   heroBackgroundImage.value = 'https://images.unsplash.com/photo-1644442076205-627648a62844?q=80&w=1080'
 }
 
-const handleQuoteClick = () => {
-  if (isMobile.value) {
-    // Mobile: Deep Link (WeChat)
-    window.location.href = 'weixin://dl/business/?t=chetuoche_quote'
-  } else {
-    // Desktop: Open Modal
-    isMiniProgramModalOpen.value = true
-  }
-}
-
-const handleDemoClick = (e: Event) => {
-  e.preventDefault()
-  // In a real app, this would open a video modal.
-  // For now, let's open the mini program modal as a conversion action.
-  isMiniProgramModalOpen.value = true
-}
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
 </script>

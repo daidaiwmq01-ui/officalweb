@@ -4,7 +4,7 @@
       <div class="relative rounded-3xl overflow-hidden bg-[#FFF5EB] flex flex-col md:flex-row items-center">
         <!-- Content -->
         <div class="p-10 md:p-16 w-full md:w-3/5 z-10">
-          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6">
+          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6 leading-[1.6]">
             24小时道路救援：<br />
             汽车托运的<span class="text-[#FF6B00]">安全底座</span>
           </h2>
@@ -30,10 +30,10 @@
               </DialogDescription>
               <div class="flex flex-col items-center justify-center py-8 gap-6">
                 <a
-                  href="tel:4008889999"
+                  href="tel:4000751117"
                   class="text-4xl font-black text-[#FF6B00] hover:text-[#E56000] transition-colors tracking-wider decoration-0"
                 >
-                  400-888-9999
+                  400-075-1117
                 </a>
                 <p class="text-sm text-gray-400 bg-gray-50 px-4 py-2 rounded-full">
                   点击号码直接拨打 · 优先接入人工客服

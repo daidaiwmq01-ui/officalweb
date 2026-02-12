@@ -12,12 +12,8 @@
 
     <div class="container mx-auto max-w-[1200px] relative z-10 px-4 lg:px-0 h-full flex flex-col justify-center">
       <!-- Breadcrumb -->
-      <div class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-white/80 text-[14px]">
-        <a href="#" class="hover:text-white transition-colors">首页</a>
-        <ChevronRight class="w-4 h-4" />
-        <a href="#" class="hover:text-white transition-colors">解决方案</a>
-        <ChevronRight class="w-4 h-4" />
-        <span class="text-white">汽车供应链</span>
+      <div class="absolute top-6 left-4 lg:left-0 z-20">
+        <BreadcrumbNav :items="breadcrumbItems" variant="light" />
       </div>
 
       <!-- Content - Left Aligned for B2B -->
@@ -26,10 +22,11 @@
           v-motion
           :initial="{ opacity: 0, x: -20 }"
           :enter="{ opacity: 1, x: 0, transition: { duration: 0.6 } }"
-          class="text-[40px] leading-[1.2] font-bold text-white mb-6"
+          class="text-2xl sm:text-3xl md:text-[40px] font-bold text-white mb-6"
+          style="line-height: 1.5;"
         >
-          汽车供应链数字化方案：<br />
-          缩短 OTD 周期并实现"零公里"交付
+          <div>汽车供应链数字化方案：</div>
+          <div>缩短 OTD 周期并实现"零公里"交付</div>
         </h1>
         
         <p 
@@ -46,7 +43,10 @@
           :initial="{ opacity: 0, y: 20 }"
           :enter="{ opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.4 } }"
         >
-          <Button class="h-14 px-10 rounded-full bg-[#006EFF] hover:bg-[#0056D6] text-white font-bold text-[18px] border-none cursor-pointer">
+          <Button
+            class="h-14 px-10 rounded-full bg-[#006EFF] hover:bg-[#0056D6] text-white font-bold text-[18px] border-none cursor-pointer"
+            @click="scrollToLeadForm"
+          >
             获取企业版方案
           </Button>
         </div>
@@ -56,7 +56,17 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronRight } from 'lucide-vue-next'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+
+const breadcrumbItems = getBreadcrumbsForRoute('/supply-chain')
 import Button from '@/components/ui/Button.vue'
 import { EXTERNAL_ASSETS } from '@/utils/images'
+
+const scrollToLeadForm = () => {
+  const el = document.getElementById('supply-chain-lead-form')
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 </script>

@@ -1,0 +1,729 @@
+---
+
+### 🚀 第一部分：给 Cursor 的 Master Prompt
+
+请将以下指令发送给 Cursor。这段指令定义了技术实现方式（使用 Nuxt 3 `useHead`）和全局关联逻辑。
+
+> **Cursor Prompt:**
+> 
+> 
+> **Task:** Implement SEO Structured Data (JSON-LD) for the Nuxt 3 project.
+> **Reference:** Follow the "Graph" strategy where all pages reference a global Organization ID.
+> **Tech Stack:** Vue 3 Composition API, Nuxt 3 `useHead`.
+> 
+> **Implementation Rules:**
+> 
+> 1. **Global ID:** Define the organization globally as `https://www.ctcapp.com/#organization` so all service pages can link back to it via the `provider` field.
+> 2. **Injection Method:** Use `useHead` in `script setup` for each page:
+> 
+> ```
+> useHead({
+>   script: [
+>     {
+>       type: 'application/ld+json',
+>       children: computed(() => JSON.stringify(jsonLdData.value))
+>     }
+>   ]
+> })
+> ```
+> 
+> 1. **Data Structure:** I will provide the specific JSON objects for each page below. Please create a composable or utility to manage the shared `Organization` data to avoid duplication.
+> 2. **Environment:** Ensure `https://www.ctcapp.com` is used as the base URL (Production), not the dev URL.
+
+---
+
+### 📂 第二部分：各页面 Schema 数据配置
+
+请将以下代码块依次提供给 Cursor，让它填充到对应的 `pages/xxx.vue` 文件中。
+
+### 1. 全局共用数据 (Global Organization)
+
+*建议创建一个 Composable `useSchemaOrg.ts` 存放此数据，所有页面通用。依据：[Source 80, 81]*
+
+```
+// Shared Organization Data
+const organizationSchema = {
+  "@type": "Organization",
+  "@id": "https://www.ctcapp.com/#organization",
+  "name": "车拖车 (CheTuoChe)",
+  "url": "https://www.ctcapp.com",
+  "logo": "https://www.ctcapp.com/logo.png",
+  "slogan": "让汽车托运像发快递一样简单",
+  "description": "国内领先的AI智能调度汽车托运平台，连接167万用户与45万运力伙伴。",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "400-075-1117",
+    "contactType": "customer service",
+    "areaServed": "CN",
+    "availableLanguage": "Chinese"
+  },
+  "sameAs": [
+    "https://www.douyin.com/user/chetuoche",
+    "https://weixin.qq.com/..."
+  ]
+};
+```
+
+### 2. 首页 (Home)
+
+*文件路径：`pages/index.vue`依据：[Source 65, 81]*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    organizationSchema, // 引用全局组织
+    {
+      "@type": "WebSite",
+      "@id": "https://www.ctcapp.com/#website",
+      "url": "https://www.ctcapp.com",
+      "name": "车拖车官网 - 全场景AI智能汽车托运调度平台",
+      "publisher": { "@id": "https://www.ctcapp.com/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.ctcapp.com/price?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+};
+```
+
+### 3. 小板车托运 (Small Board)
+
+*文件路径：`pages/service/small-board.vue`依据：[Source 17, 84]重点：突出“5秒接单”、“门到门”和服务问答。*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "name": "小板车尊享托运",
+      "provider": { "@id": "https://www.ctcapp.com/#organization" },
+      "description": "提供1对1门到门、零等待、零中转服务。依托AI智能LBS调度，最快5秒接单，15分钟上门。",
+      "areaServed": "CN",
+      "serviceType": "Car Transport",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "CNY",
+        "priceSpecification": {
+           "@type": "UnitPriceSpecification",
+           "price": "2.5",
+           "unitCode": "KMT", // Per Kilometer
+           "referenceQuantity": {
+             "@type": "QuantitativeValue",
+             "unitCode": "KMT"
+           }
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "小板车托运多久能上门？",
+          "acceptedAnswer": { "@type": "Answer", "text": "依托车拖车AI LBS调度系统，最快5秒接单，平均15分钟内上门取车。" }
+        },
+        {
+           "@type": "Question",
+           "name": "小板车托运包含保险吗？",
+           "acceptedAnswer": { "@type": "Answer", "text": "包含。我们与太平洋/东海保险合作，为每笔订单提供全程运输险保障。" }
+        }
+      ]
+    }
+  ]
+};
+```
+
+### 4. 道路救援 (Rescue)
+
+*文件路径：`pages/service/rescue.vue`依据：[Source 53, 54]重点：价格透明（170元起）和 24小时服务。*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "24小时道路救援服务",
+  "provider": { "@id": "https://www.ctcapp.com/#organization" },
+  "serviceType": "RoadsideAssistance", // 特殊类型
+  "description": "提供故障车拖车、地库亏电搭电、事故车救援服务。安全底座保障。",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "CNY",
+    "price": "170.00",
+    "description": "救援起步价（含10公里）",
+    "priceValidUntil": "2025-12-31"
+  },
+  "availableChannel": {
+    "@type": "ServiceChannel",
+    "serviceUrl": "https://www.ctcapp.com/service/rescue",
+    "servicePhone": "400-075-1117"
+  }
+};
+```
+
+### 5. 价格查询 (Price Calculator)
+
+*文件路径：`pages/price/index.vue`依据：[Source 7, 82]重点：明确“无隐形消费”和计算逻辑。*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication", // 计算器视为一种Web应用工具
+  "name": "2026 汽车托运价格计算器",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "CNY",
+    "lowPrice": "200", // 示例最低价
+    "offerCount": "30000", // 对应30000条线路
+    "description": "支持小板车阶梯里程计费、大板车热门专线报价。一口价模式拒绝隐形消费。"
+  }
+};
+```
+
+### 6. 下载聚合页 (App Download)
+
+*文件路径：`pages/download/index.vue`依据：[Source 1, 51, 82]重点：强调支持鸿蒙系统。*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "车拖车客户端 APP",
+      "operatingSystem": "Android, iOS, HarmonyOS",
+      "applicationCategory": "BusinessApplication",
+      "downloadUrl": "https://www.ctcapp.com/download/client",
+      "featureList": "AI智能发单, 实时位置追踪, 在线电子合同, 违章处理",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "车拖车司机端 APP",
+      "operatingSystem": "Android, iOS, HarmonyOS",
+      "applicationCategory": "BusinessApplication",
+      "downloadUrl": "https://www.ctcapp.com/download/driver",
+      "featureList": "海量货源自动听单, 极速结算, 司机课堂, 运费补贴",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
+    }
+  ]
+};
+```
+
+### 7. 资讯详情页 (News Detail)
+
+*文件路径：`pages/news/[id].vue`依据：[Source 67, 83]重点：E-E-A-T 专家背书（Author）。*
+
+```
+// 注意：这里的数据需要根据 API 返回的 newsDetail 动态填充
+const jsonLdData = computed(() => ({
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": newsDetail.value?.title,
+  "image": [newsDetail.value?.coverUrl],
+  "datePublished": newsDetail.value?.createTime,
+  "dateModified": newsDetail.value?.updateTime,
+  "author": {
+    "@type": "Organization", // 或 Person
+    "name": newsDetail.value?.author || "车拖车研究院" // E-E-A-T 关键点
+  },
+  "publisher": { "@id": "https://www.ctcapp.com/#organization" },
+  "description": newsDetail.value?.summary
+}));
+```
+
+---
+
+### ✅ 验证步骤 (Cursor 完成后)
+
+完成代码添加后，请务必执行以下验证：
+
+1. **本地运行：** `npm run dev`。
+2. **查看源码：** 在浏览器中右键“查看网页源代码”，搜索 `application/ld+json`，确认脚本已生成且包含了 JSON 数据。
+3. **Google 测试：** 待部署到测试环境后，使用 [Google 富媒体搜索结果测试](https://search.google.com/test/rich-results) 输入 URL 进行验证，确保无红字报错。
+
+收到，我们继续完成剩余核心页面的 **Schema.org 结构化数据**配置。这些页面（大板车、代驾、解决方案、招聘等）是构建 B2B 业务信任度和吸引专业流量的关键。
+
+请将以下内容作为 **“第二批 Schema 配置任务”** 发送给 Cursor。
+
+---
+
+### 🚀 给 Cursor 的指令 (Part 2)
+
+> **Cursor Prompt (Continuation):**
+> 
+> 
+> **Task:** Implement JSON-LD for the remaining service and corporate pages (Large Board, Valet, Solutions, Recruitment, etc.).
+> **Context:** Continue using the `useHead` method in Nuxt 3.
+> **Constraint:** Ensure all `provider` or `hiringOrganization` fields reference the global Organization ID `https://www.ctcapp.com/#organization` defined in Part 1.
+> **Data Source:** Use the specific JSON objects provided below for each page component.
+> 
+
+---
+
+### 📂 页面数据配置 (Page Configurations)
+
+### 8. 大板车干线集运 (Large Board)
+
+*文件路径：`pages/service/large-board.vue`依据：[Source 14, 15] - 30,000条线路、国家交通局定位*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "name": "大板车干线集运 (笼车托运)",
+      "provider": { "@id": "https://www.ctcapp.com/#organization" },
+      "description": "提供高性价比的长途汽车批量运输服务。覆盖全国30,000+条线路，1000+网点，支持国家交通局系统实时定位。",
+      "serviceType": "Car Transport",
+      "areaServed": "CN",
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "CNY",
+        "lowPrice": "800", // 典型长途起步价示例
+        "offerCount": "30000",
+        "description": "基于起终点与车型（如SUV/轿车）的动态阶梯报价，量大更优。"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "大板车托运多久能到？",
+          "acceptedAnswer": { "@type": "Answer", "text": "大板车需配载发车，跨省干线通常需3-7天。核心城市（如京沪、广深）开通了每日直达专线，时效更快。" }
+        },
+        {
+          "@type": "Question",
+          "name": "能查到车辆位置吗？",
+          "acceptedAnswer": { "@type": "Answer", "text": "可以。车拖车大板车接入国家交通局运输系统，提供官方级实时GPS/北斗定位查询，轨迹透明。" }
+        }
+      ]
+    }
+  ]
+};
+```
+
+### 9. 代驾取送车 (Valet Service)
+
+*文件路径：`pages/service/valet.vue`依据：[Source 4, 5, 78] - 第一检测人、点火即走、75.6元起*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "专业汽车代驾取送服务",
+  "provider": { "@id": "https://www.ctcapp.com/#organization" },
+  "serviceType": "Designated Driving",
+  "description": "解决汽车托运“最后一公里”接驳难题。代驾员作为“第一检测人”执行标准化验车，支持长途专人专车直达，点火即走。",
+  "serviceOutput": "标准化验车报告",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "CNY",
+    "priceSpecification": {
+       "@type": "UnitPriceSpecification",
+       "price": "75.6", // 依据文档[Source 8]起步价
+       "referenceQuantity": { "@type": "QuantitativeValue", "value": "20", "unitCode": "KMT" }, // 含20公里
+       "name": "代驾起步价"
+    }
+  }
+};
+```
+
+### 10. 解决方案聚合页 (Solutions Hub)
+
+*文件路径：`pages/solutions/index.vue`依据：[Source 43, 58, 56] - 供应链、商业活动、安全防护*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "车拖车行业解决方案中心",
+  "description": "面向主机厂、商业活动及个人提供全场景物流解决方案。涵盖OTD可视化供应链、保姆式特种车托运及等保三级安全防护。",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "汽车供应链数字化解决方案",
+        "url": "https://www.ctcapp.com/solutions/supply-chain",
+        "description": "缩短OTD周期，实现“零公里”交付，支持4S店动态调拨。"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "商业活动特种托运方案",
+        "url": "https://www.ctcapp.com/solutions/events",
+        "description": "全封闭厢式车运输，气囊减震，服务车展与超跑巡演。"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "网络安全防护方案",
+        "url": "https://www.ctcapp.com/solutions/security",
+        "description": "等保三级认证，金融级物流数据安全，隐私脱敏技术。"
+      }
+    ]
+  }
+};
+```
+
+### 11. 人才招聘 (Careers)
+
+*文件路径：`pages/about/careers.vue`依据：[Source 2, 3] - 智运生、物流算法工程师SEO 策略：使用 `JobPosting` 可让 Google Jobs/百度招聘直接抓取。建议后续做成动态数据。*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "加入车拖车 - 校园与社会招聘",
+  "description": "寻找改变万亿整车物流市场的精英。提供具有竞争力的薪酬与股权激励。",
+  "mainEntity": {
+    "@type": "JobPosting",
+    "title": "物流算法工程师", // 示例职位，建议动态生成
+    "hiringOrganization": { "@id": "https://www.ctcapp.com/#organization" },
+    "datePosted": "2024-05-01",
+    "validThrough": "2025-12-31",
+    "employmentType": "FULL_TIME",
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "临沂",
+        "addressRegion": "山东",
+        "addressCountry": "CN"
+      }
+    },
+    "description": "负责智能调度系统的核心算法优化，提升车辆匹配效率与路径规划能力。",
+    "baseSalary": {
+      "@type": "MonetaryAmount",
+      "currency": "CNY",
+      "value": {
+        "@type": "QuantitativeValue",
+        "value": 20000,
+        "unitText": "MONTH"
+      }
+    }
+  }
+};
+```
+
+### 12. 司机之家 (Drivers Home)
+
+*文件路径：`pages/driver/home.vue`依据：[Source 10, 11] - 驿站补给、车辆维护*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "CivicStructure", // 定义为公共设施
+  "name": "车拖车司机之家 (服务驿站)",
+  "description": "为全国货运司机提供免费洗漱、24h休息区及车辆自助检测服务的补给网络。",
+  "telephone": "400-075-1117",
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "opens": "00:00",
+    "closes": "23:59"
+  },
+  "amenityFeature": [
+    { "@type": "LocationFeatureSpecification", "name": "免费热水淋浴" },
+    { "@type": "LocationFeatureSpecification", "name": "高速Wi-Fi" },
+    { "@type": "LocationFeatureSpecification", "name": "自助洗衣" },
+    { "@type": "LocationFeatureSpecification", "name": "车辆自助检测" }
+  ]
+};
+```
+
+### 13. 关于我们 (About Us)
+
+*文件路径：`pages/about/index.vue`依据：[Source 69, 70, 71] - 成立时间、资质认证*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "mainEntity": {
+    "@id": "https://www.ctcapp.com/#organization",
+    "@type": "Organization",
+    "foundingDate": "2020",
+    "legalName": "山东车拖车网络科技有限公司",
+    "description": "车拖车致力于用数字技术重塑汽车物流信任标准。现已服务用户超167万，GMV近20亿。",
+    "award": [
+      "山东省首版次高端软件认证",
+      "国家高新技术企业",
+      "国家等保三级认证",
+      "ISO9001质量认证"
+    ],
+    "memberOf": {
+      "@type": "Organization",
+      "name": "临沂市汽车数智供应链重点实验室"
+    }
+  }
+};
+```
+
+### 14. 联系我们 (Contact)
+
+*文件路径：`pages/about/connect.vue`依据：[Source 42] - 客服/商务/技术联系方式*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "mainEntity": {
+    "@type": "Organization",
+    "@id": "https://www.ctcapp.com/#organization",
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "400-075-1117",
+        "contactType": "customer service",
+        "areaServed": "CN",
+        "availableLanguage": "Chinese"
+      },
+      {
+        "@type": "ContactPoint",
+        "email": "tech@autotrans.com",
+        "contactType": "technical support",
+        "description": "系统对接与安全咨询"
+      },
+      {
+        "@type": "ContactPoint",
+        "telephone": "138-XXXX-XXXX", // 请替换为真实号码
+        "contactType": "sales",
+        "description": "板车销售/装备采购热线"
+      }
+    ]
+  }
+};
+```
+
+---
+
+### ✅ 最终检查步骤 (For Developer)
+
+请在 Cursor 完成代码注入后，让其执行以下检查：
+
+1. **Organization ID 一致性：** 确认所有页面中的 `provider` 或 `parentOrganization` 字段都严格指向 `https://www.ctcapp.com/#organization`，避免生成多个孤立的组织实体。
+2. **动态数据绑定：** 对于“人才招聘”和“资讯详情”页，确认代码使用了 Vue 的 `computed` 属性来绑定 API 返回的真实数据，而不是写死的静态数据。
+3. **Sitemap 配合：** 确保 `nuxt-simple-sitemap` 或类似模块已配置，以便搜索引擎能发现这些深层页面。
+
+收到，这是 **第三批（也是最后一批）核心页面的 Schema.org 结构化数据**。
+
+这一批重点涵盖了 **B2B 垂直解决方案**、**司机/合作伙伴招募** 以及 **SEO 流量型内容页（资讯列表、用户指南）**。这些页面是提升网站在特定领域（如“车展托运”、“供应链物流”）权威性的关键。
+
+请将以下内容作为 **“Part 3: 深度业务与内容页配置”** 发送给 Cursor。
+
+---
+
+### 🚀 给 Cursor 的指令 (Part 3)
+
+> **Cursor Prompt (Final Part):**
+> 
+> 
+> **Task:** Implement JSON-LD for the specialized B2B Solutions, Driver Recruitment, and Content Hub pages.
+> **Context:** Complete the "Knowledge Graph".
+> **Constraint:** Maintain the `provider` link to `https://www.ctcapp.com/#organization`.
+> **Data Source:** Use the specific JSON objects provided below.
+> 
+
+---
+
+### 📂 页面数据配置 (Page Configurations)
+
+### 15. 资讯列表页 (News List)
+
+*文件路径：`pages/news/index.vue`依据：[Source 67, 93]SEO 策略：* 定义为 `CollectionPage`，并标记其包含的新闻类别。
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "车拖车行业资讯与技术公告",
+  "description": "汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。",
+  "url": "https://www.ctcapp.com/news",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "SiteNavigationElement",
+        "position": 1,
+        "name": "行业深度",
+        "url": "https://www.ctcapp.com/news/industry"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 2,
+        "name": "技术公告",
+        "url": "https://www.ctcapp.com/news/tech"
+      }
+    ]
+  }
+};
+```
+
+### 16. 司机招募/入驻 (Driver Recruitment)
+
+*文件路径：`pages/driver/join.vue`* (或 `pages/driver/index.vue`)
+*依据：[Source 47, 48]SEO 策略：* 使用 `JobPosting` 吸引灵活就业人群，标记为“承包商/兼职”。
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "JobPosting",
+  "title": "板车司机/代驾司机招募 (全国接单)",
+  "hiringOrganization": { "@id": "https://www.ctcapp.com/#organization" },
+  "datePosted": "2024-01-01", // 建议动态更新为当月第一天
+  "validThrough": "2025-12-31",
+  "employmentType": "CONTRACTOR", // 标记为承包/兼职
+  "jobLocationType": "TELECOMMUTE", // 允许远程/多地接单
+  "jobLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "CN" } },
+  "baseSalary": {
+    "@type": "MonetaryAmount",
+    "currency": "CNY",
+    "value": { "@type": "QuantitativeValue", "value": 15000, "unitText": "MONTH" } // 示例收入区间
+  },
+  "description": "车拖车平台招募小板车、大板车及代驾司机。提供海量货源、自动听单系统及极速结算服务。已有38万司机加入。",
+  "incentiveCompensation": "新司机入驻免保证金，享有车贴补贴及运费奖励。"
+};
+```
+
+### 17. 生态合作伙伴 (Ecosystem)
+
+*文件路径：`pages/partner/index.vue`* (或 `pages/site.vue`)
+*依据：[Source 22, 91]SEO 策略：* 针对 B2B 流量，强调“救援加盟”和“承运商入驻”。
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "车拖车运力生态合作伙伴计划",
+  "description": "诚邀板车车队、道路救援公司及代驾服务商入驻。提供海量真实货源与供应链金融支持。",
+  "mainEntity": [
+    {
+      "@type": "Service",
+      "name": "救援公司加盟",
+      "serviceType": "B2B Partnership",
+      "offers": { "@type": "Offer", "description": "共享全国故障车/事故车拖运订单" }
+    },
+    {
+      "@type": "Service",
+      "name": "承运商车队入驻",
+      "serviceType": "Logistics Partnership",
+      "offers": { "@type": "Offer", "description": "获取主机厂一手新车发运货源" }
+    }
+  ]
+};
+```
+
+### 18. 用户指南/百科 (User Guide)
+
+*文件路径：`pages/guide/index.vue`依据：[Source 24, 28, 60]SEO 策略：* 这是一个 SEO 金矿页面。结合了 `Article` (攻略) 和 `HowTo` (操作步骤)。
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "2026 汽车托运全攻略：避坑指南与验车标准",
+      "author": { "@id": "https://www.ctcapp.com/#organization" },
+      "datePublished": "2024-05-20",
+      "description": "深度解析小板车与大板车区别，详解随车行李放置规定及运输保险理赔流程。"
+    },
+    {
+      "@type": "HowTo",
+      "name": "如何使用车拖车APP安全托运汽车",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "获取精准报价",
+          "text": "使用价格计算器输入起终点，获取包含保险的一口价。"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "现场验车与签约",
+          "text": "配合司机进行360度视频验车，签署电子合同。"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "收车复验",
+          "text": "车辆送达后对照照片复验外观与里程。"
+        }
+      ]
+    }
+  ]
+};
+```
+
+### 19. B2B 解决方案：汽车供应链 (Supply Chain)
+
+*文件路径：`pages/solutions/supply-chain.vue`依据：[Source 58]*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "汽车供应链数字化解决方案",
+  "provider": { "@id": "https://www.ctcapp.com/#organization" },
+  "serviceType": "Supply Chain Management",
+  "description": "面向主机厂与4S店，提供从生产线到销售终端的OTD可视化物流服务。支持智能分拨、库存动态调拨及零公里交付。",
+  "serviceOutput": "缩短OTD周期12%-18%",
+  "audience": {
+    "@type": "BusinessAudience",
+    "audienceType": "Automotive Manufacturers"
+  }
+};
+```
+
+### 20. B2B 解决方案：商业活动/车展 (Commercial Events)
+
+*文件路径：`pages/solutions/events.vue`依据：[Source 12]*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "商业活动特种托运方案",
+  "provider": { "@id": "https://www.ctcapp.com/#organization" },
+  "serviceType": "Specialized Freight",
+  "description": "专为车展、巡演、超跑及概念车提供的保姆式运输服务。采用全封闭气囊减震厢式车，配备高保密协议团队。",
+  "serviceArea": { "@type": "Place", "name": "Global/National" },
+  "offers": { "@type": "Offer", "description": "包含定额特种险与精准展位落位服务" }
+};
+```
+
+### 21. B2B 解决方案：网络安全 (Security)
+
+*文件路径：`pages/solutions/security.vue`依据：[Source 56]*
+
+```
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "托运平台网络安全防护服务",
+  "provider": { "@id": "https://www.ctcapp.com/#organization" },
+  "serviceType": "Cybersecurity",
+  "description": "基于国家等保三级标准构建的物流数据安全堡垒。提供隐私脱敏、真实运力风控及T级抗DDoS防护。",
+  "certification": "国家信息安全等级保护三级认证"
+};
+```
+
+---
+
+### ✅ 最终交付检查清单 (Summary)
+
+至此，您已经拥有了 **21 个核心页面** 的完整 Schema 覆盖。请确保 Cursor 按照以下结构完成了文件注入：
+
+1. **Level 1 (Root):** `index.vue` (WebSite, Organization)
+2. **Level 2 (Services):** `service/*.vue`, `price/index.vue` (Service, SoftwareApp)
+3. **Level 3 (Solutions):** `solutions/*.vue` (Service for B2B)
+4. **Level 4 (Content):** `news/*.vue`, `guide/index.vue` (Article, HowTo, FAQ)
+5. **Level 5 (Ecosystem):** `driver/*.vue`, `partner/index.vue` (JobPosting, WebPage)

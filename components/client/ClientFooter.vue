@@ -14,12 +14,13 @@
           <div class="flex flex-col items-center gap-2">
             <div class="bg-white p-2 rounded-lg">
               <ImageWithFallback
-                src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://chetuoche.com"
-                alt="QR"
+                v-if="customerAndroidQr || customerIosQr"
+                :src="customerAndroidQr || customerIosQr"
+                alt="客户端下载二维码"
                 class="w-20 h-20"
               />
             </div>
-            <span class="font-bold">扫码下载 APP</span>
+            <span class="font-bold">扫码下载客户端</span>
           </div>
         </div>
       </div>
@@ -28,6 +29,14 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { Globe } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
+import { useDownloadInfo } from '@/composables/useDownloadInfo'
+
+const { fetchIfNeeded, customerAndroidQr, customerIosQr } = useDownloadInfo()
+
+onMounted(() => {
+  fetchIfNeeded()
+})
 </script>

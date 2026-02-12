@@ -371,6 +371,9 @@ export interface NewsItem {
   
   /** 封面图片 URL */
   imgUrl: string
+
+  /** 新闻类型 ID（可选，用于跳转详情） */
+  typeId?: number | string
 }
 
 /**

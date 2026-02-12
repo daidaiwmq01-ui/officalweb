@@ -1,0 +1,128 @@
+
+
+### 🚀 给 Cursor 的批量修复指令
+
+**Task:** Add SEO Meta Tags (Title, Description, Keywords) to the following Nuxt 3 pages using `useHead`.
+**Context:** Solve the "Missing page-level Title and Description" SEO issue.
+**Constraint:** Use the exact text provided below for each file path.
+
+#### 1. `pages/index.vue` (Home)
+```javascript
+useHead({
+  title: '车拖车(CheTuoChe)官网 - 全场景AI智能汽车托运调度平台_价格透明_全国覆盖',
+  meta: [
+    { name: 'description', content: '车拖车是国内领先的一站式汽车物流调度平台，依托自研AI智能调度系统，提供大板车干线集运、小板车1对1托运、专业代驾及24h道路救援服务。运力覆盖全国90%以上地区，支持可视化追踪，让汽车托运像发快递一样简单。' },
+    { name: 'keywords', content: '车拖车, 汽车托运, AI物流调度, 私家车托运, 轿车托运公司, 运车价格查询' }
+  ]
+})
+```
+
+#### 2. `pages/big-carrier/index.vue` (大板车)
+```javascript
+useHead({
+  title: '大板车集运_高性价比长途汽车托运_30000+干线物流网点 - 车拖车',
+  meta: [
+    { name: 'description', content: '针对长途搬迁、自驾返程及二手车流转，车拖车大板车托运通过规模效应大幅降低运输成本，提供批量运输方案。1000多家网点覆盖全国，30000条运输线路，支持国家交通局系统实时定位查看。' },
+    { name: 'keywords', content: '大板车托运, 笼车运输价格, 私家车长途集运, 二手车跨省托运, 运车专线' }
+  ]
+})
+```
+
+#### 3. `pages/small-carrier/index.vue` (小板车)
+```javascript
+useHead({
+  title: '小板车托运服务_5秒接单_门到门专车直送_价格透明按公里计费 - 车拖车',
+  meta: [
+    { name: 'description', content: '车拖车小板车快运主打极致效率，提供1对1门到门、零等待、零中转服务。依托AI智能LBS调度，最快5秒接单，15分钟上门。太平洋/东海保险全程保障，适合豪车交付与紧急运输。提供5种下单方式，价格透明按公里计费，无中转风险。' },
+    { name: 'keywords', content: '小板车托运价格, 单车救援拖车, 豪车托运, 专车运车, 门到门汽车快运' }
+  ]
+})
+```
+
+#### 4. `pages/luxury-transport/index.vue` (豪华/商业活动)
+```javascript
+useHead({
+  title: '商业活动汽车物流_车展/巡演/豪车特种托运_全封闭厢式板车 - 车拖车',
+  meta: [
+    { name: 'description', content: '专为概念车、超跑、老爷车打造“保姆式”特种托运服务。采用配备气囊减震系统的全封闭厢式板车，确保无尘、无划痕运输。提供高保密协议、定额特种险及专业地勤团队，支持展位精准落位，保障高价值车辆非凡展程。' },
+    { name: 'keywords', content: '车展托运, 高端车定制运输, 全封闭厢式板车, 赛道日托运, 豪车保险, 特种物流执行' }
+  ]
+})
+```
+
+#### 5. `pages/supply-chain/index.vue` (供应链)
+```javascript
+useHead({
+  title: '汽车供应链物流数字化方案_OTD全周期缩短_4S店动态调拨服务 - 车拖车 (CheTuoChe)',
+  meta: [
+    { name: 'description', content: '车拖车为汽车生产商与经销商构建端到端可视化物流体系。通过智能分拨算法与多式联运，使交付周期缩短12%-18%，降低物流成本15%。支持“零公里”交付标准与店间余缺自动调拨，实现新车从生产线到4S店的零延时供货。' },
+    { name: 'keywords', content: '汽车供应链解决方案, OTD交付体系, 整车物流数字化, 4S店补库运输, 智能路径规划, 数字化验车' }
+  ]
+})
+```
+
+#### 6. `pages/valet/index.vue` (代驾)
+```javascript
+useHead({
+  title: '汽车代驾取送服务_解决托运最后一公里_长途代驾专人直达 - 车拖车',
+  meta: [
+    { name: 'description', content: '打通汽车托运末端服务盲区，代驾员充当“第一检测人”进行标准化验车。无论是大板车市区接驳，还是专人专车的长途代驾，提供GPS/北斗全流程监控，随停随走，安全无忧。' },
+    { name: 'keywords', content: '汽车代驾取送, 托运末端接驳, 长途代驾价格, 门到门送车服务, 代驾验车' }
+  ]
+})
+```
+
+#### 7. `pages/rescue/index.vue` (救援)
+```javascript
+useHead({
+  title: '24小时道路救援服务_全天候故障/事故车拖车_全状态汽车移动安全底座 - 车拖车官网',
+  meta: [
+    { name: 'description', content: '拖车道路救援提供全场景应急保障，涵盖故障车位移、事故车拖运、地库亏电启动及僵尸车搬迁服务。依托覆盖全国的小板车网络，我们构建了“运输+保障”的闭环体系，解决起运前及到达后“最后一米”的移动难题。救援起步价170元，价格透明，支持全天候快速响应。' },
+    { name: 'keywords', content: '道路救援, 拖车服务, 汽车故障救援, 24小时拖车, 地库拖车救援, 事故车运输, 亏电搭电, 车拖车救援' }
+  ]
+})
+```
+
+#### 8. `pages/about/index.vue` (关于我们)
+```javascript
+useHead({
+  title: '关于车拖车 - 用数字技术重塑汽车物流信任标准_等保三级认证企业',
+  meta: [
+    { name: 'description', content: '山东车拖车网络科技有限公司成立于2020年，拥有国家等保三级认证、ISO9001质量认证及亿元级物流责任险。致力于让汽车托运像发快递一样简单，服务用户超167万，GMV近20亿。' },
+    { name: 'keywords', content: '车拖车简介, 数字化物流公司, 汽车托运资质, 临沂汽车数智供应链实验室, 车拖车历程' }
+  ]
+})
+```
+
+#### 9. `pages/partners/index.vue` (合作伙伴)
+```javascript
+useHead({
+  title: '生态合作 - 共建数字化运力生态 驱动物流增长 - 车拖车',
+  meta: [
+    { name: 'description', content: '诚邀板车车队、救援公司、代驾服务商入驻。提供海量真实货源、极速结算系统及等保三级数据安全保障，助力合作伙伴效率提升。' },
+    { name: 'keywords', content: '承运商入驻, 救援加盟, 大客户合作, 数字化管车, 货源平台' }
+  ]
+})
+```
+
+#### 10. `pages/solutions/index.vue` (解决方案聚合)
+```javascript
+useHead({
+  title: '汽车托运行业解决方案中心_数字化供应链/商业活动/个人旅游 - 车拖车',
+  meta: [
+    { name: 'description', content: '为主机厂、车展方及个人用户提供全场景物流支撑。涵盖OTD可视化供应链、保姆式特种车托运及等保三级金融级安全防护方案。数字化技术重塑汽车物流信任标准。' },
+    { name: 'keywords', content: '汽车供应链方案, 车展物流托运, 高端车定制运输, 物流数据安全, 托运平台等保三级' }
+  ]
+})
+```
+
+#### 11. `pages/news/index.vue` (新闻列表)
+```javascript
+useHead({
+  title: '汽车托运资讯 - 行业深度、技术公告与物流攻略 - 车拖车',
+  meta: [
+    { name: 'description', content: '来自车拖车的权威新闻与资讯。汇总行业趋势、数字化物流算法公告、清障车销售动态，通过结构化数据（JSON-LD）建立专业可信的品牌形象。' },
+    { name: 'keywords', content: '物流资讯, 行业新闻, 托运百科, 数字化物流, 车拖车动态' }
+  ]
+})
+```

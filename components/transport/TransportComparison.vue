@@ -3,7 +3,7 @@
     <div class="max-w-[1200px] mx-auto">
       <!-- Part A: Redesigned SEO Opening Statement (Expert Insight Style) -->
       <div class="relative mb-20 overflow-hidden">
-        <div class="relative bg-[#F0F7FF] border-l-4 border-[#006EFF] rounded-r-xl p-10">
+        <div class="relative bg-[#F0F7FF] border-l-4 border-[#006EFF] rounded-r-xl p-4 sm:p-10">
           <!-- Decorative Icon -->
           <Quote class="absolute -top-2 -left-2 w-24 h-24 text-[#006EFF] opacity-[0.05] pointer-events-none" />
           
@@ -27,14 +27,14 @@
 
       <!-- Part B: Decision Matrix Table Section -->
       <div class="text-center mb-10">
-        <h2 class="text-[36px] font-bold text-[#0B2747]">
+        <h2 class="text-xl sm:text-[36px] font-bold text-[#0B2747] px-2">
           一图看懂：大板车集运与小板车专运的区别
         </h2>
       </div>
 
-      <!-- The Table Architecture -->
-      <div class="overflow-hidden rounded-xl border border-[#E5E7EB] shadow-md bg-white">
-        <div class="grid grid-cols-[1.2fr_2fr_2fr_2fr] bg-[#F8F9FB] border-b border-[#E5E7EB]">
+      <!-- The Table Architecture：小屏横向滚动 -->
+      <div class="overflow-x-auto overflow-y-hidden rounded-xl border border-[#E5E7EB] shadow-md bg-white scrollbar-hide">
+        <div class="grid grid-cols-[1.2fr_2fr_2fr_2fr] min-w-[640px] bg-[#F8F9FB] border-b border-[#E5E7EB]">
           <div class="px-6 py-6 font-bold text-[#0B2747] text-[16px] flex items-center">
             维度
           </div>
@@ -52,7 +52,7 @@
           </div>
         </div>
 
-        <div class="divide-y divide-[#E5E7EB]">
+        <div class="divide-y divide-[#E5E7EB] min-w-[640px]">
           <div
             v-for="(row, index) in rows"
             :key="index"

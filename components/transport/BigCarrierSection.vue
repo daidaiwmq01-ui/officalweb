@@ -35,7 +35,7 @@
 
         <!-- Left Column: Content -->
         <div class="lg:col-span-7 order-1">
-          <h2 class="text-[36px] font-bold text-[#0B2747] mb-6 leading-tight">
+          <h2 class="text-2xl sm:text-[36px] font-bold text-[#0B2747] mb-6 leading-tight">
             大板车汽车托运：性价比之选
           </h2>
           
@@ -75,13 +75,13 @@
             </p>
           </div>
 
-          <button 
-            @click="handleQuoteClick"
+          <NuxtLink 
+            to="/pricing#pricing-calculator"
             class="mt-8 px-10 py-4 bg-[#006EFF] hover:bg-[#0056CC] text-white font-bold rounded-full shadow-lg shadow-blue-500/20 transition-all hover:-translate-y-1 active:scale-95 flex items-center gap-2"
           >
             立即获取大板车报价
             <ArrowRight class="w-5 h-5" />
-          </button>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { DollarSign, Network, ArrowRight, MessageCircle } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import Dialog from '@/components/ui/Dialog.vue'
@@ -138,28 +138,7 @@ import DialogDescription from '@/components/ui/DialogDescription.vue'
 import { EXTERNAL_ASSETS } from '@/utils/images'
 
 const isMiniProgramModalOpen = ref(false)
-const isMobile = ref(false)
 
 const sectionImage = EXTERNAL_ASSETS.TRUCK_BIG_CARRIER
 
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
-
-const handleQuoteClick = () => {
-  if (isMobile.value) {
-    window.location.href = 'weixin://dl/business/?t=chetuoche_quote'
-  } else {
-    isMiniProgramModalOpen.value = true
-  }
-}
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
 </script>

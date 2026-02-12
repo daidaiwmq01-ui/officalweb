@@ -1,5 +1,5 @@
 <template>
-  <article class="bg-white min-h-screen font-['Noto_Sans_SC']">
+  <article class="bg-white min-h-screen font-['Noto_Sans_SC'] overflow-x-hidden">
     
     <!-- 🚀 Hero Section: The Power of Scale -->
     <DriverHero />
@@ -29,6 +29,11 @@
 </template>
 
 <script setup lang="ts">
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/download/driver'))
+
 import DriverHero from '@/components/driver/DriverHero.vue'
 import DriverOrderDispatch from '@/components/driver/DriverOrderDispatch.vue'
 import DriverAcademy from '@/components/driver/DriverAcademy.vue'

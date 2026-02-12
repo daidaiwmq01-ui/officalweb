@@ -67,16 +67,16 @@
             </div>
           </div>
 
-          <button
+          <NuxtLink
             v-motion
             :hovered="{ scale: 1.02 }"
             :tapped="{ scale: 0.98 }"
-            @click="handleCalculateClick"
+            to="/pricing#pricing-calculator"
             class="w-full mt-12 h-14 bg-[#006EFF] text-white rounded-full font-bold flex items-center justify-center gap-2 shadow-md hover:bg-[#0052CC] transition-colors border-none cursor-pointer"
           >
             <Calculator :size="18" />
             <span>在线计算运费</span>
-          </button>
+          </NuxtLink>
         </div>
 
         <!-- Right Column: Comparison Table -->
@@ -162,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { MapPin, Plus, Clock, Calculator, CheckCircle2, Minus, MessageCircle } from 'lucide-vue-next'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
@@ -172,7 +172,6 @@ import DialogDescription from '@/components/ui/DialogDescription.vue'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
 
 const isMiniProgramModalOpen = ref(false)
-const isMobile = ref(false)
 
 const comparisons = [
   {
@@ -197,24 +196,4 @@ const comparisons = [
   }
 ]
 
-const checkMobile = () => {
-  isMobile.value = window.innerWidth < 768
-}
-
-const handleCalculateClick = () => {
-  if (isMobile.value) {
-    window.location.href = 'weixin://dl/business/?t=chetuoche_quote'
-  } else {
-    isMiniProgramModalOpen.value = true
-  }
-}
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
 </script>

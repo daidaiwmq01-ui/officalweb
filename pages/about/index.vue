@@ -1,7 +1,7 @@
 <template>
-  <article class="bg-white min-h-screen font-['Noto_Sans_SC']">
-    <!-- 🚀 Hero Section: The Visionary Leader -->
-    <section class="relative h-[600px] overflow-hidden bg-gradient-to-b from-[#0B2747] to-[#111827]">
+  <article class="bg-white min-h-screen font-['Noto_Sans_SC'] overflow-x-hidden">
+    <!-- 🚀 Hero Section：移动端自适应高度，防止溢出 -->
+    <section class="relative min-h-[400px] h-auto py-16 sm:py-0 sm:h-[600px] overflow-hidden bg-gradient-to-b from-[#0B2747] to-[#111827]">
       <!-- Abstract Tech Background -->
       <div class="absolute inset-0 opacity-20 z-0">
         <ImageWithFallback
@@ -13,30 +13,22 @@
       <!-- Dot Grid Map Overlay (Subtle) -->
       <div class="absolute inset-0 z-1 bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:40px_40px]" />
 
-      <div class="container mx-auto max-w-[1200px] px-4 relative z-10 text-center h-full flex flex-col justify-center">
+      <div class="container mx-auto max-w-[1200px] px-4 relative z-10 text-center min-h-0 h-full flex flex-col justify-start pt-14">
         <!-- Breadcrumb -->
-        <nav class="absolute top-6 left-4 lg:left-0 flex items-center gap-2 text-[14px] text-white/60">
-          <button
-            @click="navigateToHome"
-            class="hover:text-white bg-transparent border-none cursor-pointer"
-          >
-            首页
-          </button>
-          <ChevronRight class="w-3 h-3" />
-          <span class="text-white font-bold">
-            关于我们
-          </span>
-        </nav>
+        <div class="absolute top-6 left-4 lg:left-0 z-20">
+          <BreadcrumbNav :items="breadcrumbItems" variant="light" />
+        </div>
 
+        <div class="pt-6 lg:pt-8">
         <h1
           v-motion
           :initial="{ opacity: 0, y: 30 }"
           :enter="{ opacity: 1, y: 0 }"
-          class="text-[48px] md:text-[56px] font-bold text-white leading-tight mb-8"
+          class="text-2xl sm:text-3xl md:text-[48px] lg:text-[56px] font-bold text-white mb-8"
+          style="line-height: 1.5;"
         >
-          关于车拖车：用数字技术
-          <br />
-          重塑汽车物流信任标准的领军者
+          <div>关于车拖车：用数字技术</div>
+          <div>重塑汽车物流信任标准的领军者</div>
         </h1>
 
         <p
@@ -69,31 +61,33 @@
             加入我们
           </Button>
         </div>
+        </div>
       </div>
     </section>
 
     <!-- 🛡️ Section A: Company Identity & Mission -->
-    <section class="py-24 bg-white">
-      <div class="container mx-auto max-w-[1200px] px-4">
-        <div class="grid grid-cols-12 gap-12 items-center">
-          <div class="col-span-12 lg:col-span-6">
+    <section class="py-24 bg-white overflow-x-hidden w-full">
+      <div class="container mx-auto max-w-[1200px] px-4 w-full box-border">
+        <div class="grid grid-cols-12 gap-8 md:gap-12 items-center min-w-0">
+          <div class="col-span-12 lg:col-span-6 min-w-0">
             <div
               v-motion
               :initial="{ opacity: 0, x: -30 }"
               :visible="{ opacity: 1, x: 0 }"
               :visibleOnce="true"
+              class="min-w-0"
             >
-              <h2 class="text-[32px] font-bold text-[#0B2747] mb-8">
+              <h2 class="text-xl sm:text-[32px] font-bold text-[#0B2747] mb-8">
                 让汽车物流更简单、更高效
               </h2>
 
-              <div class="space-y-6">
-                <p class="text-[16px] text-gray-600 leading-[1.8]">
+              <div class="space-y-6 min-w-0">
+                <p class="text-[16px] text-gray-600 leading-[1.8] break-words">
                   车拖车（CheTuoChe）作为中国领先的汽车数智化物流服务平台，始终坚持
                   <strong>"商运+旅运+救援"</strong>
                   的一体化发展战略。我们不仅是传统运力与数字化技术的撮合者，更是汽车物流行业信任标准与服务标准的定义者。通过自研的数智供应链系统，我们实现了物流轨迹的毫秒级更新。
                 </p>
-                <p class="text-[16px] text-gray-600 leading-[1.8]">
+                <p class="text-[16px] text-gray-600 leading-[1.8] break-words">
                   凭借自有及挂靠的{" "}
                   <span class="text-[#FF6B00] font-bold">
                     100,000台
@@ -113,9 +107,9 @@
                 </p>
               </div>
 
-              <div class="flex gap-10 mt-12 border-t pt-10">
-                <div>
-                  <div class="text-[28px] font-black text-[#0B2747]">
+              <div class="flex flex-wrap gap-6 sm:gap-10 mt-12 border-t pt-10">
+                <div class="min-w-0">
+                  <div class="text-xl sm:text-[28px] font-black text-[#0B2747]">
                     100,000
                     <span class="text-[16px] ml-1">
                       台
@@ -125,8 +119,8 @@
                     合规清障车
                   </div>
                 </div>
-                <div>
-                  <div class="text-[28px] font-black text-[#0B2747]">
+                <div class="min-w-0">
+                  <div class="text-xl sm:text-[28px] font-black text-[#0B2747]">
                     450,000
                     <span class="text-[16px] ml-1">
                       名
@@ -136,8 +130,8 @@
                     认证司机
                   </div>
                 </div>
-                <div>
-                  <div class="text-[28px] font-black text-[#0B2747]">
+                <div class="min-w-0">
+                  <div class="text-xl sm:text-[28px] font-black text-[#0B2747]">
                     2,800,000
                     <span class="text-[16px] ml-1">
                       位
@@ -151,25 +145,25 @@
             </div>
           </div>
 
-          <div class="col-span-12 lg:col-span-6">
+          <div class="col-span-12 lg:col-span-6 min-w-0">
             <div
               v-motion
               :initial="{ opacity: 0, scale: 0.95 }"
               :visible="{ opacity: 1, scale: 1 }"
               :visibleOnce="true"
-              class="relative rounded-[40px] overflow-hidden shadow-2xl group"
+              class="relative rounded-2xl sm:rounded-[40px] overflow-hidden shadow-2xl group w-full"
             >
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1657980928718-a97f012f552e"
                 alt="CheTuoChe Lab"
-                class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-110"
+                class="w-full h-[280px] sm:h-[500px] object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-[#0B2747]/80 to-transparent" />
-              <div class="absolute bottom-10 left-10 right-10">
-                <div class="text-white font-bold text-[20px] mb-2">
+              <div class="absolute bottom-4 left-4 right-4 sm:bottom-10 sm:left-10 sm:right-10">
+                <div class="text-white font-bold text-base sm:text-[20px] mb-2">
                   临沂市汽车数智供应链重点实验室
                 </div>
-                <div class="text-white/60 text-[14px]">
+                <div class="text-white/60 text-xs sm:text-[14px]">
                   用 AI 赋能每一公里，探索汽车物流的最优解。
                 </div>
               </div>
@@ -180,8 +174,8 @@
     </section>
 
     <!-- 🏭 Section A-Plus: "Software + Manufacturing" Industrial Layout -->
-    <section class="py-24 bg-[#F8F9FB]">
-      <div class="container mx-auto max-w-[1200px] px-4">
+    <section class="py-24 bg-[#F8F9FB] overflow-hidden">
+      <div class="container mx-auto max-w-[1200px] px-4 w-full">
         <div class="grid grid-cols-12 gap-12 items-center">
           <!-- Left Column: Narrative -->
           <div class="col-span-12 lg:col-span-5">
@@ -191,7 +185,7 @@
               :visible="{ opacity: 1, x: 0 }"
               :visibleOnce="true"
             >
-              <h2 class="text-[32px] font-bold text-[#0B2747] mb-8 leading-tight">
+              <h2 class="text-xl sm:text-[32px] font-bold text-[#0B2747] mb-8 leading-tight">
                 产业布局：从"智能调度"到"硬核制造"
               </h2>
 
@@ -368,7 +362,7 @@
             :initial="{ opacity: 0, y: 20 }"
             :visible="{ opacity: 1, y: 0 }"
             :visibleOnce="true"
-            class="text-[32px] font-bold mb-4 text-[#0B2747]"
+            class="text-xl sm:text-[32px] font-bold mb-4 text-[#0B2747]"
           >
             四大核心硬实力
           </h2>
@@ -442,7 +436,7 @@
             :initial="{ opacity: 0, y: 20 }"
             :visible="{ opacity: 1, y: 0 }"
             :visibleOnce="true"
-            class="text-[32px] font-bold mb-4 text-[#0B2747]"
+            class="text-xl sm:text-[32px] font-bold mb-4 text-[#0B2747]"
           >
             车拖车发展历程
           </h2>
@@ -593,6 +587,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
+import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+
+useBreadcrumbSchema(getBreadcrumbsForRoute('/about'))
+
+const breadcrumbItems = getBreadcrumbsForRoute('/about')
 import { useRouter } from 'vue-router'
 import {
   ChevronRight,
@@ -642,10 +643,6 @@ const timelineData = ref([
   },
 ])
 
-const navigateToHome = () => {
-  router.push('/')
-}
-
 const navigateToSolutions = () => {
   router.push('/solutions')
 }
@@ -654,4 +651,18 @@ const navigateToCareers = () => {
   router.push('/careers')
 }
 
+// SEO Meta Tags
+useHead({
+  title: '关于车拖车 - 用数字技术重塑汽车物流信任标准_等保三级认证企业',
+  meta: [
+    { name: 'description', content: '山东车拖车网络科技有限公司成立于2020年，拥有国家等保三级认证、ISO9001质量认证及亿元级物流责任险。致力于让汽车托运像发快递一样简单，服务用户超167万，GMV近20亿。' },
+    { name: 'keywords', content: '车拖车简介, 数字化物流公司, 汽车托运资质, 临沂汽车数智供应链实验室, 车拖车历程' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.chetuoche.com/about' }
+  ]
+})
+
+// Schema.org 结构化数据
+useAboutPageSchema()
 </script>

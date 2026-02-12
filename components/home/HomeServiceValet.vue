@@ -16,7 +16,7 @@
 
         <!-- Text Right -->
         <div class="w-full lg:w-1/2">
-          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6 leading-tight">
+          <h2 class="text-3xl md:text-4xl font-bold text-[#0B2747] mb-6 leading-[1.6]">
             专业代驾服务：<br />
             打通物流"最后一公里"的<span class="text-[#FF6B00]">检测专家</span>
           </h2>

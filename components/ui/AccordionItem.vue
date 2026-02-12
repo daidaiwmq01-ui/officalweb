@@ -14,34 +14,20 @@
  * 必须与 AccordionTrigger 和 AccordionContent 组件配合使用
  * 
  * @example
+ * 示例（省略完整 SFC 标签，避免被解析为真实标签）：
  * ```vue
- * <script setup>
- * import { ref } from 'vue'
- * 
  * const activeValue = ref('item-1')
- * </script>
  * 
- * <template>
- *   <Accordion v-model="activeValue">
- *     <AccordionItem value="item-1" class="bg-white rounded-lg border">
- *       <AccordionTrigger>
- *         点击展开/收起
- *       </AccordionTrigger>
- *       <AccordionContent>
- *         这是项目 1 的内容
- *       </AccordionContent>
- *     </AccordionItem>
- *     
- *     <AccordionItem value="item-2" class="bg-white rounded-lg border">
- *       <AccordionTrigger>
- *         项目 2
- *       </AccordionTrigger>
- *       <AccordionContent>
- *         这是项目 2 的内容
- *       </AccordionContent>
- *     </AccordionItem>
- *   </Accordion>
- * </template>
+ * <Accordion v-model="activeValue">
+ *   <AccordionItem value="item-1" class="bg-white rounded-lg border">
+ *     <AccordionTrigger>点击展开/收起</AccordionTrigger>
+ *     <AccordionContent>这是项目 1 的内容</AccordionContent>
+ *   </AccordionItem>
+ *   <AccordionItem value="item-2" class="bg-white rounded-lg border">
+ *     <AccordionTrigger>项目 2</AccordionTrigger>
+ *     <AccordionContent>这是项目 2 的内容</AccordionContent>
+ *   </AccordionItem>
+ * </Accordion>
  * ```
  * 
  * @design-notes
@@ -75,19 +61,15 @@ defineProps<{
    * 
    * @example
    * ```vue
-   * <!-- 单选模式 -->
    * <Accordion v-model="activeValue">
    *   <AccordionItem value="faq-1">...</AccordionItem>
    *   <AccordionItem value="faq-2">...</AccordionItem>
    * </Accordion>
-   * <!-- 当 activeValue === 'faq-1' 时，第一个项展开 -->
    * 
-   * <!-- 多选模式 -->
    * <Accordion v-model="activeValues" type="multiple">
    *   <AccordionItem value="item-1">...</AccordionItem>
    *   <AccordionItem value="item-2">...</AccordionItem>
    * </Accordion>
-   * <!-- 当 activeValues.includes('item-1') 时，第一个项展开 -->
    * ```
    */
   value: string

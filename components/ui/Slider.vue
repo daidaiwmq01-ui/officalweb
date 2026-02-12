@@ -37,40 +37,19 @@
  * 
  * @example
  * ```vue
- * <script setup>
- * import { ref } from 'vue'
- * 
  * // 基础用法
  * const value = ref([100000])
  * 
+ * <Slider v-model="value" :max="500000" :step="5000" />
+ * <p>当前值: {{ value[0] }}</p>
+ * 
  * // 自定义范围
  * const price = ref([50000])
- * </script>
+ * <Slider v-model="price" :min="0" :max="1000000" :step="10000" />
+ * <p>价格: ¥{{ price[0].toLocaleString() }}</p>
  * 
- * <template>
- *   <!-- 基础用法 -->
- *   <Slider 
- *     v-model="value" 
- *     :max="500000" 
- *     :step="5000"
- *   />
- *   <p>当前值: {{ value[0] }}</p>
- *   
- *   <!-- 自定义范围 -->
- *   <Slider 
- *     v-model="price" 
- *     :min="0" 
- *     :max="1000000" 
- *     :step="10000"
- *   />
- *   <p>价格: ¥{{ price[0].toLocaleString() }}</p>
- *   
- *   <!-- 自定义样式 -->
- *   <Slider 
- *     v-model="value" 
- *     class="w-full"
- *   />
- * </template>
+ * // 自定义样式
+ * <Slider v-model="value" class="w-full" />
  * ```
  * 
  * @design-notes
