@@ -67,7 +67,7 @@
         </div>
 
         <!-- Trust Indicators Bar -->
-        <div class="mt-16 flex flex-wrap items-center gap-8 border-t border-white/10 pt-8">
+        <div class="mt-16 flex flex-wrap items-center gap-8 border-t border-white/10 pt-5">
           <div
             v-for="(item, idx) in trustItems"
             :key="idx"

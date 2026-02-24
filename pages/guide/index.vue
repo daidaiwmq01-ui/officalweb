@@ -1,45 +1,62 @@
 <template>
   <div class="bg-white min-h-screen font-['Noto_Sans_SC'] text-[#0B2747]">
 
-    <!-- Hero Section：移动端预留面包屑空间 -->
-    <section class="relative w-full min-h-[320px] h-[50vh] sm:h-[400px] overflow-hidden mt-[-80px] pt-[80px]">
+    <!-- Hero Section：参照ValetHero优化样式 -->
+    <header role="banner" class="relative w-full h-[520px] overflow-hidden font-['Noto_Sans_SC'] bg-[#0B2747]">
+      <!-- Background Image with Optimized Brand Navy Overlay -->
       <div class="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1764332688472-b970f6ca8915?auto=format&fit=crop&q=80&w=1200"
           alt="User Guide Hero"
           class="w-full h-full object-cover"
         />
-        <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 to-[#0B2747]/40" />
+        <!-- Brand Mask: Left to Right Navy Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-[#0B2747]/30" />
       </div>
 
-      <div class="container mx-auto max-w-[1200px] relative z-10 px-4 h-full flex flex-col justify-start pt-14">
+      <!-- Content Container：始终预留面包屑高度，避免 PC 端 H1 与面包屑重叠 -->
+      <div class="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-0 h-full flex flex-col justify-start pt-14">
+        <!-- Breadcrumb Navigation - Absolute Positioned -->
         <div class="absolute top-6 left-4 lg:left-0 z-20">
           <BreadcrumbNav :items="breadcrumbItems" variant="light" />
         </div>
 
-        <div
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
-          class="max-w-[800px] pt-6 lg:pt-8"
-        >
-          <h1 class="text-2xl sm:text-[36px] font-bold text-white mb-4" style="line-height: 1.5;">
+        <div class="max-w-[752px] pt-6 lg:pt-8 px-4 lg:px-0">
+          <!-- Main Title (H1) -->
+          <h1
+            v-motion
+            :initial="{ opacity: 0, y: 32 }"
+            :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+            class="text-2xl sm:text-3xl md:text-[42px] font-bold text-white tracking-tight drop-shadow-lg"
+            style="line-height: 1.5;"
+          >
             <div>车拖车用户指南：</div>
             <div>汽车托运流程、安全规范与避坑百科</div>
           </h1>
-          <p class="text-[18px] text-white/90 font-medium mb-8 leading-relaxed">
+
+          <!-- Subtitle -->
+          <p
+            v-motion
+            :initial="{ opacity: 0, y: 32 }"
+            :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 200 } }"
+            class="text-[18px] font-medium leading-relaxed text-gray-100 mt-6 max-w-3xl drop-shadow-md"
+          >
             为您拆解从询价下单、视频验车到保险理赔的全流程细节，让非标服务变得像标准产品一样可靠。
           </p>
 
+          <!-- CTA Button -->
           <Button
+            v-motion
+            :initial="{ opacity: 0, y: 32 }"
+            :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 400 } }"
             @click="scrollToPitfalls"
-            class="h-12 px-8 rounded-full border-2 border-white bg-transparent text-white font-bold text-[16px] hover:bg-white hover:text-[#0B2747] transition-all border-solid cursor-pointer"
+            class="h-14 px-8 mt-8 rounded-full border-2 border-white text-white font-bold text-lg flex items-center justify-center gap-2 bg-transparent cursor-pointer transition-all hover:bg-white hover:text-[#0B2747]"
           >
-            阅读避坑指南
+            <span>阅读避坑指南</span>
           </Button>
         </div>
       </div>
-    </section>
+    </header>
 
     <!-- Pitfall Avoidance Grid -->
     <section id="pitfalls" class="py-24 bg-white">
@@ -250,7 +267,8 @@ useBreadcrumbSchema(getBreadcrumbsForRoute('/guide'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/guide')
 import { useRouter } from 'vue-router'
-import { useHead } from '#app'
+import { useHead } from '@unhead/vue'
+import { useSeoMeta } from '@unhead/vue'
 import {
   ChevronRight,
   XCircle,
