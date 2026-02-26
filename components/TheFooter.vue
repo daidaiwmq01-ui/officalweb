@@ -5,8 +5,8 @@
         <!-- Brand & Contact -->
         <div>
           <div class="mb-6">
-            <img
-              src="/logo.png"
+            <img loading="lazy"
+              src="/image/logo/logo.png"
               alt="车拖车"
               class="h-10 w-auto brightness-0 invert"
               @error="handleLogoError"
@@ -150,9 +150,9 @@
           <div class="flex gap-6">
             <!-- WeChat QR -->
             <div class="flex flex-col items-center gap-2">
-              <div class="w-24 h-24 bg-white p-1.5 rounded-lg overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1681070890678-ff14d17e5825?auto=format&fit=crop&q=80&w=200"
+              <div class="w-24 h-24 rounded-lg overflow-hidden">
+                <img loading="lazy"
+                  src="/image/contectQR/douyinQR.png"
                   alt="微信公众号"
                   class="w-full h-full object-cover"
                 />
@@ -164,9 +164,9 @@
 
             <!-- Douyin QR -->
             <div class="flex flex-col items-center gap-2">
-              <div class="w-24 h-24 bg-white p-1.5 rounded-lg overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1681070890678-ff14d17e5825?auto=format&fit=crop&q=80&w=200"
+              <div class="w-24 h-24 rounded-lg overflow-hidden">
+                <img loading="lazy"
+                  src="/image/contectQR/gongzhongQR.png"
                   alt="官方抖音"
                   class="w-full h-full object-cover"
                 />
@@ -321,8 +321,8 @@ const handleNavClick = (id: string) => {
  * 
  * @example
  * ```vue
- * <img 
- *   src="/logo.png" 
+ * <img loading="lazy" 
+ *   src="/image/logo/logo.png" 
  *   alt="车拖车"
  *   @error="handleLogoError"
  * />

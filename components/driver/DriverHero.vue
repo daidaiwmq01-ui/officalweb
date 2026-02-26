@@ -3,8 +3,9 @@
     <!-- Background Image Overlay -->
     <div class="absolute inset-0 z-0">
       <ImageWithFallback
-        src="https://images.unsplash.com/photo-1716518363780-5ffd4aa93d9e"
+        src="/image/driver/hero.webp"
         alt="CheTuoChe Driver"
+        loading="eager"
         class="w-full h-full object-cover opacity-30 grayscale-[0.5]"
       />
       <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747] via-[#0B2747]/80 to-transparent" />

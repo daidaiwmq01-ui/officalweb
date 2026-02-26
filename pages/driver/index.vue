@@ -3,9 +3,10 @@
     <!-- 1. Hero Section (High Impact) -->
     <section class="relative w-full h-[500px] pt-[80px] overflow-hidden">
       <div class="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1688619101855-396f4f06710e?q=80&w=2000" 
-          alt="CheTuoChe Professional Driver" 
+        <img
+          loading="eager"
+          src="/image/driver/hero.webp" 
+          alt="车拖车认证板车司机驾驶专业运输车" 
           class="w-full h-full object-cover"
         />
         <!-- Overlay: Slight dark gradient on the left text area -->
@@ -119,9 +120,9 @@
           <!-- Left: Phone Mockups -->
           <div class="lg:w-1/2 relative">
             <div class="relative z-10 w-[300px] mx-auto">
-              <img src="https://images.unsplash.com/photo-1509576931792-214960705f8a?q=80&w=1000" alt="App Mockup" class="rounded-[40px] shadow-2xl border-[8px] border-[#0B2747]" />
+              <img loading="lazy" src="/image/driver/mockup.webp" alt="车拖车司机端APP界面展示" class="rounded-[40px] shadow-2xl border-[8px] border-[#0B2747]" />
               <div class="absolute -bottom-6 -right-12 w-[240px] hidden md:block">
-                 <img src="https://images.unsplash.com/photo-1509576931792-214960705f8a?q=80&w=1000" alt="App Mockup 2" class="rounded-[30px] shadow-2xl border-[6px] border-[#0B2747] opacity-90 scale-90" />
+                 <img loading="lazy" src="/image/driver/mockup.webp" alt="App Mockup 2" class="rounded-[30px] shadow-2xl border-[6px] border-[#0B2747] opacity-90 scale-90" />
               </div>
             </div>
             <!-- Background Decor -->
@@ -214,7 +215,7 @@
             </Button>
           </div>
           <div class="lg:w-1/2 rounded-[32px] overflow-hidden shadow-2xl relative">
-            <img src="https://images.unsplash.com/photo-1671822571472-8a57bfc7e194?q=80&w=1000" alt="Driver Station" class="w-full h-[400px] object-cover" />
+            <img loading="lazy" src="/image/driver/driverhome.webp" alt="车拖车司机之家驿站服务站" class="w-full h-[400px] object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#0B2747]/40 to-transparent" />
           </div>
         </div>
@@ -225,12 +226,23 @@
 
 <script setup lang="ts">
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useSchemaOrg } from '@/composables/useSchemaOrg'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/driver'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/driver')
+
+useHead({
+  title: '司机端入驻 - 全国最大的板车司机接单平台 - 车拖车',
+  meta: [
+    { name: 'description', content: '车拖车司机端汇聚38万+认证司机，海量真实货源，自动听单，极速结算。下载APP即可入驻，开启高收入板车托运事业。' },
+    { name: 'keywords', content: '板车司机, 司机入驻, 司机接单平台, 托运司机, 车拖车司机端' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.ctcapp.com/driver' }
+  ]
+})
 
 import { 
   Smartphone, 
@@ -273,7 +285,7 @@ const driverSchema = {
   '@context': 'https://schema.org',
   '@type': 'JobPosting',
   'title': '板车司机/代驾司机招募 (全国接单)',
-  'hiringOrganization': { '@id': 'https://www.chetuoche.com/#organization' },
+  'hiringOrganization': { '@id': 'https://www.ctcapp.com/#organization' },
   'datePosted': '2024-01-01',
   'validThrough': '2026-12-31',
   'employmentType': 'CONTRACTOR',

@@ -6,7 +6,7 @@
 <template>
   <!-- 示例 1: 使用 Props 配置（推荐用于简单场景） -->
   <BaseHero
-    background-image="https://images.unsplash.com/photo-1234567890"
+    background-image="/image/home/home-hero-bg.png"
     image-alt="大板车托运服务"
     :breadcrumbs="breadcrumbs"
     :title="title"
@@ -17,7 +17,7 @@
 
   <!-- 示例 2: 使用 Slots 配置（推荐用于复杂场景） -->
   <BaseHero
-    background-image="https://images.unsplash.com/photo-1234567890"
+    background-image="/image/home/home-hero-bg.png"
     image-alt="小板车托运服务"
     :breadcrumbs="breadcrumbs"
   >

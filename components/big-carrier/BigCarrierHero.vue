@@ -6,9 +6,10 @@
     <!-- Background Image with Optimized Brand Navy Overlay -->
     <div class="absolute inset-0 z-0">
       <ImageWithFallback
-        :src="heroBg"
+        :src="heroBackground"
         alt="大板车干线集运"
-        class="w-full h-full object-cover"
+        loading="eager"
+        class="w-full h-full object-cover object-center"
       />
       <!-- Brand Mask: Left to Right Navy Gradient -->
       <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-[#0B2747]/30" />
@@ -119,15 +120,10 @@
           <!-- QR Code Container -->
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
             <ImageWithFallback
-              src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
+              src="/image/contectQR/liteprogress.webp"
               alt="WeChat Mini Program QR"
               class="w-full h-full p-2"
             />
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center p-1 border border-gray-100">
-                <MessageCircle class="w-6 h-6 text-[#07C160] fill-current" />
-              </div>
-            </div>
           </div>
 
           <div class="text-[14px] text-gray-400 mb-6 font-medium">
@@ -152,6 +148,7 @@ import {
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
+import heroBackground from '@/assets/image/big-carrier/hero.jpg'
 
 const breadcrumbItems = getBreadcrumbsForRoute('/big-carrier')
 import Dialog from '@/components/ui/Dialog.vue'
@@ -159,7 +156,6 @@ import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -170,6 +166,4 @@ const props = defineProps<Props>()
 
 const isMiniProgramModalOpen = ref(false)
 
-// Replace figma:asset with EXTERNAL_ASSETS URL
-const heroBg = EXTERNAL_ASSETS.BRANDED_TRUCK
 </script>

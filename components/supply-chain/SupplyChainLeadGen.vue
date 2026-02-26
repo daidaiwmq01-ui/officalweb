@@ -83,7 +83,7 @@
               </button>
             </div>
             <div class="flex items-center gap-3">
-              <img
+              <img loading="lazy"
                 v-if="captchaImg"
                 :src="captchaImg"
                 alt="验证码"

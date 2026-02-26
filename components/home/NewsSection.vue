@@ -23,7 +23,7 @@
           @click="handleNewsClick(item)"
         >
           <div class="relative overflow-hidden rounded-xl mb-4 aspect-[16/10]">
-            <img
+            <img loading="lazy"
               :src="item.image"
               :alt="item.title"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
@@ -84,7 +84,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2026-01-15',
     author: '车拖车研究院',
     category: '企业动态',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800',
+    image: '/image/home/home-hero-bg.png',
     desc: '本轮融资将用于进一步完善全国运力网络建设及 L4 级自动驾驶干线物流的技术预研。',
     typeId: 1
   },
@@ -94,7 +94,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2025-12-20',
     author: '品牌中心',
     category: '行业荣誉',
-    image: 'https://images.unsplash.com/photo-1578574577315-3fbeb0ce88be?q=80&w=800',
+    image: '/image/solutions/hero.png',
     desc: '凭借独特的"AI+运力"双引擎模式，车拖车在降本增效方面的突出表现获得评审团一致认可。',
     typeId: 1
   },
@@ -104,7 +104,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2026-01-28',
     author: '运营中心',
     category: '服务公告',
-    image: 'https://images.unsplash.com/photo-1625218377718-4c5991443cc6?q=80&w=800',
+    image: '/image/transport/hero.webp',
     desc: '为保障春节期间车主返乡需求，平台已调度储备 3000+ 辆应急救援车与小板车运力。',
     typeId: 1
   }

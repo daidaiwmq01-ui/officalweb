@@ -5,8 +5,9 @@
     <section class="relative h-[400px] overflow-hidden">
       <div class="absolute inset-0 z-0">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1621375041839-da81cd8a7295"
-          alt="Contact Hero"
+          src="/image/about/hero.webp"
+          alt="联系车拖车 - 客服与商务合作"
+        loading="eager"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-[#0B2747]/90" />
@@ -86,7 +87,7 @@
               v-motion
               :hovered="{ x: 10 }"
               class="p-8 rounded-[32px] bg-[#FFF8F4] border border-orange-50 group transition-all cursor-pointer"
-              @click="callPhone('13800000000')"
+              @click="callPhone('19078975678')"
             >
               <div class="flex items-start gap-6">
                 <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-[#FF6B00] group-hover:bg-[#FF6B00] group-hover:text-white transition-all">
@@ -94,7 +95,7 @@
                 </div>
                 <div>
                   <div class="text-[12px] text-orange-400 font-bold uppercase tracking-widest mb-2">板车销售专线</div>
-                  <div class="text-[24px] font-black text-[#0B2747] mb-2 tracking-tight">138-XXXX-XXXX</div>
+                  <div class="text-[24px] font-black text-[#0B2747] mb-2 tracking-tight">19078975678</div>
                   <p class="text-[14px] text-gray-500">获取底盘报价、金融方案与入驻政策</p>
                 </div>
               </div>
@@ -105,7 +106,7 @@
               v-motion
               :hovered="{ x: 10 }"
               class="p-8 rounded-[32px] bg-[#F0F4F8] border border-blue-50 group transition-all cursor-pointer"
-              @click="sendEmail('tech@autotrans.com')"
+              @click="sendEmail('yunweishu8888@163.com')"
             >
               <div class="flex items-start gap-6">
                 <div class="w-12 h-12 bg-[#0B2747] rounded-2xl flex items-center justify-center text-white group-hover:bg-[#006EFF] transition-all">
@@ -113,7 +114,7 @@
                 </div>
                 <div>
                   <div class="text-[12px] text-blue-900/40 font-bold uppercase tracking-widest mb-2">安全与技术支持</div>
-                  <div class="text-[24px] font-black text-[#0B2747] mb-2 tracking-tight">tech@autotrans.com</div>
+                  <div class="text-[24px] font-black text-[#0B2747] mb-2 tracking-tight">yunweishu8888@163.com</div>
                   <p class="text-[14px] text-gray-500">系统对接、网络安全合规咨询</p>
                 </div>
               </div>
@@ -232,8 +233,8 @@
             <h3 class="text-[24px] font-bold text-[#0B2747] mb-8">总部办公中心</h3>
             <div class="relative rounded-[40px] overflow-hidden shadow-xl border-8 border-white group">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1760124056883-732e7a5e2e68"
-                alt="Headquarters Location"
+                src="/image/about/about-lab-main.webp"
+                alt="车拖车总部办公大楼地址"
                 class="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-1000"
               />
               <div class="absolute inset-0 bg-[#0B2747]/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -264,8 +265,8 @@
                 <div class="text-[18px] font-bold text-[#0B2747] mb-2">微信公众号</div>
                 <p class="text-[12px] text-gray-400 mb-6 leading-relaxed">获取最新运价与行业资讯</p>
                 <div class="w-32 h-32 bg-gray-50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center">
-                  <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=wechat_chetuoche"
+                  <img loading="lazy"
+                    src="/image/qrcode/wechat.png"
                     alt="车拖车微信公众号二维码-获取行业资讯与运价动态"
                     class="w-24 h-24 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
                   />
@@ -279,8 +280,8 @@
                 <div class="text-[18px] font-bold text-[#0B2747] mb-2">抖音官方号</div>
                 <p class="text-[12px] text-gray-400 mb-6 leading-relaxed">观看发车现场与避坑指南</p>
                 <div class="w-32 h-32 bg-gray-50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center">
-                  <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=douyin_chetuoche"
+                  <img loading="lazy"
+                    src="/image/qrcode/douyin.png"
                     alt="车拖车抖音官方号二维码-观看发车现场与托运避坑指南"
                     class="w-24 h-24 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
                   />
@@ -371,10 +372,10 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: '联系车拖车获取汽车托运咨询。综合服务热线 400-075-1117，技术支持 tech@autotrans.com，10分钟内响应。'
+      content: '联系车拖车获取汽车托运咨询。综合服务热线 400-075-1117，技术支持 yunweishu8888@163.com，10分钟内响应。'
     }
   ],
-  link: [{ rel: 'canonical', href: 'https://www.chetuoche.com/contact' }]
+  link: [{ rel: 'canonical', href: 'https://www.ctcapp.com/contact' }]
 })
 
 // Schema.org 结构化数据（统一使用全局 Organization @id）

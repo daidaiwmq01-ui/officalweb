@@ -7,11 +7,11 @@
           @click="handleSupplyChainClick"
           class="relative h-[400px] rounded-2xl overflow-hidden group cursor-pointer"
         >
-          <img
-            :src="supplyChainImage"
+          <img loading="lazy"
+            src="/image/supply-chain/hero.png"
             alt="Supply Chain Solutions"
             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            @error="handleSupplyChainImageError"
+            @error="(e) => handleSupplyChainImageError(e)"
           />
           <!-- Gradient Overlay: Navy Blue to Transparent -->
           <div class="absolute inset-0 bg-gradient-to-t from-[#0B2747]/90 via-[#0B2747]/50 to-transparent p-10 flex flex-col justify-end text-white">
@@ -28,11 +28,11 @@
           @click="handleTruckSalesClick"
           class="relative h-[400px] rounded-2xl overflow-hidden group cursor-pointer"
         >
-          <img
-            :src="factoryImage"
+          <img loading="lazy"
+            src="/image/home/factory.png"
             alt="Truck Manufacturing"
             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            @error="handleFactoryImageError"
+            @error="(e) => handleFactoryImageError(e)"
           />
           <!-- Gradient Overlay: Navy Blue to Transparent -->
           <div class="absolute inset-0 bg-gradient-to-t from-[#0B2747]/90 via-[#0B2747]/50 to-transparent p-10 flex flex-col justify-end text-white">
@@ -49,12 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowRight } from 'lucide-vue-next'
-// Import images from images mapping (Agent B's work)
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
 interface Props {
   setActiveId?: (id: string) => void
 }
@@ -62,15 +58,14 @@ interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 
-const supplyChainImage = ref(EXTERNAL_ASSETS.PARTNER_B2B_HANDSHAKE)
-const factoryImage = ref(EXTERNAL_ASSETS.FACTORY_HERO)
-
-const handleSupplyChainImageError = () => {
-  supplyChainImage.value = EXTERNAL_ASSETS.PARTNER_B2B_HANDSHAKE
+const handleSupplyChainImageError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && !el.src.includes('supply-chain/hero')) el.src = '/image/supply-chain/hero.png'
 }
 
-const handleFactoryImageError = () => {
-  factoryImage.value = EXTERNAL_ASSETS.FACTORY_HERO
+const handleFactoryImageError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && !el.src.includes('image/home/factory')) el.src = '/image/home/factory.png'
 }
 
 const handleSupplyChainClick = () => {

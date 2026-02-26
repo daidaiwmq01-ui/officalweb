@@ -63,6 +63,7 @@
               <ImageWithFallback
                 :src="review.avatar"
                 :alt="review.name"
+                :use-webp="false"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -113,7 +114,7 @@ import ImageWithFallback from '@/components/ImageWithFallback.vue'
 
 const reviews = [
   {
-    avatar: 'https://images.unsplash.com/photo-1758600432264-b8d2a0fd7d83',
+    avatar: '/image/valet/avatar1.jpeg',
     name: '张先生 (杭州)',
     car: '劳斯莱斯 古思特',
     review:
@@ -122,7 +123,7 @@ const reviews = [
     service: '小板车专送',
   },
   {
-    avatar: 'https://images.unsplash.com/photo-1761933808230-9a2e78956daa',
+    avatar: '/image/valet/avatar2.jpeg',
     name: '李女士 (成都)',
     car: '坦克 300',
     review:
@@ -131,7 +132,7 @@ const reviews = [
     service: '小板车专送',
   },
   {
-    avatar: 'https://images.unsplash.com/photo-1700954343841-2134b33d569d',
+    avatar: '/image/valet/avatar3.jpeg',
     name: '赵先生 (武汉)',
     car: '特斯拉 Model Y',
     review:

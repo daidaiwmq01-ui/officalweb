@@ -2,8 +2,9 @@
   <section class="relative w-full h-[448px] overflow-hidden font-['Noto_Sans_SC']">
     <!-- Background with Navy Blue Gradient Overlay - No pure black used -->
     <div class="absolute inset-0 z-0">
-      <img 
-        :src="EXTERNAL_ASSETS.TRAVEL_HERO" 
+      <img
+        loading="eager"
+        src="/image/personal-travel/hero.webp" 
         alt="个人旅游托运 - 亚洲家庭自驾游" 
         class="w-full h-full object-cover"
       />
@@ -69,8 +70,6 @@ import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 
 const breadcrumbItems = getBreadcrumbsForRoute('/personal-travel')
 import { useRouter } from 'vue-router'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
 const router = useRouter()
 
 const goToPricingCalculator = () => {

@@ -1,7 +1,7 @@
 <template>
   <div class="p-8 rounded-[32px] border-none shadow-sm hover:shadow-lg transition-all bg-white">
     <div class="flex items-center gap-4 mb-6">
-      <img
+      <img loading="lazy"
         :src="image"
         :alt="name"
         class="w-16 h-16 rounded-full object-cover"

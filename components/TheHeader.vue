@@ -8,7 +8,7 @@
         @click.prevent="handleNavClick('home')"
         class="flex items-center hover:opacity-90 transition-opacity flex-shrink-0 pr-10"
       >
-        <img :src="brandLogo" alt="车拖车" class="h-10 w-auto" />
+        <img loading="lazy" :src="brandLogo" alt="车拖车" class="h-10 w-auto" />
       </a>
 
       <!-- Center: Main Navigation Menu -->
@@ -83,7 +83,7 @@
       <!-- Right: Call to Action (CTA) -->
       <div class="flex items-center gap-4">
         <Button
-          @click="isOrderModalOpen = true"
+          @click="isMiniProgramModalOpen = true"
           class="hidden md:flex items-center justify-center h-10 px-6 rounded-full bg-[#FF6B00] hover:bg-[#E56000] text-white font-bold text-[15px] transition-all hover:-translate-y-1 shadow-md hover:shadow-orange-200/50 flex-shrink-0 border-none cursor-pointer"
         >
           立即下单
@@ -163,7 +163,30 @@
       </div>
     </Transition>
 
-    <OrderModal v-model="isOrderModalOpen" />
+    <Dialog v-model="isMiniProgramModalOpen">
+      <DialogContent class="sm:max-w-[400px] bg-white p-0 overflow-hidden rounded-2xl gap-0">
+        <div class="p-8 flex flex-col items-center text-center">
+          <DialogHeader class="mb-2 p-0 space-y-0">
+            <DialogTitle class="text-[22px] font-bold text-[#0B2747] text-center">微信扫码 · 3秒获取报价</DialogTitle>
+          </DialogHeader>
+          <DialogDescription class="text-[14px] text-gray-500 mb-8 max-w-[260px] leading-relaxed">
+            无需下载，支持小板车、大板车、救援实时测算
+          </DialogDescription>
+
+          <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
+            <ImageWithFallback
+              src="/image/contectQR/liteprogress.webp"
+              alt="WeChat Mini Program QR"
+              class="w-full h-full p-2"
+            />
+          </div>
+
+          <div class="text-[14px] text-gray-400 mb-6 font-medium">
+            打开微信 [扫一扫]
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   </header>
 </template>
 
@@ -200,20 +223,18 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ChevronDown, Menu, X } from 'lucide-vue-next'
 import Button from './ui/Button.vue'
-import OrderModal from './OrderModal.vue'
+import Dialog from './ui/Dialog.vue'
+import DialogContent from './ui/DialogContent.vue'
+import DialogHeader from './ui/DialogHeader.vue'
+import DialogTitle from './ui/DialogTitle.vue'
+import DialogDescription from './ui/DialogDescription.vue'
+import ImageWithFallback from './ImageWithFallback.vue'
 import type { MenuItem } from '@/types'
 
 /**
- * 品牌 Logo 路径
- * 
- * @constant brandLogo
- * @type {string}
- * @default '/logo.png'
- * 
- * @todo 替换为实际的品牌 Logo 文件
- * @see public/logo.png
+ * 品牌 Logo 路径（与 /public/image 目录一致）
  */
-const brandLogo = '/logo.png'
+const brandLogo = '/image/logo/logo.png'
 
 /**
  * 组件属性定义
@@ -249,8 +270,8 @@ const activeDropdown = ref<string | null>(null)
 /** 移动端菜单是否打开 */
 const isMobileMenuOpen = ref(false)
 
-/** 订单模态框是否打开 */
-const isOrderModalOpen = ref(false)
+/** 小程序二维码弹窗是否打开 */
+const isMiniProgramModalOpen = ref(false)
 
 const menuItems: MenuItem[] = [
   { label: '首页', href: '#', id: 'home', hasDropdown: false },
@@ -427,7 +448,7 @@ const handleChildClick = (child: { href?: string; id?: string }) => {
  * ```
  */
 const handleMobileOrderClick = () => {
-  isOrderModalOpen.value = true
+  isMiniProgramModalOpen.value = true
   isMobileMenuOpen.value = false
 }
 </script>

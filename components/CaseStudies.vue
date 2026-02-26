@@ -118,17 +118,17 @@ import ImageWithFallback from '@/components/ImageWithFallback.vue'
 
 const cases = [
   {
-    image: 'https://images.unsplash.com/photo-1750087252823-91079622a25c',
+    image: '/image/small-carrier/case1.jpeg',
     from: '杭州',
     to: '三亚',
     car: '保时捷 911 Carrera',
     distance: '2,350km',
     duration: '36小时',
-    insurance: 'PICC 500万承保',
+    insurance: '运输保险 500万承保',
     highlight: '车主全程未到场，远程视频验车交付',
   },
   {
-    image: 'https://images.unsplash.com/reserve/9JMZhTL8T7ulzIoD2E78_2010_02280041.JPG',
+    image: '/image/small-carrier/case2.webp',
     from: 'G4高速',
     to: '北京4S店',
     car: '宝马 X5 xDrive40i',
@@ -138,7 +138,7 @@ const cases = [
     highlight: '15分钟极速响应，解决高速抛锚难题',
   },
   {
-    image: 'https://images.unsplash.com/photo-1760765865486-0ecdb14275b1',
+    image: '/image/small-carrier/case3.webp',
     from: '广州',
     to: '深圳',
     car: '特斯拉 Model Y',

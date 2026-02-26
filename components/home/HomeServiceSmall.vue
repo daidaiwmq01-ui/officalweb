@@ -5,11 +5,11 @@
         <!-- Image Left -->
         <div class="w-full lg:w-1/2 relative">
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
-            <img
-              :src="serviceImage"
+            <img loading="lazy"
+              src="/image/home/home-service-small-bg.png"
               alt="Small Carrier Luxury Transport"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-              @error="handleImageError"
+              @error="(e) => handleImageError(e)"
             />
             <!-- Decorative Element -->
             <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-[#FF6B00] rounded-full opacity-10 blur-2xl" />
@@ -61,27 +61,16 @@
 
           <!-- QR Code Container -->
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
-            <img
-              src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
+            <img loading="lazy"
+              src="/image/contectQR/liteprogress.webp"
               alt="WeChat Mini Program QR"
               class="w-full h-full p-2"
             />
             <!-- Center Icon Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center p-1 border border-gray-100">
-                <MessageCircle class="w-6 h-6 text-[#07C160] fill-current" />
-              </div>
-            </div>
           </div>
 
           <div class="text-[14px] text-gray-400 mb-6 font-medium">
             打开微信 [扫一扫]
-          </div>
-
-          <div class="w-full border-t border-gray-100 pt-6">
-            <button class="text-[14px] text-[#0B2747] hover:text-[#006EFF] font-medium transition-colors">
-              我是企业用户？<span class="text-[#006EFF] font-bold"> [ 切换至企业版 ]</span>
-            </button>
           </div>
         </div>
       </DialogContent>
@@ -91,20 +80,18 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ArrowRight, CheckCircle2, MessageCircle } from 'lucide-vue-next'
+import { ArrowRight, CheckCircle2 } from 'lucide-vue-next'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
-import { SERVICE_SMALL_CARRIER, EXTERNAL_ASSETS } from '@/utils/images'
-
 const isMiniProgramModalOpen = ref(false)
 const tags = ['5秒极速接单', '38万+ 运力覆盖', '全程保险']
-const serviceImage = ref(SERVICE_SMALL_CARRIER || EXTERNAL_ASSETS.LUXURY_SHOW)
 
-const handleImageError = () => {
-  serviceImage.value = EXTERNAL_ASSETS.LUXURY_SHOW
+const handleImageError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && !el.src.includes('home-service-small-bg')) el.src = '/image/home/home-service-small-bg.png'
 }
 
 </script>

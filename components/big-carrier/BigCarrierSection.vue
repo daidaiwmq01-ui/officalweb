@@ -64,8 +64,5 @@
 <script setup lang="ts">
 import { CheckCircle2 } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
-// Replace figma:asset with EXTERNAL_ASSETS URL
-const definitionImg = EXTERNAL_ASSETS.TRUCK_FLATBED_FULL
+const definitionImg = '/image/big-carrier/big-service.png'
 </script>

@@ -3,9 +3,10 @@
     <!-- 1. Hero Section (Industrial Style) -->
     <section class="relative w-full h-[500px] overflow-hidden">
       <div class="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1679561159990-bbf4394db78f?q=80&w=2000" 
-          alt="CheTuoChe Wrecker Manufacturing" 
+        <img
+          loading="eager"
+          src="/image/truck-sale/hero.webp" 
+          alt="车拖车装备制造清障车生产基地" 
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-transparent" />
@@ -72,7 +73,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Truck 1 -->
           <ProductCard 
-            image="https://images.unsplash.com/photo-1742069028629-790f9d5b014b?q=80&w=1000"
+            image="/image/truck-sale/hero.webp"
             title="3吨蓝牌一拖二清障车"
             tag="C证可开 / 进城无忧"
             specs="轴距 3300mm | 载重 3吨 | 适合城市救援"
@@ -80,7 +81,7 @@
           />
           <!-- Truck 2 -->
           <ProductCard 
-            image="https://images.unsplash.com/photo-1531061972109-7a54a01c8088?q=80&w=1000"
+            image="/image/truck-sale/twobase.jpeg"
             title="全落地液压板清障车"
             tag="豪车/超跑专用"
             specs="零角度上车 | 載重 4-5吨 | 适合长途专车"
@@ -88,7 +89,7 @@
           />
           <!-- Truck 3 -->
           <ProductCard 
-            image="https://images.unsplash.com/photo-1657486233645-f0f71d4d7805?q=80&w=1000"
+            image="/image/home/factory.png"
             title="厢式运输车 (封闭式)"
             tag="高价值/保密运输"
             specs="全封闭结构 | 气囊减震 | 适合巡展/赛车"
@@ -112,7 +113,7 @@
         </div>
         <div class="flex-1 relative">
           <div class="aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-            <img src="https://images.unsplash.com/photo-1584291527905-f930791fb1ce?q=80&w=1000" alt="Service Network Map" class="w-full h-full object-cover" />
+            <img loading="lazy" src="/image/truck-sale/twobase.jpeg" alt="临沂与随州两大清障车生产基地分布图" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-[#006EFF]/10 mix-blend-overlay" />
           </div>
           <!-- Decorative Pulse Points -->
@@ -178,7 +179,7 @@
             <h3 class="text-[24px] font-bold text-[#0B2747] mb-2">获取 2026 最新报价单</h3>
             <p class="text-[#0B2747]/60">提交您的意向车型，销售经理将在 1 小时内为您提供底盘报价及金融方案。</p>
             <div class="mt-6 flex items-center gap-2 text-[#006EFF] font-bold">
-              <Phone class="w-5 h-5" /> 138-XXXX-XXXX (板车销售热线)
+              <Phone class="w-5 h-5" /> 19078975678 (板车销售热线)
             </div>
           </div>
           
@@ -285,7 +286,7 @@ useHead({
     }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/truck-sales' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/truck-sales' }
   ]
 })
 
@@ -294,7 +295,7 @@ const truckSalesSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '车拖车清障车装备直销',
-  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
   'serviceType': 'Vehicle Sales',
   'description': '山东临沂/湖北随州两大生产基地，年产1500台。购车即享平台优选订单权益，助您开启高效物流事业。',
   'areaServed': 'CN',

@@ -33,7 +33,7 @@
 
     <!-- 测试 3: 使用 Props 直接配置 -->
     <BaseHero
-      background-image="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2000"
+      background-image="/image/home/home-hero-bg.png"
       image-alt="测试 Hero"
       title="测试标题：<span class='text-brand-blue'>高亮部分</span>"
       subtitle="这是一个测试副标题，验证 BaseHero 组件的基本功能。"
@@ -58,7 +58,7 @@
 
     <!-- 测试 4: 使用 Slots 完全自定义 -->
     <BaseHero
-      background-image="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2000"
+      background-image="/image/home/home-hero-bg.png"
       :breadcrumbs="testBreadcrumbs"
       height="large"
     >

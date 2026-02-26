@@ -6,7 +6,7 @@
           <div class="relative w-full max-w-[500px] aspect-square rounded-2xl sm:rounded-[40px] overflow-hidden shadow-2xl border-4 sm:border-8 border-white">
             <div class="absolute inset-0">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1758224388400-305dfddfbcd9"
+                src="/image/driver/mockup.png"
                 alt="Standardization"
                 class="w-full h-full object-cover"
               />

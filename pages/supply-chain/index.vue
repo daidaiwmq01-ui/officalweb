@@ -25,7 +25,7 @@ useHead({
     { name: 'keywords', content: '汽车供应链解决方案, OTD交付体系, 整车物流数字化, 4S店补库运输, 智能路径规划, 数字化验车' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/supply-chain' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/supply-chain' }
   ]
 })
 
@@ -34,7 +34,7 @@ const supplyChainSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '汽车供应链数字化解决方案',
-  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
   'serviceType': 'Supply Chain Management',
   'description': '面向主机厂与4S店，提供从生产线到销售终端的OTD可视化物流服务。支持智能分拨、库存动态调拨及零公里交付。',
   'serviceOutput': '缩短OTD周期12%-18%',

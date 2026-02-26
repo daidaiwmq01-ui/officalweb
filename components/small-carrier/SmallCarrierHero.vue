@@ -3,8 +3,9 @@
     <!-- Background Image with Optimized Brand Navy Overlay -->
     <div class="absolute inset-0 z-0">
       <ImageWithFallback
-        :src="heroBg"
+        src="/image/small-carrier/hero.webp"
         alt="车拖车小板车托运"
+        loading="eager"
         class="w-full h-full object-cover"
       />
       <!-- Brand Mask: Left to Right Navy Gradient -->
@@ -85,15 +86,10 @@
           <!-- QR Code Container -->
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
             <ImageWithFallback 
-              src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
+              src="/image/contectQR/liteprogress.webp"
               alt="WeChat Mini Program QR"
               class="w-full h-full p-2"
             />
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center p-1 border border-gray-100">
-                <MessageCircle class="w-6 h-6 text-[#07C160] fill-current" />
-              </div>
-            </div>
           </div>
 
           <div class="text-[14px] text-gray-400 mb-6 font-medium">
@@ -107,7 +103,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { ShieldCheck, Users, MessageCircle } from 'lucide-vue-next'
+import { ShieldCheck, Users } from 'lucide-vue-next'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 
@@ -119,7 +115,6 @@ import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -130,7 +125,6 @@ const props = defineProps<Props>()
 const isMiniProgramModalOpen = ref(false)
 const isMobile = ref(false)
 
-const heroBg = EXTERNAL_ASSETS.TRUCK_ENCLOSED_BOX
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 768

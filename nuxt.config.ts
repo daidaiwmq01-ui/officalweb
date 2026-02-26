@@ -1,3 +1,5 @@
+import { resolve } from 'node:path'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -9,42 +11,54 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap'
   ],
 
-  // Sitemap 配置
+  site: {
+    url: 'https://www.ctcapp.com',
+    name: '车拖车 - 智能汽车物流生态平台'
+  },
+
   sitemap: {
-    hostname: 'https://www.chetuoche.com',
-    gzip: true,
-    routes: [
-      { url: '/', changefreq: 'daily', priority: 1.0 },
-      { url: '/big-carrier', changefreq: 'weekly', priority: 0.9 },
-      { url: '/small-carrier', changefreq: 'weekly', priority: 0.9 },
-      { url: '/rescue', changefreq: 'weekly', priority: 0.9 },
-      { url: '/valet', changefreq: 'weekly', priority: 0.9 },
-      { url: '/luxury-transport', changefreq: 'weekly', priority: 0.8 },
-      { url: '/supply-chain', changefreq: 'weekly', priority: 0.8 },
-      { url: '/personal-travel', changefreq: 'weekly', priority: 0.8 },
-      { url: '/about', changefreq: 'monthly', priority: 0.7 },
-      { url: '/contact', changefreq: 'monthly', priority: 0.7 },
-      { url: '/partners', changefreq: 'monthly', priority: 0.7 },
-      { url: '/solutions', changefreq: 'monthly', priority: 0.8 },
-      { url: '/news', changefreq: 'daily', priority: 0.8 },
-      { url: '/pricing', changefreq: 'weekly', priority: 0.9 },
-      { url: '/guide', changefreq: 'monthly', priority: 0.6 },
-      { url: '/careers', changefreq: 'monthly', priority: 0.6 },
-      { url: '/truck-sales', changefreq: 'weekly', priority: 0.7 },
-      { url: '/partner-recruit', changefreq: 'monthly', priority: 0.7 },
-      { url: '/download', changefreq: 'monthly', priority: 0.6 },
-      { url: '/download/client', changefreq: 'monthly', priority: 0.6 },
-      { url: '/download/driver', changefreq: 'monthly', priority: 0.6 },
-      { url: '/driver', changefreq: 'monthly', priority: 0.6 },
-      { url: '/driver/home', changefreq: 'monthly', priority: 0.6 },
-      { url: '/transport', changefreq: 'weekly', priority: 0.8 },
-      { url: '/cybersecurity', changefreq: 'monthly', priority: 0.5 }
-    ],
+    autoLastmod: true,
+    experimentalCompression: true,
+    defaults: {
+      changefreq: 'monthly',
+      priority: 0.5
+    },
     exclude: [
       '/test-hero',
       '/api/**',
       '/admin/**'
+    ],
+    sources: [
+      '/api/__sitemap__/urls'
     ]
+  },
+
+  routeRules: {
+    '/': { sitemap: { changefreq: 'daily', priority: 1.0 } },
+    '/big-carrier': { sitemap: { changefreq: 'weekly', priority: 0.9 } },
+    '/small-carrier': { sitemap: { changefreq: 'weekly', priority: 0.9 } },
+    '/rescue': { sitemap: { changefreq: 'weekly', priority: 0.9 } },
+    '/valet': { sitemap: { changefreq: 'weekly', priority: 0.9 } },
+    '/pricing': { sitemap: { changefreq: 'weekly', priority: 0.8 } },
+    '/luxury-transport': { sitemap: { changefreq: 'weekly', priority: 0.8 } },
+    '/supply-chain': { sitemap: { changefreq: 'weekly', priority: 0.8 } },
+    '/personal-travel': { sitemap: { changefreq: 'weekly', priority: 0.8 } },
+    '/transport': { sitemap: { changefreq: 'weekly', priority: 0.8 } },
+    '/solutions': { sitemap: { changefreq: 'monthly', priority: 0.8 } },
+    '/news': { sitemap: { changefreq: 'daily', priority: 0.8 } },
+    '/about': { sitemap: { changefreq: 'monthly', priority: 0.7 } },
+    '/contact': { sitemap: { changefreq: 'monthly', priority: 0.7 } },
+    '/partners': { sitemap: { changefreq: 'monthly', priority: 0.7 } },
+    '/truck-sales': { sitemap: { changefreq: 'weekly', priority: 0.7 } },
+    '/partner-recruit': { sitemap: { changefreq: 'monthly', priority: 0.7 } },
+    '/guide': { sitemap: { changefreq: 'monthly', priority: 0.6 } },
+    '/careers': { sitemap: { changefreq: 'monthly', priority: 0.6 } },
+    '/download': { sitemap: { changefreq: 'monthly', priority: 0.6 } },
+    '/download/client': { sitemap: { changefreq: 'monthly', priority: 0.6 } },
+    '/download/driver': { sitemap: { changefreq: 'monthly', priority: 0.6 } },
+    '/driver': { sitemap: { changefreq: 'monthly', priority: 0.6 } },
+    '/driver/home': { sitemap: { changefreq: 'monthly', priority: 0.6 } },
+    '/cybersecurity': { sitemap: { changefreq: 'monthly', priority: 0.5 } }
   },
 
   css: [
@@ -73,9 +87,11 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.VITE_APP_API || 'https://git.chetuoche.net/official-website-server',
-      proxyApi: process.env.VITE_APP_PROXY_API || 'https://test.chetuoche.net',
-      tmapKey: process.env.TMAP_KEY || 'QH6BZ-IBD37-SIAXU-HFYOF-TQJWE-BBFJD'
+      apiBase: process.env.VITE_APP_API || '',
+      proxyApi: process.env.VITE_APP_PROXY_API || '',
+      tmapKey: process.env.TMAP_KEY || '',
+      ga4MeasurementId: process.env.NUXT_PUBLIC_GA4_MEASUREMENT_ID || '',
+      baiduHmId: process.env.NUXT_PUBLIC_BAIDU_HM_ID || ''
     }
   },
 
@@ -87,6 +103,32 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    resolve: {
+      alias: process.env.NODE_ENV === 'development'
+        ? {
+            // Workaround for intermittent Vite import-analysis failure in dev:
+            // Failed to resolve import "#app-manifest" from nuxt manifest composable.
+            '#app-manifest': resolve(process.cwd(), '.nuxt/manifest/meta/dev.json')
+          }
+        : {}
+    },
+    plugins: [
+      {
+        name: 'ignore-nuxt-dir-request',
+        apply: 'serve',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const url = req.url?.split('?')[0]
+            if (url === '/_nuxt' || url === '/_nuxt/') {
+              res.statusCode = 204
+              res.end()
+              return
+            }
+            next()
+          })
+        }
+      }
+    ],
     server: {
       hmr: {
         protocol: 'ws',
@@ -101,6 +143,6 @@ export default defineNuxtConfig({
 
   devServer: {
     port: 3001,
-    host: '127.0.0.1'
+    host: '0.0.0.0'  // 允许局域网访问：本机用 localhost:3001，其他设备用 http://<本机IP>:3001
   }
 })

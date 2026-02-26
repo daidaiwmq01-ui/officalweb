@@ -46,11 +46,11 @@
         <!-- Image/Graphic -->
         <div class="w-full md:w-2/5 h-[300px] md:h-auto relative">
           <div class="absolute inset-0 md:-left-20">
-            <img
-              :src="serviceImage"
+            <img loading="lazy"
+              src="/image/home/rescue.png"
               alt="Roadside Rescue"
               class="w-full h-full object-cover object-center"
-              @error="handleImageError"
+              @error="(e) => handleImageError(e)"
             />
             <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#FFF5EB] via-transparent to-transparent md:w-1/2" />
           </div>
@@ -68,13 +68,10 @@ import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
-// Import image from images mapping (Agent B's work)
-import { SERVICE_RESCUE, EXTERNAL_ASSETS } from '@/utils/images'
-
-const serviceImage = ref(SERVICE_RESCUE || EXTERNAL_ASSETS.RESCUE_SCENE)
 const showRescueDialog = ref(false)
 
-const handleImageError = () => {
-  serviceImage.value = EXTERNAL_ASSETS.RESCUE_SCENE
+const handleImageError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && !el.src.includes('rescue.png')) el.src = '/image/home/rescue.png'
 }
 </script>

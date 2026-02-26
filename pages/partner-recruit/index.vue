@@ -5,8 +5,9 @@
     <section class="relative w-full h-[550px] overflow-hidden">
       <div class="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1565688335719-d0297c355556?q=80&w=1500"
-          alt="Business Opportunity"
+          loading="eager"
+          src="/image/partner-recruit/hero.webp"
+          alt="车拖车城市合伙人招募 - 零加盟费创业机会"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 to-[#0B2747]/60" />
@@ -383,7 +384,7 @@
             title="全维度人才培养"
             desc="提供涵盖新人入职、大客户开发技巧、数字化订单系统操作等全方位培训，让您的团队快速具备盈利能力。"
             :icon="GraduationCap"
-            image="https://images.unsplash.com/photo-1611226103607-72fe64c526ec?q=80&w=1000"
+            image="/image/partner-recruit/service.png"
             :reverse="false"
             :items="[
               '每周线上集训',
@@ -395,7 +396,7 @@
             title="品牌赋能与营销支持"
             desc="总部承担主流媒体品牌广告投放。免费提供门店装修设计、宣传海报、落地展架等全套视觉物料支持。"
             :icon="Megaphone"
-            image="https://images.unsplash.com/photo-1565688335719-d0297c355556?q=80&w=1500"
+            image="/image/partner-recruit/support.png"
             :reverse="true"
             :items="[
               '千万级广告覆盖',
@@ -407,7 +408,7 @@
             title="专属管家式售后服务"
             desc="设立合伙人专属客服通道，协助处理复杂异常订单，24h 响应投诉，让您专注市场开发无后顾之忧。"
             :icon="Headphones"
-            image="https://images.unsplash.com/photo-1598585031991-a99408386ab9?q=80&w=1000"
+            image="/image/partner-recruit/grewup.png"
             :reverse="false"
             :items="[
               '理赔绿色通道',
@@ -430,21 +431,21 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <SuccessCard
-            image="https://images.unsplash.com/photo-1700954343841-2134b33d569d?q=80&w=1000"
+            image="/image/partner-recruit/avatar1.jpeg"
             name="陈先生"
             location="山东·济南"
             quote="从传统物流转型，首月在平台支持下成交额即突破 30 万，纯收入超 20 万。数字化管理真的省心。"
             income="¥20.5W+"
           />
           <SuccessCard
-            image="https://images.unsplash.com/photo-1544168190-79c17527004f?q=80&w=1000"
+            image="/image/partner-recruit/avatar2.jpeg"
             name="林女士"
             location="广东·佛山"
             quote="0加盟费政策给了我创业的勇气。现在团队已经扩招到10人，是本地口碑最好的托运服务站。"
             income="¥15.8W+"
           />
           <SuccessCard
-            image="https://images.unsplash.com/photo-1700954343841-2134b33d569d?q=80&w=1000"
+            image="/image/partner-recruit/avatar1.jpeg"
             name="王总"
             location="四川·成都"
             quote="正式代理商的区域保护政策非常有竞争力。现在正向年度800万目标冲刺，期待拿原始股权。"
@@ -568,7 +569,7 @@
 import { ref, computed } from 'vue'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useFAQPageSchema } from '@/composables/useSchemaOrg'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/partner-recruit'))
 
@@ -681,7 +682,7 @@ useHead({
     }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/partner-recruit' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/partner-recruit' }
   ]
 })
 
@@ -694,12 +695,17 @@ const partnerRecruitSchema = {
   'mainEntity': {
     '@type': 'Service',
     'name': '城市合伙人招募',
-    'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+    'provider': { '@id': 'https://www.ctcapp.com/#organization' },
     'description': '零费准入、全维扶持、股权激励。阶梯返利最高70%，年度成单达标可转公司股权。'
   }
 }
 
 useSchemaOrg(partnerRecruitSchema)
+useFAQPageSchema([
+  { question: '真的不需要任何加盟费吗？', answer: '是的。我们推行"城市合伙人"模式，初级阶段完全免收加盟费、保证金。我们更看重合伙人在当地的市场拓展能力与服务质量。' },
+  { question: '佣金结算周期是多久？', answer: '平台采用 T+1 实时入账模式。当运单状态变更为"已完成"且客户确认支付后，返佣金额将即时进入您的合伙人钱包，您可以随时申请提现。' },
+  { question: '没有物流经验可以加入吗？', answer: '完全可以。我们提供"保姆级"扶持体系，从系统培训到实战带教。只要您有创业热情和本地人脉资源，剩下的专业活儿由总部后台完成。' }
+])
 
 const scrollToForm = () => {
   document

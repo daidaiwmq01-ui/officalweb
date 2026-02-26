@@ -66,6 +66,7 @@
                 <ImageWithFallback
                   :src="item.avatar"
                   :alt="item.user"
+                :use-webp="false"
                   class="w-full h-full object-cover"
                 />
               </ClientOnly>

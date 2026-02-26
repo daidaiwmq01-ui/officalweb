@@ -2,8 +2,9 @@
   <section class="relative w-full h-[450px] overflow-hidden font-['Noto_Sans_SC']">
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
-      <img 
-        :src="EXTERNAL_ASSETS.SOLUTIONS_HERO" 
+      <img
+        loading="eager"
+        src="/image/solutions/hero.png" 
         alt="Digital Logistics Network" 
         class="w-full h-full object-cover"
       />
@@ -42,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { EXTERNAL_ASSETS } from '@/utils/images'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 

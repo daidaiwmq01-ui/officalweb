@@ -34,6 +34,7 @@
               <ImageWithFallback
                 :src="review.avatar"
                 :alt="review.name"
+                :use-webp="false"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -97,7 +98,7 @@ const reviews = [
   {
     name: '张先生',
     location: '哈尔滨',
-    avatar: 'https://images.unsplash.com/photo-1611403119860-57c4937ef987?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbWlsaW5nJTIwQ2hpbmVzZSUyMG1hbiUyMDMwcyUyMHBvcnRyYWl0JTIwY2FzdWFsfGVufDF8fHx8MTc2OTQxNTYwMXww&ixlib=rb-4.1.0&q=80&w=1080',
+    avatar: '/image/partner-recruit/avatar1.jpeg',
     route: '哈尔滨 → 三亚',
     car: '车型：丰田汉兰达',
     content: '每年冬天都去海南，以前最头疼大板车进不了市区。这次用了车拖车，代驾直接到楼下取车，到了三亚也是直接送到酒店，全程不用我操心，太方便了！',
@@ -106,7 +107,7 @@ const reviews = [
   {
     name: '李经理',
     location: '广州',
-    avatar: 'https://images.unsplash.com/photo-1768899819030-ba787d3f0138?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBDaGluZXNlJTIwYnVzaW5lc3NtYW4lMjAzMHMlMjBzdWl0JTIwcG9ydHJhaXR8ZW58MXx8fHwxNzY5NDE1NjAxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    avatar: '/image/partner-recruit/avatar2.jpeg',
     route: '广州 → 成都',
     car: '车型：奥迪 A6L x 6',
     content: '作为车商最看重时效和票据。车拖车的干线发车频率很高，基本不用等。最重要的是能开增值税专票，物流轨迹在国家交通系统能查到，给客户看很放心。',
@@ -115,7 +116,7 @@ const reviews = [
   {
     name: '王女士',
     location: '上海',
-    avatar: 'https://images.unsplash.com/photo-1676340619040-8688de9fd331?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBDaGluZXNlJTIwYnVzaW5lc3N3b21hbiUyMDMwcyUyMHNtaWxpbmclMjBvZmZpY2UlMjBibGF6ZXJ8ZW58MXx8fHwxNzY5NDE1NjQ5fDA&ixlib=rb-4.1.0&q=80&w=1080',
+    avatar: '/image/partner-recruit/avatar3.jpeg',
     route: '乌鲁木齐 → 上海',
     car: '车型：坦克 300',
     content: '新疆自驾玩累了，实在不想开回上海。在大板车和自己开之间犹豫很久，最后看中这里的GPS实时定位。车在笼车上的照片都会发给我，行李也免费随车运回了，省了四千公里油费！',

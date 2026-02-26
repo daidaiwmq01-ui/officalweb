@@ -53,7 +53,7 @@ useHead({
     }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/transport' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/transport' }
   ]
 })
 
@@ -63,7 +63,7 @@ const transportSchema = {
   '@type': 'CollectionPage',
   'name': '汽车托运服务百科 - 大板车/小板车/代驾/救援全解析',
   'description': '车拖车提供全场景汽车托运服务：大板车干线集运、小板车专车托运、专业代驾接驳、24小时道路救援。全国覆盖，安全可靠，价格透明。',
-  'url': 'https://www.chetuoche.com/transport',
+  'url': 'https://www.ctcapp.com/transport',
   'mainEntity': {
     '@type': 'ItemList',
     'itemListElement': [
@@ -71,33 +71,33 @@ const transportSchema = {
         '@type': 'ListItem',
         'position': 1,
         'name': '大板车干线集运',
-        'url': 'https://www.chetuoche.com/big-carrier',
+        'url': 'https://www.ctcapp.com/big-carrier',
         'description': '高性价比长途批量运输，30000+干线线路'
       },
       {
         '@type': 'ListItem',
         'position': 2,
         'name': '小板车专车托运',
-        'url': 'https://www.chetuoche.com/small-carrier',
+        'url': 'https://www.ctcapp.com/small-carrier',
         'description': '1对1门到门，5秒接单极速响应'
       },
       {
         '@type': 'ListItem',
         'position': 3,
         'name': '专业代驾接驳',
-        'url': 'https://www.chetuoche.com/valet',
+        'url': 'https://www.ctcapp.com/valet',
         'description': '解决托运最后一公里，第一检测人验车'
       },
       {
         '@type': 'ListItem',
         'position': 4,
         'name': '24小时道路救援',
-        'url': 'https://www.chetuoche.com/rescue',
+        'url': 'https://www.ctcapp.com/rescue',
         'description': '故障车拖运、地库救援、事故车运输'
       }
     ]
   },
-  'publisher': { '@id': 'https://www.chetuoche.com/#organization' }
+  'publisher': { '@id': 'https://www.ctcapp.com/#organization' }
 }
 
 useSchemaOrg(transportSchema)

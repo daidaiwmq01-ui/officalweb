@@ -13,6 +13,7 @@
         v-if="backgroundImage"
         :src="backgroundImage"
         :alt="imageAlt"
+        loading="eager"
         class="w-full h-full object-cover"
       />
       <!-- Gradient Overlay -->

@@ -66,12 +66,10 @@
 <script setup lang="ts">
 import { ArrowRight } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
 const cases = [
   {
     tag: '紧急救援托运',
-    image: EXTERNAL_ASSETS.TRUCK_ENCLOSED_BOX,
+    image: '/image/small-carrier/case1.jpeg',
     from: '杭州',
     to: '上海',
     title: '车辆故障需紧急维修，15分钟接单拖走',
@@ -80,7 +78,7 @@ const cases = [
   },
   {
     tag: '豪车新车交付',
-    image: EXTERNAL_ASSETS.TRUCK_ENCLOSED_BOX,
+    image: '/image/small-carrier/case2.webp',
     from: '广州',
     to: '深圳',
     title: '百万豪车首次交付，厢式车私密护送',
@@ -89,7 +87,7 @@ const cases = [
   },
   {
     tag: '短途专车直送',
-    image: EXTERNAL_ASSETS.TRUCK_FLATBED_FULL,
+    image: '/image/small-carrier/case3.webp',
     from: '北京',
     to: '天津',
     title: '4S店购车，次日送达家门口',

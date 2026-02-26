@@ -5,8 +5,9 @@
       <!-- Background Map Overlay -->
       <div class="absolute inset-0 z-0">
         <ImageWithFallback 
-          src="https://images.unsplash.com/photo-1712508818413-76a31994b525" 
-          alt="Global Logistics Network" 
+          src="/image/partners/hero.jpeg" 
+          alt="车拖车生态合作伙伴全国运力网络"
+        loading="eager" 
           class="w-full h-full object-cover opacity-20" 
         />
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B2747]/40 to-[#0B2747]" />
@@ -88,7 +89,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Carrier Card -->
           <CapacityCard 
-            image="https://images.unsplash.com/photo-1569478676506-ff9dc916613f"
+            image="/image/partners/net1.png"
             :icon="Truck"
             title="板车/承运商"
             headline="海量货源，极速结算"
@@ -99,7 +100,7 @@
           />
           <!-- Rescue Card -->
           <CapacityCard 
-            image="https://images.unsplash.com/photo-1572299486328-2578c37ad440"
+            image="/image/partners/net2.png"
             :icon="LifeBuoy"
             title="救援服务商"
             headline="闲置运力，高效变现"
@@ -109,7 +110,7 @@
           />
           <!-- Valet Card -->
           <CapacityCard 
-            image="https://images.unsplash.com/photo-1604904612715-47bf9d9bc670"
+            image="/image/partners/bet3.png"
             :icon="UserCheck"
             title="专业代驾"
             headline="最后一公里接驳"
@@ -209,8 +210,8 @@
             class="relative rounded-[40px] overflow-hidden shadow-2xl border border-white"
           >
             <ImageWithFallback 
-              src="https://images.unsplash.com/photo-1604090261928-2431109672e4" 
-              alt="Logistics Dashboard" 
+              src="/image/partners/net1.png" 
+              alt="车拖车合作伙伴管理后台仪表盘" 
               class="w-full h-full object-cover" 
             />
             <div class="absolute inset-0 bg-gradient-to-t from-[#0B2747]/60 to-transparent" />
@@ -278,25 +279,25 @@
           <SupportItem 
             :icon="Factory"
             title="装备制造"
-            image="https://images.unsplash.com/photo-1720036236694-d0a231c52563"
+            image="/image/partners/net1.png"
             desc="自有板车工厂年产1500台，提供购车金融方案与融资租赁支持。"
           />
           <SupportItem 
             :icon="Coffee"
             title="司机之家"
-            image="https://images.unsplash.com/photo-1721054940072-c1b1725afd03"
+            image="/image/partners/net2.png"
             desc="全国 500+ 线下驿站，提供淋浴、维修与补给，是司机的坚实后盾。"
           />
           <SupportItem 
             :icon="Lock"
             title="科技风控"
-            image="https://images.unsplash.com/photo-1680992045535-95919d4971a9"
+            image="/image/partners/bet3.png"
             desc="T级 DDoS 防护与双向实名认证，确保每一笔交易数据不可篡改。"
           />
           <SupportItem 
             :icon="GraduationCap"
             title="司机课堂"
-            image="https://images.unsplash.com/photo-1758691736067-b309ee3ef7b9"
+            image="/image/partners/hero.jpeg"
             desc="标准化服务培训与岗前考核体系，帮助合作伙伴提升核心服务分。"
           />
         </div>
@@ -501,7 +502,7 @@ useHead({
     { name: 'keywords', content: '承运商入驻, 救援加盟, 大客户合作, 数字化管车, 货源平台' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/partners' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/partners' }
   ]
 })
 

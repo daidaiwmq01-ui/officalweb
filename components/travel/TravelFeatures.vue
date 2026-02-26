@@ -9,8 +9,8 @@
             :visible-once="{ opacity: 1, y: 0 }"
             class="relative rounded-3xl overflow-hidden shadow-2xl"
           >
-            <img
-              :src="EXTERNAL_ASSETS.TRAVEL_SCENE"
+            <img loading="lazy"
+              src="/image/personal-travel/vacation.png"
               alt="Vacation Travel"
               class="w-full h-auto"
             />
@@ -52,8 +52,6 @@
 
 <script setup lang="ts">
 import { Smartphone, Camera, MapPin, Truck } from 'lucide-vue-next'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
 const features = [
   {
     icon: Smartphone,

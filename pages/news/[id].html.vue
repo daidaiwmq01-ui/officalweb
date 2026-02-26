@@ -2,7 +2,7 @@
   <div class="bg-white min-h-screen font-['Noto_Sans_SC'] text-[#0B2747]">
     <section class="relative w-full h-[260px] overflow-hidden mt-[-80px] pt-[80px]">
       <div class="absolute inset-0 z-0">
-        <img :src="detail.coverImg || FALLBACK_IMAGE" alt="News Cover" class="w-full h-full object-cover" />
+        <img loading="eager" :src="detail.coverImg || FALLBACK_IMAGE" :alt="detail?.title || '车拖车资讯封面'" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-[#0B2747]/75" />
       </div>
       <div class="container mx-auto max-w-[1000px] relative z-10 px-4 lg:px-0 h-full flex flex-col justify-center">
@@ -46,7 +46,7 @@ import { useRoute } from 'vue-router'
 import { parseNewsId } from '@/utils/slug'
 
 const FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&q=80&w=1200'
+  '/image/news/hero.webp'
 
 interface NewsItemRaw {
   id?: number | string
@@ -103,28 +103,82 @@ const { data: detail } = await useAsyncData('news-detail', async () => {
   return {}
 })
 
-// Schema.org 结构化数据 - 新闻详情（动态）
+const BASE_URL = 'https://www.ctcapp.com'
+
+function toISODate(dateStr?: string): string | undefined {
+  if (!dateStr || typeof dateStr !== 'string') return undefined
+  const trimmed = dateStr.trim()
+  if (/^\d{4}-\d{2}-\d{2}T/.test(trimmed)) return trimmed
+  const match = trimmed.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})$/)
+  if (match) return `${match[1]}T${match[2]}+08:00`
+  const dateOnly = trimmed.match(/^(\d{4}-\d{2}-\d{2})$/)
+  if (dateOnly) return dateOnly[1]
+  return undefined
+}
+
+function toAbsoluteUrl(path?: string): string {
+  if (!path) return `${BASE_URL}${FALLBACK_IMAGE}`
+  if (/^https?:\/\//.test(path)) return path
+  return `${BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
+}
+
 const newsArticleSchema = computed(() => {
   const d = detail.value || {}
   const title = d.title || '新闻详情'
-  const image = d.coverImg || d.imgUrl || d.cover || FALLBACK_IMAGE
+  const image = toAbsoluteUrl(d.coverImg || d.imgUrl || d.cover)
   const desc = d.briefIntroduction || title
+  const articleUrl = `${BASE_URL}/news/${id.value}.html`
 
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
-    'headline': title,
+    'mainEntityOfPage': {
+      '@type': 'WebPage',
+      '@id': articleUrl
+    },
+    'headline': title.length > 110 ? title.slice(0, 110) : title,
     'image': [image],
-    'datePublished': d.publishTime || d.createTime,
-    'dateModified': d.updateTime || d.publishTime || d.createTime,
+    'datePublished': toISODate(d.publishTime || d.createTime),
+    'dateModified': toISODate(d.updateTime || d.publishTime || d.createTime),
     'author': {
       '@type': 'Organization',
-      'name': d.author || '车拖车研究院'
+      'name': d.author || '车拖车研究院',
+      'url': BASE_URL
     },
-    'publisher': { '@id': 'https://www.chetuoche.com/#organization' },
+    'publisher': {
+      '@type': 'Organization',
+      'name': '车拖车 (CheTuoChe)',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': `${BASE_URL}/image/logo/logo.png`
+      }
+    },
     'description': desc
   }
 })
 
 useSchemaOrg(newsArticleSchema)
+
+useHead(computed(() => {
+  const d = detail.value || {}
+  const title = d.title ? `${d.title} - 车拖车资讯` : '新闻详情 - 车拖车'
+  const desc = d.briefIntroduction || d.title || '车拖车行业资讯与技术公告'
+  const image = toAbsoluteUrl(d.coverImg || d.imgUrl || d.cover)
+  const url = `${BASE_URL}/news/${id.value}.html`
+  return {
+    title,
+    meta: [
+      { name: 'description', content: desc },
+      { name: 'keywords', content: '车拖车, 汽车托运, 物流资讯, 行业新闻' },
+      { property: 'og:title', content: title },
+      { property: 'og:description', content: desc },
+      { property: 'og:image', content: image },
+      { property: 'og:url', content: url },
+      { property: 'og:type', content: 'article' }
+    ],
+    link: [
+      { rel: 'canonical', href: url }
+    ]
+  }
+}))
 </script>

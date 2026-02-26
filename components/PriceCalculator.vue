@@ -198,27 +198,74 @@
 
                   <div
                     v-if="isCarrierOpen && !isCarrierLocked"
-                    class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-30 p-4 max-h-64 overflow-auto"
+                    class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-30 p-4 max-h-72 overflow-auto space-y-4"
                   >
                     <div v-if="carrierLoading" class="text-xs text-gray-400 py-2">
                       正在加载板车数据...
                     </div>
-                    <div v-else-if="carrierOptions.length === 0" class="text-xs text-gray-400 py-2">
+                    <div v-else-if="carrierTreeData.length === 0" class="text-xs text-gray-400 py-2">
                       暂无可选板车
                     </div>
-                    <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      <button
-                        v-for="item in carrierOptions"
-                        :key="item.value"
-                        @click="() => handleCarrierSelect(item)"
-                        :class="`py-2 rounded-lg text-xs font-medium transition-all border ${
-                          carrierBoard === item.label
-                            ? 'bg-blue-100 border-[#006EFF] text-[#006EFF]'
-                            : 'bg-white border-gray-100 text-gray-500 hover:border-gray-200'
-                        }`"
-                      >
-                        {{ item.label }}
-                      </button>
+                    <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div class="space-y-2 border border-gray-100 rounded-lg p-3">
+                        <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">1. 板车类型</div>
+                        <div class="grid grid-cols-2 gap-2">
+                          <button
+                            v-for="vehicle in carrierTreeData"
+                            :key="vehicle.id"
+                            @click="() => handleCarrierVehicleSelect(vehicle.id)"
+                            :class="`py-2 rounded-lg text-xs font-medium transition-all border ${
+                              selectedCarrierVehicleId === vehicle.id
+                                ? 'bg-blue-100 border-[#006EFF] text-[#006EFF]'
+                                : 'bg-white border-gray-100 text-gray-500 hover:border-gray-200'
+                            }`"
+                          >
+                            {{ vehicle.name }}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="space-y-2 border border-gray-100 rounded-lg p-3">
+                        <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">2. 吨位</div>
+                        <div v-if="currentCarrierVehicleTypes.length > 0" class="grid grid-cols-2 gap-2">
+                          <button
+                            v-for="typeNode in currentCarrierVehicleTypes"
+                            :key="typeNode.id"
+                            @click="() => handleCarrierTypeSelect(typeNode.id)"
+                            :class="`py-2 rounded-lg text-xs font-medium transition-all border ${
+                              selectedCarrierTypeId === typeNode.id
+                                ? 'bg-blue-100 border-[#006EFF] text-[#006EFF]'
+                                : 'bg-white border-gray-100 text-gray-500 hover:border-gray-200'
+                            }`"
+                          >
+                            {{ typeNode.name }}
+                          </button>
+                        </div>
+                        <div v-else class="text-xs text-gray-400 py-2">
+                          请先选择板车类型
+                        </div>
+                      </div>
+
+                      <div class="space-y-2 border border-gray-100 rounded-lg p-3">
+                        <div class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">3. 牌照</div>
+                        <div v-if="currentCarrierLicensePlates.length > 0" class="grid grid-cols-1 gap-2">
+                          <button
+                            v-for="plateNode in currentCarrierLicensePlates"
+                            :key="plateNode.value"
+                            @click="() => handleCarrierPlateSelect(plateNode)"
+                            :class="`py-2 px-3 rounded-lg text-xs font-medium text-left transition-all border ${
+                              carrierBoard === plateNode.label
+                                ? 'bg-blue-100 border-[#006EFF] text-[#006EFF]'
+                                : 'bg-white border-gray-100 text-gray-500 hover:border-gray-200'
+                            }`"
+                          >
+                            {{ plateNode.label }}
+                          </button>
+                        </div>
+                        <div v-else class="text-xs text-gray-400 py-2">
+                          请先选择吨位
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -326,15 +373,10 @@
           <!-- QR Code Container -->
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
             <ImageWithFallback 
-              src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
+              src="/image/contectQR/liteprogress.webp"
               alt="WeChat Mini Program QR"
               class="w-full h-full p-2"
             />
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center p-1 border border-gray-100">
-                <MessageCircle class="w-6 h-6 text-[#07C160] fill-current" />
-              </div>
-            </div>
           </div>
 
           <div class="text-[14px] text-gray-400 mb-6 font-medium">
@@ -392,7 +434,25 @@ interface Result {
 
 const result = ref<Result | null>(null)
 
-interface CarrierOption {
+interface CarrierLicensePlateNode {
+  id: string
+  name: string
+  info?: any
+}
+
+interface CarrierVehicleTypeNode {
+  id: string
+  name: string
+  licensePlate: CarrierLicensePlateNode[]
+}
+
+interface CarrierVehicleNode {
+  id: string
+  name: string
+  vehicleType: CarrierVehicleTypeNode[]
+}
+
+interface CarrierPlateOption {
   value: string
   label: string
 }
@@ -413,7 +473,9 @@ let fromDebounceTimer: number | null = null
 let toDebounceTimer: number | null = null
 let blurTimer: number | null = null
 
-const carrierOptions = ref<CarrierOption[]>([])
+const carrierTreeData = ref<CarrierVehicleNode[]>([])
+const selectedCarrierVehicleId = ref<string>('')
+const selectedCarrierTypeId = ref<string>('')
 const carrierLoading = ref(false)
 const vehicleOptions = ref<{ label: string; code: number }[]>([])
 const vehicleLoading = ref(false)
@@ -426,6 +488,26 @@ const fallbackVehicleTypes = VEHICLE_TYPES
 const features = PRICE_CALCULATOR_FEATURES
 
 const isCarrierLocked = computed(() => !carType.value)
+const currentCarrierVehicle = computed(() =>
+  carrierTreeData.value.find((item) => item.id === selectedCarrierVehicleId.value)
+)
+const currentCarrierVehicleTypes = computed(
+  () => currentCarrierVehicle.value?.vehicleType || []
+)
+const currentCarrierType = computed(() =>
+  currentCarrierVehicleTypes.value.find((item) => item.id === selectedCarrierTypeId.value)
+)
+const currentCarrierLicensePlates = computed<CarrierPlateOption[]>(() => {
+  if (!currentCarrierType.value) return []
+  return currentCarrierType.value.licensePlate.map((plateNode) => {
+    const infoDesc = String(plateNode.info?.infoDesc || '').trim()
+    const label = infoDesc
+      ? `${plateNode.name}（${infoDesc}）`
+      : plateNode.name
+    const value = String(plateNode.info?.id ?? plateNode.id)
+    return { value, label }
+  })
+})
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 768
@@ -439,38 +521,52 @@ const handleQRClick = () => {
   }
 }
 
-const normalizeCarrierOptions = (payload: any): CarrierOption[] => {
-  const list: CarrierOption[] = []
-
-  const pushItem = (item: any) => {
-    if (!item) return
-    const value = String(item.id || item.value || item.code || item.key || item.name || item.title || '')
-    const label = String(item.name || item.title || item.label || item.value || '')
-    if (!label) return
-    list.push({ value, label })
+const normalizeCarrierTree = (payload: any): CarrierVehicleNode[] => {
+  const getTopLevelList = (input: any): any[] => {
+    if (Array.isArray(input)) return input
+    if (Array.isArray(input?.data)) return input.data
+    if (Array.isArray(input?.data?.list)) return input.data.list
+    if (Array.isArray(input?.data?.rows)) return input.data.rows
+    return []
   }
 
-  const walk = (nodes: any[]) => {
-    nodes.forEach((node) => {
-      pushItem(node)
-      const children = node?.children || node?.childList || node?.list
-      if (Array.isArray(children) && children.length > 0) {
-        walk(children)
+  return getTopLevelList(payload).map((vehicleNode: any) => {
+    const vehicleId = String(vehicleNode?.id ?? vehicleNode?.value ?? '')
+    const vehicleName = String(vehicleNode?.name || vehicleNode?.title || vehicleNode?.label || '')
+    const typeNodes = Array.isArray(vehicleNode?.vehicleType)
+      ? vehicleNode.vehicleType
+      : Array.isArray(vehicleNode?.children)
+        ? vehicleNode.children
+        : []
+
+    const vehicleType = typeNodes.map((typeNode: any) => {
+      const typeId = String(typeNode?.id ?? typeNode?.value ?? '')
+      const typeName = String(typeNode?.name || typeNode?.title || typeNode?.label || '')
+      const plateNodes = Array.isArray(typeNode?.licensePlate)
+        ? typeNode.licensePlate
+        : Array.isArray(typeNode?.children)
+          ? typeNode.children
+          : []
+
+      const licensePlate = plateNodes.map((plateNode: any) => ({
+        id: String(plateNode?.id ?? plateNode?.value ?? ''),
+        name: String(plateNode?.name || plateNode?.title || plateNode?.label || ''),
+        info: plateNode?.info || null,
+      }))
+
+      return {
+        id: typeId,
+        name: typeName,
+        licensePlate,
       }
     })
-  }
 
-  if (Array.isArray(payload)) {
-    walk(payload)
-  } else if (Array.isArray(payload?.data)) {
-    walk(payload.data)
-  } else if (Array.isArray(payload?.data?.list)) {
-    walk(payload.data.list)
-  } else if (Array.isArray(payload?.data?.rows)) {
-    walk(payload.data.rows)
-  }
-
-  return list
+    return {
+      id: vehicleId,
+      name: vehicleName,
+      vehicleType,
+    }
+  }).filter((item: CarrierVehicleNode) => item.id && item.name)
 }
 
 const normalizeVehicleOptions = (payload: any): { label: string; code: number }[] => {
@@ -517,16 +613,29 @@ const fetchCarrierOptions = async () => {
   carrierLoading.value = true
   try {
     const res = await $fetch('/api/order/vehicleCombine/listTree/v2', { method: 'GET' })
-    carrierOptions.value = normalizeCarrierOptions(res)
+    carrierTreeData.value = normalizeCarrierTree(res)
   } catch (error) {
-    carrierOptions.value = []
+    carrierTreeData.value = []
   } finally {
     carrierLoading.value = false
   }
 }
 
-const handleCarrierSelect = (item: CarrierOption) => {
-  carrierBoard.value = item.label
+const handleCarrierVehicleSelect = (vehicleId: string) => {
+  selectedCarrierVehicleId.value = vehicleId
+  selectedCarrierTypeId.value = ''
+  carrierBoard.value = ''
+}
+
+const handleCarrierTypeSelect = (typeId: string) => {
+  selectedCarrierTypeId.value = typeId
+  carrierBoard.value = ''
+}
+
+const handleCarrierPlateSelect = (plate: CarrierPlateOption) => {
+  const vehicleName = currentCarrierVehicle.value?.name || ''
+  const typeName = currentCarrierType.value?.name || ''
+  carrierBoard.value = [vehicleName, typeName, plate.label].filter(Boolean).join(' · ')
   isCarrierOpen.value = false
 }
 
@@ -778,6 +887,8 @@ watch(
     if (!carType.value) {
       carTypeCode.value = null
     }
+    selectedCarrierVehicleId.value = ''
+    selectedCarrierTypeId.value = ''
     carrierBoard.value = ''
     isCarrierOpen.value = false
   }

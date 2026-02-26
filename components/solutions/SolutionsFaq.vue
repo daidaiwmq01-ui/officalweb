@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
 import { ChevronDown } from 'lucide-vue-next'
+import { useFAQPageSchema } from '@/composables/useSchemaOrg'
 
 const faqs = [
   {
@@ -50,4 +51,6 @@ const faqs = [
     answer: "请确保车内无贵重违禁品，油量保持在 1/4 左右。我们的司机会在取车时进行 360° AI 验车并拍摄不少于 8 张高清照片，确保交付时原样交接。"
   }
 ]
+
+useFAQPageSchema(faqs.map(f => ({ question: f.question, answer: f.answer })))
 </script>

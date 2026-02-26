@@ -3,7 +3,8 @@
     <!-- Hero Section -->
     <section class="relative w-full h-[350px] overflow-hidden mt-[-80px] pt-[80px]">
       <div class="absolute inset-0 z-0">
-        <img 
+        <img
+          loading="eager"
           :src="ASSETS.HERO" 
           alt="车拖车新闻资讯中心-汽车物流行业深度解析与技术公告" 
           class="w-full h-full object-cover"
@@ -184,7 +185,7 @@ useHead({
     { name: 'keywords', content: '物流资讯, 行业新闻, 托运百科, 数字化物流, 车拖车动态' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/news' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/news' }
   ]
 })
 
@@ -194,21 +195,31 @@ const newsListSchema = {
   '@type': 'CollectionPage',
   'name': '车拖车行业资讯与技术公告',
   'description': '汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。',
-  'url': 'https://www.chetuoche.com/news',
+  'url': 'https://www.ctcapp.com/news',
+  'publisher': {
+    '@type': 'Organization',
+    'name': '车拖车 (CheTuoChe)',
+    'logo': {
+      '@type': 'ImageObject',
+      'url': 'https://www.ctcapp.com/image/logo/logo.png'
+    }
+  },
   'mainEntity': {
     '@type': 'ItemList',
+    'itemListOrder': 'https://schema.org/ItemListOrderDescending',
+    'name': '最新资讯',
     'itemListElement': [
       {
-        '@type': 'SiteNavigationElement',
+        '@type': 'ListItem',
         'position': 1,
         'name': '行业深度',
-        'url': 'https://www.chetuoche.com/news'
+        'url': 'https://www.ctcapp.com/news'
       },
       {
-        '@type': 'SiteNavigationElement',
+        '@type': 'ListItem',
         'position': 2,
         'name': '技术公告',
-        'url': 'https://www.chetuoche.com/news'
+        'url': 'https://www.ctcapp.com/news'
       }
     ]
   }
@@ -218,7 +229,7 @@ useSchemaOrg(newsListSchema)
 
 // --- Global Assets & Sidebar Constants ---
 const ASSETS = {
-  HERO: "https://images.unsplash.com/photo-1733948351315-688870d89e66?auto=format&fit=crop&q=80&w=1200",
+  HERO: "/image/news/hero.webp",
 }
 
 interface NewsTypeItem {

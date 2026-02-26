@@ -33,7 +33,7 @@
         <div class="flex flex-col md:flex-row gap-6 p-6">
           <!-- Article Image -->
           <div class="w-full md:w-[200px] h-[140px] flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
-            <img
+            <img loading="lazy"
               :src="article.imgUrl"
               :alt="article.title"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -110,7 +110,7 @@ const formatDate = (dateString: string): string => {
 
 const handleImageError = (event: Event) => {
   const target = event.target as HTMLImageElement
-  target.src = 'https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&q=80&w=800'
+  target.src = '/image/home/home-hero-bg.png'
 }
 
 const handleClick = (article: NewsItem) => {

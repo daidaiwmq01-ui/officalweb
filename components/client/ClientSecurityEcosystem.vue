@@ -12,7 +12,7 @@
             >
               <div class="h-[240px] bg-slate-100 relative">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800"
+                  src="/image/transport/hero.webp"
                   alt="Map Tracking"
                   class="w-full h-full object-cover opacity-80"
                 />
@@ -69,7 +69,7 @@
               <ShieldCheck class="w-8 h-8 text-[#FF6B00]" />
               <div>
                 <div class="text-[14px] font-bold text-[#0B2747]">
-                  PICC 运输险
+                  保险公司运输险
                 </div>
                 <div class="text-[10px] text-gray-400">
                   全程保单已生效

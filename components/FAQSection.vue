@@ -83,6 +83,7 @@
 
 <script setup lang="ts">
 import { Headphones, Phone, ChevronDown, HelpCircle, MessageCircle } from 'lucide-vue-next'
+import { useFAQPageSchema } from '@/composables/useSchemaOrg'
 
 const faqs = [
   {
@@ -106,4 +107,6 @@ const faqs = [
     answer: '全程可视化。通过 APP 实时查看 GPS 轨迹，关键节点（装车/到达）主动推送视频验车记录。',
   },
 ]
+
+useFAQPageSchema(faqs)
 </script>

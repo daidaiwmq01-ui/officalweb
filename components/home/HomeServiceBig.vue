@@ -35,11 +35,11 @@
         <!-- Image Right -->
         <div class="w-full lg:w-1/2 relative">
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
-            <img
-              :src="serviceImage"
+            <img loading="lazy"
+              src="/image/home/home-service-big-bg.png"
               alt="Big Carrier Transport"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-              @error="handleImageError"
+              @error="(e) => handleImageError(e)"
             />
           </div>
         </div>
@@ -51,9 +51,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ArrowRight, CheckCircle2 } from 'lucide-vue-next'
-// Import image from images mapping (Agent B's work)
-import { SERVICE_BIG_CARRIER, EXTERNAL_ASSETS } from '@/utils/images'
-
 interface Props {
   setActiveId?: (id: string) => void
 }
@@ -61,10 +58,10 @@ interface Props {
 const props = defineProps<Props>()
 
 const tags = ['价格更低', '每日发车', 'GB1589标准车型']
-const serviceImage = ref(SERVICE_BIG_CARRIER || EXTERNAL_ASSETS.TRUCK_FLATBED_FULL)
 
-const handleImageError = () => {
-  serviceImage.value = EXTERNAL_ASSETS.TRUCK_FLATBED_FULL
+const handleImageError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && !el.src.includes('home-service-big-bg')) el.src = '/image/home/home-service-big-bg.png'
 }
 
 </script>

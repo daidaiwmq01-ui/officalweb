@@ -33,21 +33,19 @@
 
 <script setup lang="ts">
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
 const gallery = [
   {
-    src: EXTERNAL_ASSETS.LUXURY_SHOW,
+    src: '/image/luxury-transport/case1.webp',
     title: "顶级车展支持",
     desc: "为国际 A 类车展提供概念车从 VDC 到展台的全流程入场服务。"
   },
   {
-    src: EXTERNAL_ASSETS.LUXURY_TOUR,
+    src: '/image/luxury-transport/case2.webp',
     title: "品牌全国巡演",
     desc: "助力品牌方实现跨城市快闪店及封闭式私享品鉴会车辆轮动。"
   },
   {
-    src: EXTERNAL_ASSETS.LUXURY_TRACK,
+    src: '/image/luxury-transport/case3.webp',
     title: "赛道日与性能测试",
     desc: "针对改装车、性能车提供往返赛车场的高速直达特种托运服务。"
   }

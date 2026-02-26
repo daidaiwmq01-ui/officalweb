@@ -5,7 +5,7 @@
       <!-- Background Overlay: Binary/Hex Grid -->
       <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-[#0B2747]/40" />
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
         <!-- Hexagonal/Tech Grid Overlay -->
         <div class="absolute inset-0 opacity-[0.05] bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:32px_32px]" />
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#020617]/50 to-[#0F172A]" />
@@ -133,8 +133,8 @@
             <div class="relative aspect-square rounded-[60px] overflow-hidden bg-[#020617] border border-white/5 flex items-center justify-center">
               <div class="absolute inset-0 opacity-20">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
-                  alt="Cyber Security Tech"
+                  src="/image/about/about-lab-main.webp"
+                  alt="车拖车网络安全技术架构图"
                   class="w-full h-full object-cover grayscale"
                 />
               </div>
@@ -242,7 +242,7 @@
           </Button>
           <Button class="h-16 px-10 rounded-2xl border-white/10 hover:bg-white/5 font-bold text-[18px] bg-transparent text-white">
             <Mail class="w-5 h-5 mr-3" />
-            安全咨询：tech@chetuoche.com
+            安全咨询：yunweishu8888@163.com
           </Button>
         </div>
         <p class="mt-8 text-white/30 text-[14px]">
@@ -261,6 +261,17 @@ import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
 useBreadcrumbSchema(getBreadcrumbsForRoute('/cybersecurity'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/cybersecurity')
+
+useHead({
+  title: '网络安全与数据保护 - 国家等保三级认证 - 车拖车',
+  meta: [
+    { name: 'description', content: '车拖车已通过国家信息系统安全等级保护三级认证（DJCP），在数据脱敏、加密传输及服务器深度加固方面达到金融级安全标准。' },
+    { name: 'keywords', content: '网络安全, 等保三级, 数据保护, 信息安全, 车拖车安全' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.ctcapp.com/cybersecurity' }
+  ]
+})
 
 
 import { useRouter } from 'vue-router'
@@ -291,7 +302,7 @@ const cybersecuritySchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '托运平台网络安全防护服务',
-  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
   'serviceType': 'Cybersecurity',
   'description': '基于国家等保三级标准构建的物流数据安全堡垒。提供隐私脱敏、真实运力风控及T级抗DDoS防护。',
   'certification': '国家信息安全等级保护三级认证',

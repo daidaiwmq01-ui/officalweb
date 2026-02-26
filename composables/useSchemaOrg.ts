@@ -6,11 +6,11 @@
 // 全局组织信息 - 所有页面共用
 export const organizationSchema = {
   '@type': 'Organization',
-  '@id': 'https://www.chetuoche.com/#organization',
+  '@id': 'https://www.ctcapp.com/#organization',
   'name': '车拖车 (CheTuoChe)',
   'legalName': '山东车拖车网络科技有限公司',
-  'url': 'https://www.chetuoche.com',
-  'logo': 'https://www.chetuoche.com/logo.png',
+  'url': 'https://www.ctcapp.com',
+  'logo': 'https://www.ctcapp.com/image/logo/logo.png',
   'slogan': '让汽车托运像发快递一样简单',
   'description': '国内领先的AI智能调度汽车托运平台，连接167万用户与45万运力伙伴。',
   'foundingDate': '2020',
@@ -54,13 +54,13 @@ export function useHomePageSchema() {
       organizationSchema,
       {
         '@type': 'WebSite',
-        '@id': 'https://www.chetuoche.com/#website',
-        'url': 'https://www.chetuoche.com',
+        '@id': 'https://www.ctcapp.com/#website',
+        'url': 'https://www.ctcapp.com',
         'name': '车拖车官网 - 全场景AI智能汽车托运调度平台',
-        'publisher': { '@id': 'https://www.chetuoche.com/#organization' },
+        'publisher': { '@id': 'https://www.ctcapp.com/#organization' },
         'potentialAction': {
           '@type': 'SearchAction',
-          'target': 'https://www.chetuoche.com/pricing?q={search_term_string}',
+          'target': 'https://www.ctcapp.com/pricing?q={search_term_string}',
           'query-input': 'required name=search_term_string'
         }
       }
@@ -87,7 +87,7 @@ export function useServiceSchema(config: {
       {
         '@type': 'Service',
         'name': config.name,
-        'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+        'provider': { '@id': 'https://www.ctcapp.com/#organization' },
         'description': config.description,
         'serviceType': config.serviceType || 'Car Transport',
         'areaServed': config.areaServed || 'CN'
@@ -120,29 +120,58 @@ export function useServiceSchema(config: {
 
 /**
  * 文章/新闻详情 Schema
+ * 符合 Google Rich Results 对 NewsArticle 的完整要求：
+ * - publisher 包含 name + logo (ImageObject)
+ * - image 使用绝对 URL
+ * - datePublished / dateModified 使用 ISO 8601 格式
  */
 export function useArticleSchema(article: {
   title: string
   description?: string
   image?: string
+  url?: string
   datePublished?: string
   dateModified?: string
   author?: string
 }) {
-  const schema = computed(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    'headline': article.title,
-    'image': article.image ? [article.image] : undefined,
-    'datePublished': article.datePublished,
-    'dateModified': article.dateModified || article.datePublished,
-    'author': {
-      '@type': 'Organization',
-      'name': article.author || '车拖车研究院'
-    },
-    'publisher': { '@id': 'https://www.chetuoche.com/#organization' },
-    'description': article.description
-  }))
+  const baseUrl = 'https://www.ctcapp.com'
+
+  function toAbsoluteUrl(path?: string): string | undefined {
+    if (!path) return undefined
+    if (/^https?:\/\//.test(path)) return path
+    return `${baseUrl}${path.startsWith('/') ? path : `/${path}`}`
+  }
+
+  const schema = computed(() => {
+    const headline = article.title.length > 110 ? article.title.slice(0, 110) : article.title
+    const imageUrl = toAbsoluteUrl(article.image)
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'NewsArticle',
+      ...(article.url && {
+        'mainEntityOfPage': { '@type': 'WebPage', '@id': article.url }
+      }),
+      'headline': headline,
+      'image': imageUrl ? [imageUrl] : undefined,
+      'datePublished': article.datePublished,
+      'dateModified': article.dateModified || article.datePublished,
+      'author': {
+        '@type': 'Organization',
+        'name': article.author || '车拖车研究院',
+        'url': baseUrl
+      },
+      'publisher': {
+        '@type': 'Organization',
+        'name': '车拖车 (CheTuoChe)',
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${baseUrl}/image/logo/logo.png`
+        }
+      },
+      'description': article.description
+    }
+  })
   
   useSchemaOrg(schema)
 }
@@ -155,7 +184,7 @@ export function useAboutPageSchema() {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
     'mainEntity': {
-      '@id': 'https://www.chetuoche.com/#organization',
+      '@id': 'https://www.ctcapp.com/#organization',
       '@type': 'Organization',
       'foundingDate': '2020',
       'legalName': '山东车拖车网络科技有限公司',
@@ -177,6 +206,28 @@ export function useAboutPageSchema() {
 }
 
 /**
+ * 独立 FAQPage Schema - 适用于任何含 FAQ 的页面
+ */
+export function useFAQPageSchema(faqs: Array<{ question: string; answer: string }>) {
+  if (!faqs || faqs.length === 0) return
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': faqs.map(item => ({
+      '@type': 'Question',
+      'name': item.question,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': item.answer
+      }
+    }))
+  }
+
+  useSchemaOrg(schema)
+}
+
+/**
  * BreadcrumbList Schema - 面包屑结构化数据
  * @param items - 面包屑配置项数组
  * @param currentPath - 当前页面路径（用于末级 URL，可选）
@@ -185,7 +236,7 @@ export function useBreadcrumbSchema(items: Array<{ label: string; path?: string 
   if (!items || items.length === 0) return
 
   const route = useRoute()
-  const baseUrl = 'https://www.chetuoche.com'
+  const baseUrl = 'https://www.ctcapp.com'
   const path = currentPath ?? route.path
 
   const schema = computed(() => {
@@ -215,7 +266,7 @@ export function useContactPageSchema() {
     '@type': 'ContactPage',
     'mainEntity': {
       '@type': 'Organization',
-      '@id': 'https://www.chetuoche.com/#organization',
+      '@id': 'https://www.ctcapp.com/#organization',
       'contactPoint': [
         {
           '@type': 'ContactPoint',

@@ -3,7 +3,8 @@
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
       <img
-        :src="heroBackgroundImage"
+        loading="eager"
+        src="/image/home/home-hero-bg.png"
         alt="车拖车智能汽车物流生态平台-全国覆盖的托运调度服务"
         class="w-full h-full object-cover"
         @error="handleImageError"
@@ -83,27 +84,16 @@
 
           <!-- QR Code Container -->
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
-            <img
-              src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
+            <img loading="lazy"
+              src="/image/contectQR/liteprogress.webp"
               alt="车拖车微信小程序二维码-扫码获取报价"
               class="w-full h-full p-2"
             />
             <!-- Center Icon Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center p-1 border border-gray-100">
-                <MessageCircle class="w-6 h-6 text-[#07C160] fill-current" />
-              </div>
-            </div>
           </div>
 
           <div class="text-[14px] text-gray-400 mb-6 font-medium">
             打开微信 [扫一扫]
-          </div>
-
-          <div class="w-full border-t border-gray-100 pt-6">
-            <button class="text-[14px] text-[#0B2747] hover:text-[#006EFF] font-medium transition-colors cursor-pointer">
-              我是企业用户？<span class="text-[#006EFF] font-bold"> [ 切换至企业版 ]</span>
-            </button>
           </div>
         </div>
       </div>
@@ -113,20 +103,21 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ShieldCheck, Lock, Factory, Zap, MessageCircle } from 'lucide-vue-next'
+import { ShieldCheck, Lock, Factory, Zap } from 'lucide-vue-next'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
 
+const HOME_HERO_SRC = '/image/home/home-hero-bg.png'
+
 const props = defineProps<{}>()
 
 const isMiniProgramModalOpen = ref(false)
-const heroBackgroundImage = ref('https://images.unsplash.com/photo-1644442076205-627648a62844?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMHNlbWklMjB0cnVjayUyMGhpZ2h3YXklMjBzdW5ueXxlbnwxfHx8fDE3NzAwMDQ3NzN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral')
 
-const handleImageError = () => {
-  // Fallback image handling
-  heroBackgroundImage.value = 'https://images.unsplash.com/photo-1644442076205-627648a62844?q=80&w=1080'
+const handleImageError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && !el.src.includes('home-hero-bg.png')) el.src = HOME_HERO_SRC
 }
 
 </script>

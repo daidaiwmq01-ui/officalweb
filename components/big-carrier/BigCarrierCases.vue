@@ -66,13 +66,10 @@
 <script setup lang="ts">
 import { ArrowRight, MapPin } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
-// Replace figma:asset with EXTERNAL_ASSETS URLs
 const cases = [
   {
     tag: '家庭长途搬迁',
-    image: EXTERNAL_ASSETS.TRUCK_FLATBED_FULL,
+    image: '/image/big-carrier/big-case1.webp',
     from: '哈尔滨',
     to: '三亚',
     title: '一家三口避寒过冬，车辆提前发运',
@@ -81,7 +78,7 @@ const cases = [
   },
   {
     tag: 'B2B 批量调拨',
-    image: EXTERNAL_ASSETS.TRUCK_FLATBED_FULL,
+    image: '/image/big-carrier/big-case2.webp',
     from: '广州',
     to: '成都',
     title: '车行批量采购，6台车一次发运',
@@ -90,7 +87,7 @@ const cases = [
   },
   {
     tag: '自驾游返程',
-    image: EXTERNAL_ASSETS.TRUCK_ENCLOSED_BOX,
+    image: '/image/big-carrier/big-case3.webp',
     from: '乌鲁木齐',
     to: '上海',
     title: '特种兵式旅游结束，人车分离返程',

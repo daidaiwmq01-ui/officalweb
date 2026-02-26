@@ -2,11 +2,12 @@
   <div class="bg-white min-h-screen font-['Noto_Sans_SC'] text-[#0B2747]">
 
     <!-- Hero Section：移动端预留面包屑空间 -->
-    <section class="relative w-full min-h-[320px] h-[50vh] sm:h-[400px] overflow-hidden mt-[-80px] pt-[80px]">
+    <section class="relative w-full h-[520px] overflow-hidden mt-[-80px] pt-[80px]">
       <div class="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1764332688472-b970f6ca8915?auto=format&fit=crop&q=80&w=1200"
-          alt="User Guide Hero"
+          loading="eager"
+          src="/image/guide/hero.webp"
+          alt="车拖车用户指南 - 汽车托运流程与避坑百科"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 to-[#0B2747]/40" />
@@ -132,9 +133,9 @@
         <div class="flex flex-col lg:flex-row items-center gap-16">
           <div class="lg:w-1/2 relative">
             <div class="absolute -inset-4 bg-blue-100 rounded-[50px] rotate-3 -z-10" />
-            <img
-              src="https://images.unsplash.com/photo-1715422719211-e6e51fae630f?auto=format&fit=crop&q=80&w=800"
-              alt="Inspection App Interface"
+            <img loading="lazy"
+              src="/image/guide/firstcheck.webp"
+              alt="车拖车APP视频验车界面展示"
               class="w-full max-w-[500px] mx-auto rounded-[40px] shadow-2xl border-8 border-white"
             />
             <div class="absolute bottom-8 right-8 bg-white p-6 rounded-3xl shadow-xl flex items-center gap-4">
@@ -249,8 +250,20 @@ import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
 useBreadcrumbSchema(getBreadcrumbsForRoute('/guide'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/guide')
+
 import { useRouter } from 'vue-router'
 import { useHead } from '#app'
+
+useHead({
+  title: '用户指南 - 汽车托运流程、安全规范与避坑百科 - 车拖车',
+  meta: [
+    { name: 'description', content: '车拖车用户指南：从询价下单、视频验车到保险理赔的全流程拆解，三大托运避坑指南助你避开行业陷阱。' },
+    { name: 'keywords', content: '汽车托运指南, 托运流程, 验车规范, 托运避坑, 车拖车' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.ctcapp.com/guide' }
+  ]
+})
 import {
   ChevronRight,
   XCircle,
@@ -364,9 +377,9 @@ const timelineSteps = [
           <b>可视化追踪：</b>车主可通过车拖车 APP
           实时查看车辆所在位置，定位精确至 1 米级。
         </p>
-        <img
-          src="https://images.unsplash.com/photo-1762232621838-2308d2d5ba33?auto=format&fit=crop&q=80&w=1200"
-          alt="Transit"
+        <img loading="lazy"
+          src="/image/guide/tansite.webp"
+          alt="汽车托运运输途中实景"
           class="w-full h-48 object-cover rounded-2xl shadow-sm"
         />
       </div>
@@ -433,7 +446,7 @@ const schemaMarkup = computed(() => {
       {
         '@type': 'Article',
         'headline': '2026 汽车托运全攻略：避坑指南与验车标准',
-        'author': { '@id': 'https://www.chetuoche.com/#organization' },
+        'author': { '@id': 'https://www.ctcapp.com/#organization' },
         'datePublished': '2024-05-20',
         'description': '深度解析小板车与大板车区别，详解随车行李放置规定及运输保险理赔流程。'
       },

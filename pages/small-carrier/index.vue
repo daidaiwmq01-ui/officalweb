@@ -57,7 +57,7 @@ useHead({
     { name: 'keywords', content: '小板车托运价格, 单车救援拖车, 豪车托运, 专车运车, 门到门汽车快运' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/small-carrier' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/small-carrier' }
   ]
 })
 

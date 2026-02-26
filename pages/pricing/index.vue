@@ -5,8 +5,9 @@
       <!-- Background Image with Navy Gradient Overlay -->
       <div class="absolute inset-0 z-0">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1591768793355-74d7c80b0e17?q=80&w=2000"
+          src="/image/pricing-calculator/hero.webp"
           alt="Chinese truck driver with Blue CheTuoChe Logo on a professional carrier truck"
+        loading="eager"
           class="w-full h-full object-cover opacity-80"
         />
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747] via-[#0B2747]/90 to-transparent z-10" />
@@ -124,27 +125,28 @@
                         <input
                           type="text"
                           :value="fromText"
-                          @focus="showAddressDropdown = true"
-                          @blur="setTimeout(() => showAddressDropdown = false, 200)"
-                          @input="(e: Event) => fromText = (e.target as HTMLInputElement).value"
+                          @focus="() => openSmallSuggestions('from')"
+                          @blur="closeSmallSuggestions"
+                          @input="(e: Event) => handleSmallLocationInput('from', e)"
                           placeholder="请输入出发城市"
                           class="w-full bg-transparent border-none focus:ring-0 p-0 text-[#0B2747] font-bold text-[15px] placeholder:text-gray-300"
                         />
                       </div>
                       <div
-                        v-if="showAddressDropdown"
+                        v-if="smallActiveField === 'from' && smallSuggestions.length > 0"
                         class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[100] p-2"
                       >
                         <div class="text-[10px] text-gray-400 font-bold px-3 py-2 uppercase">
                           常用地点 Suggestion
                         </div>
                         <button
-                          v-for="city in ['北京朝阳', '上海浦东', '广州白云', '深圳南山']"
-                          :key="city"
-                          @click="fromText = city"
+                          v-for="item in smallSuggestions"
+                          :key="item.id"
+                          @click="() => handleSmallSuggestionSelect('from', item)"
                           class="w-full text-left px-3 py-2 text-sm text-[#0B2747] hover:bg-blue-50 rounded-lg transition-colors font-medium"
                         >
-                          {{ city }}
+                          <div>{{ item.title }}</div>
+                          <div v-if="item.address" class="text-[11px] text-gray-400 mt-0.5">{{ item.address }}</div>
                         </button>
                       </div>
                     </div>
@@ -163,10 +165,29 @@
                         <input
                           type="text"
                           :value="toText"
-                          @input="(e: Event) => toText = (e.target as HTMLInputElement).value"
+                          @focus="() => openSmallSuggestions('to')"
+                          @blur="closeSmallSuggestions"
+                          @input="(e: Event) => handleSmallLocationInput('to', e)"
                           placeholder="请输入到达城市"
                           class="w-full bg-transparent border-none focus:ring-0 p-0 text-[#0B2747] font-bold text-[15px] placeholder:text-gray-300"
                         />
+                      </div>
+                      <div
+                        v-if="smallActiveField === 'to' && smallSuggestions.length > 0"
+                        class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[100] p-2"
+                      >
+                        <div class="text-[10px] text-gray-400 font-bold px-3 py-2 uppercase">
+                          常用地点 Suggestion
+                        </div>
+                        <button
+                          v-for="item in smallSuggestions"
+                          :key="item.id"
+                          @click="() => handleSmallSuggestionSelect('to', item)"
+                          class="w-full text-left px-3 py-2 text-sm text-[#0B2747] hover:bg-blue-50 rounded-lg transition-colors font-medium"
+                        >
+                          <div>{{ item.title }}</div>
+                          <div v-if="item.address" class="text-[11px] text-gray-400 mt-0.5">{{ item.address }}</div>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -216,6 +237,34 @@
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="text-[15px] font-bold text-[#0B2747]">承运车型</label>
+                  <select
+                    :value="selectedCarrierBoard"
+                    @change="(e: Event) => selectedCarrierBoard = (e.target as HTMLSelectElement).value"
+                    class="w-full h-12 bg-gray-50 rounded-lg px-4 text-sm focus:outline-none focus:ring-1 focus:ring-[#006EFF] transition-all border border-gray-100"
+                  >
+                    <option value="">
+                      {{ carrierLoading ? '正在加载承运车型...' : '请选择承运车型（可选）' }}
+                    </option>
+                    <option v-for="item in carrierOptions" :key="item.value" :value="item.label">
+                      {{ item.label }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="text-[15px] font-bold text-[#0B2747]">手机号</label>
+                  <input
+                    type="tel"
+                    inputmode="numeric"
+                    placeholder="请输入手机号"
+                    :value="phoneNumber"
+                    @input="(e: Event) => phoneNumber = (e.target as HTMLInputElement).value"
+                    class="w-full h-12 bg-gray-50 rounded-lg px-4 text-sm focus:outline-none focus:ring-1 focus:ring-[#006EFF] transition-all"
+                  />
                 </div>
 
                 <div class="pt-6 border-t border-gray-100 flex items-center justify-between">
@@ -274,7 +323,7 @@
                             ¥
                           </span>
                           <span class="text-5xl font-mono font-bold text-[#FF6B00]">
-                            1,850
+                            {{ smallPriceDisplay }}
                           </span>
                           <span class="text-gray-400 text-sm ml-2">
                             起
@@ -294,9 +343,9 @@
                     <div class="space-y-4 pt-2">
                       <div class="flex justify-between text-sm">
                         <span class="text-gray-400">
-                          基础运输费 (860km)
+                          基础运输费 ({{ smallDistanceDisplay }}km)
                         </span>
-                        <span class="font-bold">¥1,650</span>
+                        <span class="font-bold">¥{{ smallBaseFeeDisplay }}</span>
                       </div>
                       <div class="flex justify-between text-sm">
                         <span class="text-gray-400">
@@ -308,20 +357,23 @@
                         <span class="text-gray-400">
                           运输保险 (货值100万)
                         </span>
-                        <span class="font-bold text-[#006EFF]">
-                          额外购买
-                        </span>
+                        <span class="font-bold text-[#006EFF]">¥{{ smallInsuranceFeeDisplay }}</span>
                       </div>
                     </div>
 
                     <div class="pt-8 space-y-4">
                       <Button
-                        @click="showQrModal = true"
+                        @click="handleSmallCalculate"
+                        :disabled="isCalculatingSmall"
                         class="w-full h-16 bg-[#006EFF] hover:bg-blue-600 text-white rounded-2xl font-bold text-lg shadow-lg shadow-blue-900/40 group"
                       >
-                        立即下单 (Book Now)
-                        <ChevronRight class="ml-2 group-hover:translate-x-1 transition-transform" />
+                        <span v-if="isCalculatingSmall">计算中...</span>
+                        <span v-else>立即计算价格</span>
+                        <ChevronRight v-if="!isCalculatingSmall" class="ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
+                      <p v-if="smallCalcError" class="text-center text-[11px] text-red-300 px-4">
+                        {{ smallCalcError }}
+                      </p>
                       <p class="text-center text-[11px] text-gray-500 px-4">
                         点击即代表您同意《车拖车运输服务协议》及《隐私政策》，本报价为参考价，最终结算以实际行程为准。
                       </p>
@@ -1288,8 +1340,8 @@
         <div class="p-4 bg-gray-50 rounded-3xl mb-8 relative group">
           <div class="aspect-square bg-white rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-200 group-hover:border-[#006EFF] transition-colors overflow-hidden">
             <ImageWithFallback
-              src="https://images.unsplash.com/photo-1595079676339-1534801ad6cf?q=80&w=500"
-              alt="QR Code Placeholder"
+              src="/image/pricing-calculator/hero.webp"
+              alt="扫码下载车拖车APP获取精确报价"
               class="w-full h-full object-cover p-4 opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
             />
             <div class="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-[2px] group-hover:opacity-0 transition-opacity">
@@ -1325,14 +1377,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useFAQPageSchema } from '@/composables/useSchemaOrg'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/pricing'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/pricing')
+
+useHead({
+  title: '汽车托运价格查询 - 在线运费计算器 - 车拖车',
+  meta: [
+    { name: 'description', content: '车拖车在线运费计算器，输入出发地与目的地即可获取大板车、小板车托运报价。透明定价，无隐藏费用，覆盖全国30000+条线路。' },
+    { name: 'keywords', content: '汽车托运价格, 托运运费, 板车运费计算, 汽车运输报价, 车拖车价格' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://www.ctcapp.com/pricing' }
+  ]
+})
 
 import {
   ChevronDown,
@@ -1380,10 +1443,11 @@ const props = withDefaults(defineProps<Props>(), {
 // All 15+ useState converted to ref()
 const activeTab = ref(props.initialTab)
 const isInsuranceActive = ref(true)
-const showAddressDropdown = ref(false)
 const fromText = ref('北京朝阳')
 const toText = ref('')
 const selectedVehicle = ref('')
+const selectedVehicleCode = ref<number | null>(null)
+const phoneNumber = ref('')
 const selectedRescueOptions = ref<string[]>([])
 const selectedTimeSlot = ref('今日')
 const isSwapping = ref(false)
@@ -1392,6 +1456,41 @@ const activeZoneTab = ref('华北地区')
 const selectedProvince = ref('北京')
 const selectedDistrict = ref('朝阳区')
 const openFaq = ref<number | null>(null)
+const isCalculatingSmall = ref(false)
+const smallCalcError = ref('')
+const smallResult = ref<{ distance: number; basePrice: number; insurance: number; total: number } | null>(null)
+
+interface SuggestionItem {
+  id: string
+  title: string
+  address?: string
+  adcode?: number
+  city?: string
+  province?: string
+}
+
+interface CarrierOption {
+  value: string
+  label: string
+}
+
+const smallSuggestions = ref<SuggestionItem[]>([])
+const carrierOptions = ref<CarrierOption[]>([])
+const selectedCarrierBoard = ref('')
+const carrierLoading = ref(false)
+const smallActiveField = ref<'from' | 'to' | null>(null)
+const smallSuggestionService = ref<any>(null)
+const tmapLoaded = ref(false)
+const originMeta = ref<{ adcode?: number; city?: string; province?: string }>({})
+const destMeta = ref<{ adcode?: number; city?: string; province?: string }>({})
+let fromDebounceTimer: number | null = null
+let toDebounceTimer: number | null = null
+let blurTimer: number | null = null
+
+const config = useRuntimeConfig()
+const TMAP_KEY = config.public.tmapKey
+const TMAP_SCRIPT_ID = 'tmap-js-sdk'
+const TMAP_SCRIPT_SRC = `https://map.qq.com/api/gljs?v=1.exp&key=${TMAP_KEY}&libraries=service`
 
 const TABS = [
   { id: 'small', label: '小板车托运', icon: Truck },
@@ -1451,26 +1550,31 @@ const REGION_DATA: Record<string, any> = {
     ],
     routes: [
       {
-        category: '上海方向',
+        category: '北京出发',
         items: [
-          { name: '上海浦东', price: '¥1300起' },
-          { name: '上海闵行', price: '¥1350起' },
-          { name: '上海嘉定', price: '¥1280起' },
+          { name: '上海', price: '¥1400' },
+          { name: '广州', price: '¥1700' },
+          { name: '深圳', price: '¥1900' },
+          { name: '成都', price: '¥1500' },
+          { name: '重庆', price: '¥1700' },
         ],
       },
       {
-        category: '广东方向',
+        category: '京津出发',
         items: [
-          { name: '广州白云', price: '¥1800起' },
-          { name: '深圳南山', price: '¥1900起' },
-          { name: '东莞', price: '¥1750起' },
+          { name: '郑州', price: '¥800' },
+          { name: '上海', price: '¥1100' },
+          { name: '广州', price: '¥1800' },
+          { name: '成都', price: '¥1600' },
+          { name: '南宁', price: '¥2200' },
         ],
       },
       {
         category: '海南方向',
         items: [
-          { name: '三亚', price: '¥2800' },
-          { name: '海口', price: '¥2200' },
+          { name: '海口', price: '¥2800油' },
+          { name: '三亚', price: '¥3100油' },
+          { name: '三亚（天津）', price: '¥3500油' },
         ],
         hot: true,
       },
@@ -1496,27 +1600,33 @@ const REGION_DATA: Record<string, any> = {
     ],
     routes: [
       {
-        category: '华北方向',
+        category: '上海出发（华北/西部）',
         items: [
-          { name: '北京', price: '¥1300起' },
-          { name: '天津', price: '¥1250起' },
-          { name: '大连 (海运+陆运)', price: '¥1600起' },
+          { name: '北京', price: '¥1300' },
+          { name: '西安', price: '¥1300' },
+          { name: '成都', price: '¥1500' },
+          { name: '重庆', price: '¥1300' },
+          { name: '武汉', price: '¥1000' },
         ],
       },
       {
-        category: '西部方向',
+        category: '上海出发（华南/西南）',
         items: [
-          { name: '成都', price: '¥2100' },
-          { name: '重庆', price: '¥2050' },
-          { name: '西安', price: '¥1800' },
+          { name: '广州', price: '¥1500' },
+          { name: '深圳', price: '¥1600' },
+          { name: '昆明', price: '¥2200' },
+          { name: '贵阳', price: '¥1600' },
+          { name: '海口', price: '¥2800油' },
         ],
       },
       {
-        category: '华南方向',
+        category: '杭州出发',
         items: [
-          { name: '广州', price: '¥1800' },
-          { name: '深圳', price: '¥1850' },
-          { name: '东莞', price: '¥1700' },
+          { name: '上海', price: '¥400' },
+          { name: '北京', price: '¥1500' },
+          { name: '广州', price: '¥1500' },
+          { name: '西安', price: '¥1300' },
+          { name: '成都', price: '¥1700' },
         ],
       },
     ],
@@ -1538,20 +1648,33 @@ const REGION_DATA: Record<string, any> = {
     ],
     routes: [
       {
-        category: '候鸟专线 (Seasonal)',
+        category: '深圳出发',
         items: [
-          { name: '三亚', price: '¥2500' },
-          { name: '海口', price: '¥2200' },
-          { name: '哈尔滨 (避暑)', price: '¥3500' },
+          { name: '北京', price: '¥1500' },
+          { name: '上海', price: '¥1000' },
+          { name: '成都', price: '¥1300' },
+          { name: '杭州', price: '¥1100' },
+          { name: '重庆', price: '¥1050' },
         ],
-        seasonal: true,
       },
       {
-        category: '商务干线',
+        category: '广州出发',
         items: [
-          { name: '北京', price: '¥2000' },
-          { name: '上海', price: '¥1800' },
-          { name: '杭州', price: '¥1750' },
+          { name: '北京', price: '¥1400' },
+          { name: '上海', price: '¥1000' },
+          { name: '成都', price: '¥1100' },
+          { name: '重庆', price: '¥900' },
+          { name: '西安', price: '¥1200' },
+        ],
+      },
+      {
+        category: '华南周边',
+        items: [
+          { name: '长沙', price: '¥950' },
+          { name: '衡阳', price: '¥950' },
+          { name: '湘潭', price: '¥1150' },
+          { name: '郴州', price: '¥1200' },
+          { name: '郑州', price: '¥1300' },
         ],
       },
     ],
@@ -1572,18 +1695,29 @@ const REGION_DATA: Record<string, any> = {
     ],
     routes: [
       {
-        category: '长途干线',
+        category: '武汉出发',
         items: [
-          { name: '乌鲁木齐 (长途)', price: '¥4500' },
-          { name: '拉萨 (进藏)', price: '¥5200' },
+          { name: '北京', price: '¥1400' },
+          { name: '广州', price: '¥1200' },
+          { name: '上海', price: '¥1000' },
+          { name: '西安', price: '¥1200' },
+          { name: '昆明', price: '¥2100' },
         ],
       },
       {
-        category: '沿海方向',
+        category: '华中北上',
         items: [
-          { name: '宁波', price: '¥1200' },
-          { name: '温州', price: '¥1300' },
-          { name: '厦门', price: '¥1500' },
+          { name: '沈阳', price: '¥1600' },
+          { name: '哈尔滨', price: '¥2200' },
+        ],
+      },
+      {
+        category: '郑州出发',
+        items: [
+          { name: '上海', price: '¥1000' },
+          { name: '沈阳', price: '¥1500' },
+          { name: '南宁', price: '¥1600' },
+          { name: '乌鲁木齐', price: '¥3100' },
         ],
       },
     ],
@@ -1604,17 +1738,33 @@ const REGION_DATA: Record<string, any> = {
     ],
     routes: [
       {
-        category: '进藏特色',
+        category: '成都出发',
         items: [
-          { name: '拉萨 (318返程车)', price: '¥1800' },
-          { name: '林芝', price: '¥2200' },
+          { name: '北京', price: '¥1700' },
+          { name: '广州', price: '¥1700' },
+          { name: '深圳', price: '¥1900' },
+          { name: '杭州', price: '¥1700' },
+          { name: '拉萨', price: '¥2500' },
         ],
       },
       {
-        category: '返程干线',
+        category: '昆明出发',
         items: [
-          { name: '北京 (返程)', price: '¥1500' },
-          { name: '上海 (返程)', price: '¥1400' },
+          { name: '成都', price: '¥800' },
+          { name: '重庆', price: '¥600' },
+          { name: '广州', price: '¥1000' },
+          { name: '上海', price: '¥1500' },
+          { name: '北京', price: '¥1900' },
+        ],
+      },
+      {
+        category: '西安/乌鲁木齐出发',
+        items: [
+          { name: '成都', price: '¥800' },
+          { name: '重庆', price: '¥600' },
+          { name: '济南', price: '¥900' },
+          { name: '北京', price: '¥1000' },
+          { name: '上海', price: '¥1700' },
         ],
       },
     ],
@@ -1720,6 +1870,307 @@ const faqs = [
   },
 ]
 
+const smallPriceDisplay = computed(() => {
+  if (!smallResult.value?.total) return '--'
+  return Math.round(smallResult.value.total).toLocaleString('zh-CN')
+})
+const smallDistanceDisplay = computed(() => Math.round(smallResult.value?.distance || 0))
+const smallBaseFeeDisplay = computed(() => Math.round(smallResult.value?.basePrice || 0).toLocaleString('zh-CN'))
+const smallInsuranceFeeDisplay = computed(() => Math.round(smallResult.value?.insurance || 0).toLocaleString('zh-CN'))
+
+const loadTMap = () => {
+  if (typeof window === 'undefined') {
+    return Promise.reject(new Error('TMap only runs in browser'))
+  }
+  if ((window as any).TMap?.service) {
+    return Promise.resolve((window as any).TMap)
+  }
+
+  const existingScript = document.getElementById(TMAP_SCRIPT_ID) as HTMLScriptElement | null
+  if (existingScript) {
+    return new Promise((resolve, reject) => {
+      existingScript.addEventListener('load', () => resolve((window as any).TMap))
+      existingScript.addEventListener('error', () => reject(new Error('TMap script failed to load')))
+    })
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.id = TMAP_SCRIPT_ID
+    script.src = TMAP_SCRIPT_SRC
+    script.async = true
+    script.onload = () => resolve((window as any).TMap)
+    script.onerror = () => reject(new Error('TMap script failed to load'))
+    document.head.appendChild(script)
+  })
+}
+
+const initSmallSuggestionService = async () => {
+  try {
+    const TMap = await loadTMap()
+    if (!TMap?.service?.Suggestion) return
+    smallSuggestionService.value = new TMap.service.Suggestion({
+      pageSize: 6,
+      policy: 1,
+    })
+    tmapLoaded.value = true
+  } catch {
+    tmapLoaded.value = false
+  }
+}
+
+const fetchSmallSuggestions = async (field: 'from' | 'to', keyword: string) => {
+  if (!smallSuggestionService.value || !tmapLoaded.value) return
+  try {
+    const response = await smallSuggestionService.value.getSuggestions({ keyword })
+    if (smallActiveField.value !== field) return
+    if (response?.status === 0 && Array.isArray(response.data)) {
+      smallSuggestions.value = response.data.map((item: any, index: number) => ({
+        id: `${field}-${item.id || item.title || index}`,
+        title: item.title || item.name || keyword,
+        address: item.address || item.district || '',
+        adcode: Number(item.adcode || 0) || undefined,
+        city: item.city || item.cityname || '',
+        province: item.province || item.prov || '',
+      }))
+    } else {
+      smallSuggestions.value = []
+    }
+  } catch {
+    smallSuggestions.value = []
+  }
+}
+
+const scheduleSmallSuggestionFetch = (field: 'from' | 'to', keyword: string) => {
+  const trimmed = keyword.trim()
+  if (!trimmed) {
+    smallSuggestions.value = []
+    return
+  }
+  const timerRef = field === 'from' ? fromDebounceTimer : toDebounceTimer
+  if (timerRef) window.clearTimeout(timerRef)
+  const timeoutId = window.setTimeout(() => {
+    void fetchSmallSuggestions(field, trimmed)
+  }, 250)
+  if (field === 'from') fromDebounceTimer = timeoutId
+  else toDebounceTimer = timeoutId
+}
+
+const openSmallSuggestions = (field: 'from' | 'to') => {
+  if (blurTimer) window.clearTimeout(blurTimer)
+  smallActiveField.value = field
+  const value = field === 'from' ? fromText.value : toText.value
+  if (value.trim()) scheduleSmallSuggestionFetch(field, value)
+}
+
+const closeSmallSuggestions = () => {
+  if (blurTimer) window.clearTimeout(blurTimer)
+  blurTimer = window.setTimeout(() => {
+    smallActiveField.value = null
+  }, 200)
+}
+
+const handleSmallLocationInput = (field: 'from' | 'to', event: Event) => {
+  const value = (event.target as HTMLInputElement).value
+  if (field === 'from') {
+    fromText.value = value
+    originMeta.value = {}
+  } else {
+    toText.value = value
+    destMeta.value = {}
+  }
+  smallActiveField.value = field
+  scheduleSmallSuggestionFetch(field, value)
+}
+
+const handleSmallSuggestionSelect = (field: 'from' | 'to', item: SuggestionItem) => {
+  if (field === 'from') {
+    fromText.value = item.title
+    originMeta.value = {
+      adcode: item.adcode,
+      city: item.city,
+      province: item.province,
+    }
+  } else {
+    toText.value = item.title
+    destMeta.value = {
+      adcode: item.adcode,
+      city: item.city,
+      province: item.province,
+    }
+  }
+  smallSuggestions.value = []
+  smallActiveField.value = null
+}
+
+const fetchSmallVehicleCodes = async () => {
+  try {
+    const res: any = await $fetch('/api/order/vehicleCombine/listRecommend', { method: 'GET' })
+    const list = Array.isArray(res?.data) ? res.data : []
+    const matched = list.find((item: any) => item?.carModel === selectedVehicle.value)
+    if (matched) {
+      selectedVehicleCode.value = Number(matched.carModelCode)
+      return
+    }
+    const fallbackMap: Record<string, number> = {
+      '轿车': 1,
+      'SUV': 2,
+      '跑车': 3,
+      '面包车': 4,
+      '皮卡': 5,
+      '摩托车': 6,
+    }
+    selectedVehicleCode.value = fallbackMap[selectedVehicle.value] ?? null
+  } catch {
+    const fallbackMap: Record<string, number> = {
+      '轿车': 1,
+      'SUV': 2,
+      '跑车': 3,
+      '面包车': 4,
+      '皮卡': 5,
+      '摩托车': 6,
+    }
+    selectedVehicleCode.value = fallbackMap[selectedVehicle.value] ?? null
+  }
+}
+
+const resolveSmallLocationMeta = async (
+  field: 'from' | 'to'
+): Promise<{ adcode?: number; city?: string; province?: string }> => {
+  const currentMeta = field === 'from' ? originMeta.value : destMeta.value
+  if (currentMeta?.adcode) {
+    return currentMeta
+  }
+
+  const keyword = (field === 'from' ? fromText.value : toText.value).trim()
+  if (!keyword || !smallSuggestionService.value || !tmapLoaded.value) {
+    return {}
+  }
+
+  try {
+    const response = await smallSuggestionService.value.getSuggestions({ keyword })
+    if (response?.status === 0 && Array.isArray(response.data) && response.data.length > 0) {
+      const first = response.data[0]
+      const resolved = {
+        adcode: Number(first?.adcode || 0) || undefined,
+        city: first?.city || first?.cityname || '',
+        province: first?.province || first?.prov || '',
+      }
+      if (field === 'from') {
+        originMeta.value = resolved
+      } else {
+        destMeta.value = resolved
+      }
+      return resolved
+    }
+  } catch {
+    // ignore and fallback to empty meta
+  }
+
+  return {}
+}
+
+const normalizeCarrierOptions = (payload: any): CarrierOption[] => {
+  const list: CarrierOption[] = []
+  const unique = new Set<string>()
+  const topLevel = Array.isArray(payload?.data) ? payload.data : []
+
+  topLevel.forEach((vehicleNode: any) => {
+    const vehicleName = String(vehicleNode?.name || '')
+    const typeNodes = Array.isArray(vehicleNode?.vehicleType) ? vehicleNode.vehicleType : []
+    typeNodes.forEach((typeNode: any) => {
+      const typeName = String(typeNode?.name || '')
+      const plateNodes = Array.isArray(typeNode?.licensePlate) ? typeNode.licensePlate : []
+      plateNodes.forEach((plateNode: any) => {
+        const plateName = String(plateNode?.name || '')
+        const infoDesc = String(plateNode?.info?.infoDesc || '').trim()
+        const labelMain = [vehicleName, typeName, plateName].filter(Boolean).join(' · ')
+        const label = infoDesc ? `${labelMain}（${infoDesc}）` : labelMain
+        const value = String(plateNode?.info?.id ?? plateNode?.id ?? label)
+        const key = `${value}|${label}`
+        if (!label || unique.has(key)) return
+        unique.add(key)
+        list.push({ value, label })
+      })
+    })
+  })
+
+  return list
+}
+
+const fetchSmallCarrierOptions = async () => {
+  carrierLoading.value = true
+  try {
+    const res: any = await $fetch('/api/order/vehicleCombine/listTree/v2', { method: 'GET' })
+    carrierOptions.value = normalizeCarrierOptions(res)
+  } catch {
+    carrierOptions.value = []
+  } finally {
+    carrierLoading.value = false
+  }
+}
+
+const handleSmallCalculate = async () => {
+  smallCalcError.value = ''
+  if (!fromText.value || !toText.value) {
+    smallCalcError.value = '请输入出发地和目的地'
+    return
+  }
+  if (!selectedVehicle.value || !selectedVehicleCode.value) {
+    smallCalcError.value = '请选择有效车型'
+    return
+  }
+  const resolvedOrigin = await resolveSmallLocationMeta('from')
+  const resolvedDest = await resolveSmallLocationMeta('to')
+  if (!resolvedOrigin.adcode || !resolvedDest.adcode) {
+    smallCalcError.value = '请输入有效的出发地与目的地'
+    return
+  }
+  if (!phoneNumber.value.trim()) {
+    smallCalcError.value = '请输入手机号'
+    return
+  }
+
+  isCalculatingSmall.value = true
+  try {
+    const response: any = await $fetch('/api/order/orderFeeV4', {
+      method: 'POST',
+      body: {
+        channelSource: '3017',
+        orderType: 0,
+        carTypeCode: selectedVehicleCode.value,
+        carType: selectedVehicle.value,
+        origin: resolvedOrigin.adcode,
+        originCity: resolvedOrigin.city || '',
+        originProvince: resolvedOrigin.province || '',
+        destination: resolvedDest.adcode,
+        destCity: resolvedDest.city || '',
+        destProvince: resolvedDest.province || '',
+        phone: phoneNumber.value.trim(),
+        remark: selectedCarrierBoard.value
+          ? `pricing-小板车计算器；承运板车:${selectedCarrierBoard.value}`
+          : 'pricing-小板车计算器',
+      },
+    })
+    const data = response?.data ?? response?.result ?? response
+    const total = Number(data?.totalFee ?? data?.total ?? data?.amount ?? data?.price ?? data?.fee ?? 0) || 0
+    const distance = Number(data?.distance ?? data?.mile ?? data?.km ?? 0) || 0
+    const insurance = Number(data?.insuranceFee ?? data?.insurance ?? 0) || 0
+    const basePrice = Number(data?.baseFee ?? data?.basePrice ?? Math.max(total - insurance, 0))
+    if (!total) {
+      smallCalcError.value = response?.msg || response?.message || '未获取到有效运费'
+      smallResult.value = null
+      return
+    }
+    smallResult.value = { distance, basePrice, insurance, total }
+  } catch (error: any) {
+    smallCalcError.value = error?.message || '运费请求失败'
+    smallResult.value = null
+  } finally {
+    isCalculatingSmall.value = false
+  }
+}
+
 const handleZoneChange = (zone: string) => {
   activeZoneTab.value = zone
   const data = REGION_DATA[zone]
@@ -1731,8 +2182,11 @@ const handleSwapAddresses = () => {
   isSwapping.value = true
   setTimeout(() => {
     const temp = fromText.value
+    const tempMeta = { ...originMeta.value }
     fromText.value = toText.value
     toText.value = temp
+    originMeta.value = { ...destMeta.value }
+    destMeta.value = tempMeta
     isSwapping.value = false
   }, 300)
 }
@@ -1751,8 +2205,23 @@ const setActiveId = (id: string) => {
   props.setActiveId?.(id)
 }
 
+watch(selectedVehicle, () => {
+  void fetchSmallVehicleCodes()
+})
+
+onMounted(() => {
+  void initSmallSuggestionService()
+  void fetchSmallVehicleCodes()
+  void fetchSmallCarrierOptions()
+})
+
+onUnmounted(() => {
+  if (fromDebounceTimer) window.clearTimeout(fromDebounceTimer)
+  if (toDebounceTimer) window.clearTimeout(toDebounceTimer)
+  if (blurTimer) window.clearTimeout(blurTimer)
+})
+
 // Watch for zone changes to update province/district
-import { watch } from 'vue'
 watch(activeZoneTab, (newZone) => {
   const data = REGION_DATA[newZone]
   selectedProvince.value = data.defaultProvince
@@ -1776,4 +2245,5 @@ const pricingSchema = {
 }
 
 useSchemaOrg(pricingSchema)
+useFAQPageSchema(faqs.map(f => ({ question: f.q, answer: f.a })))
 </script>

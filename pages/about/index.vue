@@ -5,8 +5,9 @@
       <!-- Abstract Tech Background -->
       <div class="absolute inset-0 opacity-20 z-0">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1596468257587-0ef5ee6709e3"
-          alt="Tech Background"
+          src="/image/about/hero.webp"
+          alt="车拖车智能科技背景 - 数字化汽车物流平台"
+        loading="eager"
           class="w-full h-full object-cover"
         />
       </div>
@@ -88,18 +89,18 @@
                   的一体化发展战略。我们不仅是传统运力与数字化技术的撮合者，更是汽车物流行业信任标准与服务标准的定义者。通过自研的数智供应链系统，我们实现了物流轨迹的毫秒级更新。
                 </p>
                 <p class="text-[16px] text-gray-600 leading-[1.8] break-words">
-                  凭借自有及挂靠的{" "}
+                  凭借自有及挂靠的
                   <span class="text-[#FF6B00] font-bold">
                     100,000台
-                  </span>{" "}
-                  合规运力车辆，以及覆盖全国的{" "}
+                  </span>
+                  合规运力车辆，以及覆盖全国的
                   <span class="text-[#FF6B00] font-bold">
                     45万
-                  </span>{" "}
-                  名认证司机，车拖车已实现年 GMV 突破{" "}
+                  </span>
+                  名认证司机，车拖车已实现年 GMV 突破
                   <span class="text-[#FF6B00] font-bold">
                     43亿
-                  </span>{" "}
+                  </span>
                   的规模化跨越。我们在临沂市建立了
                   <strong>汽车数智供应链重点实验室</strong>
                   ，并拥有自己的<strong>板车制造基地</strong>
@@ -154,8 +155,8 @@
               class="relative rounded-2xl sm:rounded-[40px] overflow-hidden shadow-2xl group w-full"
             >
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1657980928718-a97f012f552e"
-                alt="CheTuoChe Lab"
+                src="/image/about/about-lab-main.png"
+                alt="临沂汽车数智供应链重点实验室"
                 class="w-full h-[280px] sm:h-[500px] object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-[#0B2747]/80 to-transparent" />
@@ -197,7 +198,7 @@
                   ，通过自主研发实现了清障车与轿运车的标准化量产。
                 </p>
                 <p class="text-[16px] text-gray-600 leading-[1.8]">
-                  依托"数智供应链实验室"的研发成果，我们将物联网（IoT）技术直接融入板车制造过程，确保每一台产出的运输车都具备原生数字化追踪能力。目前，平台年产规模已达{" "}
+                  依托"数智供应链实验室"的研发成果，我们将物联网（IoT）技术直接融入板车制造过程，确保每一台产出的运输车都具备原生数字化追踪能力。目前，平台年产规模已达
                   <span class="text-[#FF6B00] font-bold">
                     1,500 台
                   </span>
@@ -659,7 +660,7 @@ useHead({
     { name: 'keywords', content: '车拖车简介, 数字化物流公司, 汽车托运资质, 临沂汽车数智供应链实验室, 车拖车历程' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/about' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/about' }
   ]
 })
 

@@ -3,8 +3,9 @@
     <!-- Background Image with Parallax effect (simulated via scroll-attachment if possible or just fixed) -->
     <div class="absolute inset-0 z-0">
       <ImageWithFallback 
-        :src="bgImage" 
-        alt="Car carrier truck on highway" 
+        src="/image/transport/hero.webp" 
+        alt="Car carrier truck on highway"
+        loading="eager" 
         class="w-full h-full object-cover"
       />
       <!-- Gradient Overlay -->
@@ -43,6 +44,4 @@ import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 
 const breadcrumbItems = getBreadcrumbsForRoute('/transport')
-
-const bgImage = "https://images.unsplash.com/photo-1644442076205-627648a62844?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXIlMjBjYXJyaWVyJTIwdHJ1Y2slMjBoaWdod2F5JTIwc3VubnklMjBkYXl8ZW58MXx8fHwxNzY5MTM0ODA4fDA&ixlib=rb-4.1.0&q=80&w=1080"
 </script>

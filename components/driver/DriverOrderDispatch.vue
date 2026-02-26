@@ -37,7 +37,7 @@
           <div class="relative w-full max-w-full aspect-[4/3] bg-[#F8F9FB] rounded-2xl sm:rounded-[40px] border border-gray-100 flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 opacity-40">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1710242078536-fe62a305a86c"
+                src="/image/driver/mockup.png"
                 alt="App Interface"
                 class="w-full h-full object-cover"
               />

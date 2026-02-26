@@ -112,15 +112,10 @@
           <!-- QR Code Container -->
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
             <ImageWithFallback 
-              src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
+              src="/image/contectQR/liteprogress.webp"
               alt="WeChat Mini Program QR"
               class="w-full h-full p-2"
             />
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center p-1 border border-gray-100">
-                <MessageCircle class="w-6 h-6 text-[#07C160] fill-current" />
-              </div>
-            </div>
           </div>
 
           <div class="text-[14px] text-gray-400 mb-6 font-medium">
@@ -134,7 +129,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ArrowRight, Calculator, MessageCircle } from 'lucide-vue-next'
+import { ArrowRight, Calculator } from 'lucide-vue-next'
 import Dialog from '@/components/ui/Dialog.vue'
 import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
@@ -150,7 +145,7 @@ const pricingData = [
     vehicle: '轿车/SUV',
     time: '3-4 天',
     freq: '每日发车',
-    price: '2200',
+    price: '1700',
   },
   {
     from: '上海',
@@ -158,7 +153,7 @@ const pricingData = [
     vehicle: '轿车/SUV',
     time: '4-5 天',
     freq: '每日发车',
-    price: '2400',
+    price: '1500',
   },
   {
     from: '深圳',
@@ -166,7 +161,7 @@ const pricingData = [
     vehicle: '轿车/SUV',
     time: '3-4 天',
     freq: '每日发车',
-    price: '2300',
+    price: '1500',
   },
   {
     from: '沈阳',
@@ -175,7 +170,7 @@ const pricingData = [
     vehicle: '轿车/SUV',
     time: '5-7 天',
     freq: '隔日发车',
-    price: '3500',
+    price: '3800',
   },
   {
     from: '杭州',
@@ -183,7 +178,7 @@ const pricingData = [
     vehicle: '轿车/SUV',
     time: '3-4 天',
     freq: '每日发车',
-    price: '2100',
+    price: '1300',
   },
 ]
 

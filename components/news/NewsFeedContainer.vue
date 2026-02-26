@@ -42,7 +42,7 @@ const MOCK_NEWS_LIST: NewsItem[] = [
     summary: "在非标物流领域，空驶率一直是制约效率的瓶颈。临沂汽车数智供应链实验室最新发布的调度模型显示，通过多维度路径优化，可大幅降低车辆空载时间。",
     createTime: "2026-05-12",
     author: "车拖车研究院",
-    imgUrl: "https://images.unsplash.com/photo-1720382248625-dc19de24834c?auto=format&fit=crop&q=80&w=800"
+    imgUrl: "/image/home/home-hero-bg.png"
   },
   {
     id: 2,
@@ -50,7 +50,7 @@ const MOCK_NEWS_LIST: NewsItem[] = [
     summary: "随着新能源汽车渗透率提升，托运清障需求正发生结构性变化。本文深入分析了新一代数智化清障车的技术演进路径、核心零部件国产化进程。",
     createTime: "2026-05-10",
     author: "产品中心",
-    imgUrl: "https://images.unsplash.com/photo-1764670435420-fad750bfd88d?auto=format&fit=crop&q=80&w=800"
+    imgUrl: "/image/solutions/hero.webp"
   },
   {
     id: 3,
@@ -58,7 +58,7 @@ const MOCK_NEWS_LIST: NewsItem[] = [
     summary: "车拖车平台在数据脱敏、加密传输及服务器深度加固方面完成全面升级，正式获得等保三级认证。这标志着平台在保障B端客户业务数据安全方面已达到金融级标准。",
     createTime: "2026-05-08",
     author: "信息安全部",
-    imgUrl: "https://images.unsplash.com/photo-1620712943543-bcc4628c9757?auto=format&fit=crop&q=80&w=800"
+    imgUrl: "/image/transport/hero.webp"
   },
   {
     id: 4,
@@ -66,7 +66,7 @@ const MOCK_NEWS_LIST: NewsItem[] = [
     summary: "非标服务标准化是物流行业的圣杯。我们总结了从交车验车到收车支付的 300 条核心作业准则，旨在打造行业级的透明度标杆与信任基础。",
     createTime: "2026-05-05",
     author: "专家组",
-    imgUrl: "https://images.unsplash.com/photo-1720382248625-dc19de24834c?auto=format&fit=crop&q=80&w=800"
+    imgUrl: "/image/home/home-hero-bg.png"
   }
 ]
 
@@ -110,7 +110,7 @@ const fetchNews = async () => {
       summary: (item as { briefIntroduction?: string }).briefIntroduction || item.desc || item.summary || "暂无简介",
       createTime: (item as { publishTime?: string }).publishTime || item.createTime || new Date().toISOString().split('T')[0],
       author: (item as { source?: string }).source || item.author || "官方发布",
-      imgUrl: (item as { coverImg?: string }).coverImg || item.imgUrl || item.cover || "https://images.unsplash.com/photo-1586880244406-556ebe35f282?auto=format&fit=crop&q=80&w=800",
+      imgUrl: (item as { coverImg?: string }).coverImg || item.imgUrl || item.cover || "/image/home/home-hero-bg.png",
       typeId: (item as { newsTypeId?: number; newsTypeID?: number; typeId?: number }).newsTypeId
         ?? (item as { newsTypeID?: number }).newsTypeID
         ?? (item as { typeId?: number }).typeId

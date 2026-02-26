@@ -10,7 +10,7 @@ export interface BreadcrumbConfigItem {
   path?: string
 }
 
-const BASE_URL = 'https://www.chetuoche.com'
+const BASE_URL = 'https://www.ctcapp.com'
 
 /** 路由到面包屑的映射 */
 export const BREADCRUMB_CONFIG: Record<string, BreadcrumbConfigItem[]> = {

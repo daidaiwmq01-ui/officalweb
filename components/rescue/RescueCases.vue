@@ -35,7 +35,7 @@
           class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
         >
           <!-- Image Area -->
-          <div class="relative h-[260px]">
+          <div class="relative aspect-[4/3] overflow-hidden">
             <ImageWithFallback
               :src="item.image"
               :alt="item.title"
@@ -76,7 +76,7 @@ const cases = [
     tag: '托运接驳',
     title: '僵尸车激活与发运',
     desc: '一辆闲置半年的轿车需从北京运往三亚。因轮胎瘪气且无法启动，救援团队携带充气泵与辅助轮上门，完成车辆整备后直接装上大板车发运。',
-    image: 'https://images.unsplash.com/photo-1619924363773-1f9ed4a54fe1?q=80&w=1080',
+    image: '/image/rescue/case2.webp',
   },
   {
     tag: '高速救援',

@@ -66,7 +66,7 @@ useHead({
     }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/personal-travel' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/personal-travel' }
   ]
 })
 
@@ -75,7 +75,7 @@ const personalTravelSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '个人旅游托运服务',
-  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
   'serviceType': 'Car Transport',
   'description': '专业异地运车，告别长途驾驶疲劳。支持西藏转山、三亚度假、洱海环游等场景，200万车主商业险保障，48小时极速交付。',
   'areaServed': 'CN',

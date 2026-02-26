@@ -2,8 +2,9 @@
   <section class="relative w-full h-[450px] overflow-hidden font-['Noto_Sans_SC']">
     <!-- Background with Dark Overlay -->
     <div class="absolute inset-0 z-0">
-      <img 
-        :src="EXTERNAL_ASSETS.SUPPLY_CHAIN_HERO" 
+      <img
+        loading="eager"
+        src="/image/supply-chain/hero.png" 
         alt="Car Distribution Center" 
         class="w-full h-full object-cover"
       />
@@ -61,8 +62,6 @@ import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 
 const breadcrumbItems = getBreadcrumbsForRoute('/supply-chain')
 import Button from '@/components/ui/Button.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
 const scrollToLeadForm = () => {
   const el = document.getElementById('supply-chain-lead-form')
   if (el) {

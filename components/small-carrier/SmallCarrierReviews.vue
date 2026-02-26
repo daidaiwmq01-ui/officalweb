@@ -34,6 +34,7 @@
               <ImageWithFallback
                 :src="review.avatar"
                 :alt="review.name"
+                :use-webp="false"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -99,7 +100,7 @@ const reviews = [
     location: '上海',
     route: '北京 → 上海',
     car: '特斯拉 Model S',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    avatar: '/image/small-carrier/evaluate1.jpeg',
     content: '新车刚提不敢长途开回家，选择小板车专送。司机很专业，验车拍照很仔细，厢式车全密封运输，到家后一点划痕都没有。比大板车贵一些，但完全值得！',
     tags: ['准时送达', '验车仔细', '零损耗']
   },
@@ -108,7 +109,7 @@ const reviews = [
     location: '广州',
     route: '深圳 → 广州',
     car: '保时捷 Cayenne',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+    avatar: '/image/small-carrier/evaluate2.jpeg',
     content: '高速上爆胎动不了，打电话给车拖车，20分钟救援车就到了！专车直送到维修厂，全程GPS能看到位置，服务太专业了。应急救援必备！',
     tags: ['快速响应', '专业救援', '全程追踪']
   },
@@ -117,7 +118,7 @@ const reviews = [
     location: '杭州',
     route: '杭州 → 温州',
     car: '宝马 X5',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+    avatar: '/image/small-carrier/evaluate3.jpeg',
     content: '家里有急事需要马上回老家，车开不回去。小板车当天就接单送达，速度比我想象的快太多。司机态度好，全程微信沟通，让人很放心。',
     tags: ['当日送达', '态度专业', '沟通及时']
   }

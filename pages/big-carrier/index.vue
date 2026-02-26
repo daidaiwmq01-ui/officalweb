@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useSchemaOrg } from '@/composables/useSchemaOrg'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/big-carrier'))
 
@@ -58,7 +58,6 @@ import CasesSection from '@/components/common/CasesSection.vue'
 import ReviewsSection from '@/components/common/ReviewsSection.vue'
 import BigCarrierFaq from '@/components/big-carrier/BigCarrierFaq.vue'
 import BigCarrierSemanticBlock from '@/components/big-carrier/BigCarrierSemanticBlock.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
 import type { AdvantageItem, CaseItemTypeB, ReviewItem } from '@/types'
 
 // SEO Meta Tags
@@ -69,7 +68,7 @@ useHead({
     { name: 'keywords', content: '大板车托运, 笼车运输价格, 私家车长途集运, 二手车跨省托运, 运车专线' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/big-carrier' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/big-carrier' }
   ]
 })
 
@@ -153,7 +152,7 @@ const advantages: AdvantageItem[] = [
 const cases: CaseItemTypeB[] = [
   {
     tag: '家庭长途搬迁',
-    image: EXTERNAL_ASSETS.TRUCK_FLATBED_FULL,
+    image: '/image/big-carrier/big-case1.png',
     from: '哈尔滨',
     to: '三亚',
     title: '一家三口避寒过冬，车辆提前发运',
@@ -162,7 +161,7 @@ const cases: CaseItemTypeB[] = [
   },
   {
     tag: 'B2B 批量调拨',
-    image: EXTERNAL_ASSETS.TRUCK_FLATBED_FULL,
+    image: '/image/big-carrier/big-case2.png',
     from: '广州',
     to: '成都',
     title: '车行批量采购，6台车一次发运',
@@ -171,7 +170,7 @@ const cases: CaseItemTypeB[] = [
   },
   {
     tag: '自驾游返程',
-    image: EXTERNAL_ASSETS.TRUCK_ENCLOSED_BOX,
+    image: '/image/big-carrier/big-case3.png',
     from: '乌鲁木齐',
     to: '上海',
     title: '特种兵式旅游结束，人车分离返程',
@@ -186,7 +185,7 @@ const reviews: ReviewItem[] = [
     location: '哈尔滨',
     role: '私家车主',
     scenario: '哈尔滨 → 三亚',
-    avatar: 'https://images.unsplash.com/photo-1611403119860-57c4937ef987?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbWlsaW5nJTIwQ2hpbmVzZSUyMG1hbiUyMDMwcyUyMHBvcnRyYWl0JTIwY2FzdWFsfGVufDF8fHx8MTc2OTQxNTYwMXww&ixlib=rb-4.1.0&q=80&w=1080',
+    avatar: '/image/partner-recruit/avatar1.jpeg',
     content: '每年冬天都去海南，以前最头疼大板车进不了市区。这次用了车拖车，代驾直接到楼下取车，到了三亚也是直接送到酒店，全程不用我操心，太方便了！',
     tags: ['#门到门接驳', '#老人友好'],
     car: '车型：丰田汉兰达',
@@ -196,7 +195,7 @@ const reviews: ReviewItem[] = [
     location: '广州',
     role: '车商',
     scenario: '广州 → 成都',
-    avatar: 'https://images.unsplash.com/photo-1768899819030-ba787d3f0138?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBDaGluZXNlJTIwYnVzaW5lc3NtYW4lMjAzMHMlMjBzdWl0JTIwcG9ydHJhaXR8ZW58MXx8fHwxNzY5NDE1NjAxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    avatar: '/image/partner-recruit/avatar2.jpeg',
     content: '作为车商最看重时效和票据。车拖车的干线发车频率很高，基本不用等。最重要的是能开增值税专票，物流轨迹在国家交通系统能查到，给客户看很放心。',
     tags: ['#税务合规', '#批量调车'],
     car: '车型：奥迪 A6L x 6',
@@ -206,10 +205,31 @@ const reviews: ReviewItem[] = [
     location: '上海',
     role: '自驾游爱好者',
     scenario: '乌鲁木齐 → 上海',
-    avatar: 'https://images.unsplash.com/photo-1676340619040-8688de9fd331?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBDaGluZXNlJTIwYnVzaW5lc3N3b21hbiUyMDMwcyUyMHNtaWxpbmclMjBvZmZpY2UlMjBibGF6ZXJ8ZW58MXx8fHwxNzY5NDE1NjQ5fDA&ixlib=rb-4.1.0&q=80&w=1080',
+    avatar: '/image/partner-recruit/avatar3.jpeg',
     content: '新疆自驾玩累了，实在不想开回上海。在大板车和自己开之间犹豫很久，最后看中这里的GPS实时定位。车在笼车上的照片都会发给我，行李也免费随车运回了，省了四千公里油费！',
     tags: ['#GPS定位', '#可放行李'],
     car: '车型：坦克 300',
   },
 ]
+
+useSchemaOrg({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  'name': '大板车干线集运服务',
+  'description': '车拖车大板车托运通过规模效应大幅降低运输成本，覆盖全国30000+条线路。',
+  'brand': { '@type': 'Brand', 'name': '车拖车' },
+  'aggregateRating': {
+    '@type': 'AggregateRating',
+    'ratingValue': '4.9',
+    'bestRating': '5',
+    'ratingCount': '2500000',
+    'reviewCount': '15800'
+  },
+  'review': reviews.map(r => ({
+    '@type': 'Review',
+    'author': { '@type': 'Person', 'name': r.user },
+    'reviewBody': r.content,
+    'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }
+  }))
+})
 </script>

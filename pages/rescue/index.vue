@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useSchemaOrg } from '@/composables/useSchemaOrg'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/rescue'))
 
@@ -55,7 +55,7 @@ useHead({
     { name: 'keywords', content: '道路救援, 拖车服务, 汽车故障救援, 24小时拖车, 地库拖车救援, 事故车运输, 亏电搭电, 车拖车救援' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/rescue' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/rescue' }
   ]
 })
 
@@ -64,7 +64,7 @@ const rescueSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '24小时道路救援服务',
-  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
   'serviceType': 'RoadsideAssistance',
   'description': '提供故障车拖车、地库亏电搭电、事故车救援服务。安全底座保障。',
   'areaServed': 'CN',
@@ -77,7 +77,7 @@ const rescueSchema = {
   },
   'availableChannel': {
     '@type': 'ServiceChannel',
-    'serviceUrl': 'https://www.chetuoche.com/rescue',
+    'serviceUrl': 'https://www.ctcapp.com/rescue',
     'servicePhone': '400-075-1117'
   }
 }
@@ -118,7 +118,7 @@ const reviews: ReviewItem[] = [
     location: '杭州',
     role: '私家车主',
     scenario: '拖车救援 (15km)',
-    avatar: 'https://images.unsplash.com/photo-1758600587839-56ba05596c69?q=80&w=500',
+    avatar: '/image/rescue/avatar1.jpeg',
     content: '之前叫救援被黑过，这次车拖车真的很规范。APP上显示170元起步就是170元，没有任何隐形消费，司机也没有乱要小费，这种透明度必须好评！',
     tags: ['#价格透明'],
   },
@@ -127,7 +127,7 @@ const reviews: ReviewItem[] = [
     location: '上海',
     role: '私家车主',
     scenario: '地库专项救援',
-    avatar: 'https://images.unsplash.com/photo-1611403119860-57c4937ef987?q=80&w=500',
+    avatar: '/image/rescue/avatar2.jpeg',
     content: '半夜在地库车坏了，大车进不来。车拖车派了低姿态板车，师傅技术很好，几分钟就弄出来了，直接拖到4S店，效率太高了。',
     tags: ['#地库救援'],
   },
@@ -136,9 +136,30 @@ const reviews: ReviewItem[] = [
     location: '北京',
     role: '私家车主',
     scenario: '高速应急救援',
-    avatar: 'https://images.unsplash.com/photo-1738566061505-556830f8b8f5?q=80&w=500',
+    avatar: '/image/rescue/avatar3.jpeg',
     content: '在五环上抛锚，心里很慌。下单后18分钟司机就到了，穿反光背心很专业，帮我摆好警示牌，背车动作非常利索。',
     tags: ['#极速响应'],
   },
 ]
+
+useSchemaOrg({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  'name': '24小时道路救援服务',
+  'description': '车拖车24小时道路救援服务，涵盖故障车位移、事故车拖运、地库亏电启动及僵尸车搬迁。',
+  'brand': { '@type': 'Brand', 'name': '车拖车' },
+  'aggregateRating': {
+    '@type': 'AggregateRating',
+    'ratingValue': '4.8',
+    'bestRating': '5',
+    'ratingCount': '580000',
+    'reviewCount': '8600'
+  },
+  'review': reviews.map(r => ({
+    '@type': 'Review',
+    'author': { '@type': 'Person', 'name': r.user },
+    'reviewBody': r.content,
+    'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }
+  }))
+})
 </script>

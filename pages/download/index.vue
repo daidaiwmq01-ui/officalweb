@@ -6,8 +6,9 @@
       <!-- Background Image & Overlay -->
       <div class="absolute inset-0">
         <ImageWithFallback 
-          :src="ASSETS.HERO_BG" 
-          alt="Logistics Network" 
+          src="/image/download/hero.webp" 
+          alt="车拖车APP下载中心 - 智能汽车物流平台"
+        loading="eager" 
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/80 via-[#0B2747]/40 to-transparent" />
@@ -307,10 +308,6 @@ import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import { onMounted, ref, computed } from 'vue'
 import { useDownloadInfo } from '@/composables/useDownloadInfo'
 
-const ASSETS = {
-  HERO_BG: "https://images.unsplash.com/photo-1737505599162-d9932323a889?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHRlY2glMjBuZXR3b3JrJTIwbWFwJTIwbG9naXN0aWNzJTIwbm9kZXMlMjBibHVlJTIwc2lsdmVyfGVufDF8fHx8MTc2OTY3NDY1Mnww&ixlib=rb-4.1.0&q=80&w=1080"
-}
-
 const {
   fetchIfNeeded,
   customerAndroidQr,
@@ -361,7 +358,7 @@ useHead({
     }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/download' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/download' }
   ]
 })
 
@@ -374,7 +371,7 @@ const downloadSchema = {
       'name': '车拖车客户端 APP',
       'operatingSystem': 'Android, iOS, HarmonyOS',
       'applicationCategory': 'BusinessApplication',
-      'downloadUrl': 'https://www.chetuoche.com/download/client',
+      'downloadUrl': 'https://www.ctcapp.com/download/client',
       'featureList': 'AI智能发单, 实时位置追踪, 在线电子合同, 违章处理',
       'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'CNY' }
     },
@@ -383,7 +380,7 @@ const downloadSchema = {
       'name': '车拖车司机端 APP',
       'operatingSystem': 'Android, iOS, HarmonyOS',
       'applicationCategory': 'BusinessApplication',
-      'downloadUrl': 'https://www.chetuoche.com/download/driver',
+      'downloadUrl': 'https://www.ctcapp.com/download/driver',
       'featureList': '海量货源自动听单, 极速结算, 司机课堂, 运费补贴',
       'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'CNY' }
     }

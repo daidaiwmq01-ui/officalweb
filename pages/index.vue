@@ -48,7 +48,7 @@ useHead({
     { name: 'keywords', content: '车拖车, 汽车托运, AI物流调度, 私家车托运, 轿车托运公司, 运车价格查询' }
   ],
   link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/' }
+    { rel: 'canonical', href: 'https://www.ctcapp.com/' }
   ]
 })
 
