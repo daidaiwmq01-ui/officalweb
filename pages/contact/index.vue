@@ -366,16 +366,12 @@ const sendEmail = (email: string) => {
   window.location.href = `mailto:${email}`
 }
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '联系我们 - 车拖车数字化汽车物流专家',
-  meta: [
-    {
-      name: 'description',
-      content: '联系车拖车获取汽车托运咨询。综合服务热线 400-075-1117，技术支持 yunweishu8888@163.com，10分钟内响应。'
-    }
-  ],
-  link: [{ rel: 'canonical', href: 'https://www.ctcapp.com/contact' }]
+  description: '联系车拖车获取汽车托运咨询。综合服务热线 400-075-1117，技术支持 yunweishu8888@163.com，10分钟内响应。',
+  keywords: '联系车拖车, 汽车托运咨询, 客服热线, 商务合作',
+  image: '/image/contact/og-contact.jpg'
 })
 
 // Schema.org 结构化数据（统一使用全局 Organization @id）

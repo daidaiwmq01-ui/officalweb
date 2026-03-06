@@ -1,12 +1,12 @@
 import { InferSeoMetaPlugin } from 'unhead/plugins'
-import { injectHead } from '@unhead/vue'
+import { injectHead } from '#imports'
 
 export default defineNuxtPlugin(() => {
   const head = injectHead()
   head.use(InferSeoMetaPlugin({ twitterCard: false }))
 
   const route = useRoute()
-  const BASE_URL = 'https://www.ctcapp.com'
+  const BASE_URL = 'https://newweb.chetuoche.net'
 
   useHead(computed(() => ({
     meta: [

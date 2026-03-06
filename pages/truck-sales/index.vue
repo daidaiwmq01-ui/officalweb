@@ -273,21 +273,12 @@ const handleFormSubmit = async () => {
 
 
 // SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '清障车销售 - 源头工厂直销 购车享平台订单 | 车拖车',
-  meta: [
-    {
-      name: 'description',
-      content: '车拖车装备制造，山东临沂/湖北随州两大生产基地年产1500台。3吨蓝牌、全落地液压板、厢式运输车等热销车型，购车即享平台优选订单权益。'
-    },
-    {
-      name: 'keywords',
-      content: '清障车销售,板车销售,轿运车,救援车,车拖车装备'
-    }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/truck-sales' }
-  ]
+  description: '车拖车装备制造，山东临沂/湖北随州两大生产基地年产1500台。3吨蓝牌、全落地液压板、厢式运输车等热销车型，购车即享平台优选订单权益。',
+  keywords: '清障车销售,板车销售,轿运车,救援车,车拖车装备',
+  image: '/image/truck-sales/og-truck.jpg'
 })
 
 // Schema.org 结构化数据 - 清障车/装备销售
@@ -295,7 +286,7 @@ const truckSalesSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '车拖车清障车装备直销',
-  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
+  'provider': { '@id': 'https://newweb.chetuoche.net/#organization' },
   'serviceType': 'Vehicle Sales',
   'description': '山东临沂/湖北随州两大生产基地，年产1500台。购车即享平台优选订单权益，助您开启高效物流事业。',
   'areaServed': 'CN',

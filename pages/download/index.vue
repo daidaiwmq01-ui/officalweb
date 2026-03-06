@@ -349,17 +349,12 @@ const setDriverPlatform = (platform: 'ios' | 'android') => {
   }
 }
 
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: 'APP下载中心 - 车拖车智能汽车物流平台',
-  meta: [
-    {
-      name: 'description',
-      content: '车拖车数字化终端下载中心，行业领先的 AI 智能调度平台，连接 167 万用户与 45 万运力伙伴。支持iOS、Android及HarmonyOS系统。'
-    }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/download' }
-  ]
+  description: '车拖车数字化终端下载中心，行业领先的 AI 智能调度平台，连接 167 万用户与 45 万运力伙伴。支持iOS、Android及HarmonyOS系统。',
+  keywords: 'APP下载, 车拖车下载, 汽车托运APP, 司机端下载, 客户端下载',
+  image: '/image/download/og-download.jpg'
 })
 
 // Schema.org 结构化数据
@@ -371,7 +366,7 @@ const downloadSchema = {
       'name': '车拖车客户端 APP',
       'operatingSystem': 'Android, iOS, HarmonyOS',
       'applicationCategory': 'BusinessApplication',
-      'downloadUrl': 'https://www.ctcapp.com/download/client',
+      'downloadUrl': 'https://newweb.chetuoche.net/download/client',
       'featureList': 'AI智能发单, 实时位置追踪, 在线电子合同, 违章处理',
       'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'CNY' }
     },
@@ -380,7 +375,7 @@ const downloadSchema = {
       'name': '车拖车司机端 APP',
       'operatingSystem': 'Android, iOS, HarmonyOS',
       'applicationCategory': 'BusinessApplication',
-      'downloadUrl': 'https://www.ctcapp.com/download/driver',
+      'downloadUrl': 'https://newweb.chetuoche.net/download/driver',
       'featureList': '海量货源自动听单, 极速结算, 司机课堂, 运费补贴',
       'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'CNY' }
     }

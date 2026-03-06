@@ -91,22 +91,26 @@
                 资讯分类
               </h3>
               <div class="space-y-1">
-                <button 
+                <NuxtLink
+                  to="/news"
+                  class="w-full flex justify-between items-center px-4 py-3 rounded-xl hover:bg-[#F0F7FF] group transition-all text-left block"
+                >
+                  <span class="text-[15px] transition-colors text-[#006EFF] font-semibold">
+                    全部资讯
+                  </span>
+                </NuxtLink>
+                <NuxtLink 
                   v-for="cat in SIDEBAR_CATEGORIES"
-                  :key="cat.name"
-                  class="w-full flex justify-between items-center px-4 py-3 rounded-xl hover:bg-[#F0F7FF] group transition-all cursor-pointer text-left"
-                  @click="handleCategoryClick(cat)"
+                  :key="cat.id"
+                  :to="cat.pinyin ? `/news/${cat.pinyin}` : '/news'"
+                  class="w-full flex justify-between items-center px-4 py-3 rounded-xl hover:bg-[#F0F7FF] group transition-all text-left block"
                 >
                   <span
-                    :class="[
-                      'text-[15px] transition-colors',
-                      cat.id === activeTypeId ? 'text-[#006EFF] font-semibold' : 'text-[#4B5563] group-hover:text-[#006EFF]'
-                    ]"
+                    class="text-[15px] transition-colors text-[#4B5563] group-hover:text-[#006EFF]"
                   >
                     {{ cat.name }}
                   </span>
-                  <span class="text-[12px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full group-hover:bg-[#E6F2FF] group-hover:text-[#006EFF] transition-colors">{{ cat.count }}</span>
-                </button>
+                </NuxtLink>
               </div>
             </div>
 
@@ -157,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
@@ -167,26 +171,19 @@ useBreadcrumbSchema(getBreadcrumbsForRoute('/news'))
 const breadcrumbItems = getBreadcrumbsForRoute('/news')
 import { 
   Search, 
-  ChevronRight, 
   TrendingUp,
   Hash,
 } from 'lucide-vue-next'
 import Input from '@/components/ui/Input.vue'
-import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import NewsFeedContainer from '@/components/news/NewsFeedContainer.vue'
-import { useRouter } from 'vue-router'
 import { makeNewsPath } from '@/utils/slug'
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '汽车托运资讯 - 行业深度、技术公告与物流攻略 - 车拖车',
-  meta: [
-    { name: 'description', content: '来自车拖车的权威新闻与资讯。汇总行业趋势、数字化物流算法公告、清障车销售动态，通过结构化数据（JSON-LD）建立专业可信的品牌形象。' },
-    { name: 'keywords', content: '物流资讯, 行业新闻, 托运百科, 数字化物流, 车拖车动态' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/news' }
-  ]
+  description: '来自车拖车的权威新闻与资讯。汇总行业趋势、数字化物流算法公告、清障车销售动态，通过结构化数据（JSON-LD）建立专业可信的品牌形象。',
+  keywords: '物流资讯, 行业新闻, 托运百科, 数字化物流, 车拖车动态',
+  image: '/image/news/og-news.jpg'
 })
 
 // Schema.org 结构化数据
@@ -195,13 +192,13 @@ const newsListSchema = {
   '@type': 'CollectionPage',
   'name': '车拖车行业资讯与技术公告',
   'description': '汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。',
-  'url': 'https://www.ctcapp.com/news',
+  'url': 'https://newweb.chetuoche.net/news',
   'publisher': {
     '@type': 'Organization',
     'name': '车拖车 (CheTuoChe)',
     'logo': {
       '@type': 'ImageObject',
-      'url': 'https://www.ctcapp.com/image/logo/logo.png'
+      'url': 'https://newweb.chetuoche.net/image/logo/logo.png'
     }
   },
   'mainEntity': {
@@ -213,13 +210,13 @@ const newsListSchema = {
         '@type': 'ListItem',
         'position': 1,
         'name': '行业深度',
-        'url': 'https://www.ctcapp.com/news'
+        'url': 'https://newweb.chetuoche.net/news'
       },
       {
         '@type': 'ListItem',
         'position': 2,
         'name': '技术公告',
-        'url': 'https://www.ctcapp.com/news'
+        'url': 'https://newweb.chetuoche.net/news'
       }
     ]
   }
@@ -236,6 +233,7 @@ interface NewsTypeItem {
   id?: number | string
   newsType?: string
   name?: string
+  code?: string
 }
 
 interface NewsItemRaw {
@@ -263,27 +261,11 @@ const FALLBACK_HOT_READS = [
   { id: 5, title: "清障车选购指南：如何平衡性能、价格与维护成本" }
 ]
 
-interface Props {
-  setActiveId?: (id: string) => void
-}
-
-const props = defineProps<Props>()
-
 const searchQuery = ref("")
-const router = useRouter()
-const activeTypeId = ref<number | string | undefined>(undefined)
-
-const handleSetActiveId = (id: string) => {
-  props.setActiveId?.(id)
-}
-
-const handleCategoryClick = (cat: { id?: number | string }) => {
-  if (cat?.id === undefined || cat?.id === null) return
-  activeTypeId.value = cat.id
-}
+const activeTypeId = ref<number | string>('all')
 
 const handleHotReadClick = (article: { id: number | string; typeId?: number | string }) => {
-  router.push({ path: makeNewsPath(article.id) })
+  navigateTo(makeNewsPath(article.id))
 }
 
 const { data: sidebarData } = await useAsyncData('news-sidebar', async () => {
@@ -297,6 +279,7 @@ const { data: sidebarData } = await useAsyncData('news-sidebar', async () => {
     .map((item) => ({
       id: item.id as number | string,
       name: item.newsType || item.name || '新闻资讯',
+      pinyin: item.code || '',
       count: 0
     }))
 
@@ -353,15 +336,4 @@ const SIDEBAR_CATEGORIES = computed(() => sidebarData.value?.categories || FALLB
 const TAGS = computed(() => sidebarData.value?.tags || FALLBACK_TAGS)
 const HOT_READS = computed(() => sidebarData.value?.hotReads || FALLBACK_HOT_READS)
 
-watch(
-  SIDEBAR_CATEGORIES,
-  (cats) => {
-    if (activeTypeId.value !== undefined) return
-    const first = cats?.[0]
-    if (first?.id !== undefined && first?.id !== null) {
-      activeTypeId.value = first.id
-    }
-  },
-  { immediate: true }
-)
 </script>

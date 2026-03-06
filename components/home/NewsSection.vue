@@ -147,7 +147,7 @@ const mapHomeNewsItems = (rawList: NewsItemRaw[], typeMap: Map<string, string>) 
       id: item.id ?? `${typeId || 'news'}-${item.title}`,
       title: item.title || '暂无标题',
       date: normalizeDate(item.publishTime || item.createTime),
-      author: item.source || item.author || '官方发布',
+      author: item.author || item.source || '官方发布',
       category,
       image: item.coverImg || item.imgUrl || item.cover || FALLBACK_NEWS_ITEMS[0].image,
       desc: item.briefIntroduction || item.desc || item.summary || '暂无简介',

@@ -366,22 +366,19 @@
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 import { useBreadcrumbSchema, useFAQPageSchema } from '@/composables/useSchemaOrg'
+import { usePageSeo } from '@/composables/useSeoMeta'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/driver/home'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/driver/home')
 
-useHead({
-  title: '司机之家 - 全国驿站补给网络 - 车拖车',
-  meta: [
-    { name: 'description', content: '车拖车司机之家计划2026年底构建500+处服务驿站，为货运司机提供24h热水淋浴、免费Wi-Fi、车辆自助检测及温暖生活补给。' },
-    { name: 'keywords', content: '司机之家, 司机驿站, 货运服务站, 司机补给, 车拖车' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/driver/home' }
-  ]
+usePageSeo({
+  title: '司机之家 - 全国驿站补给网络',
+  description: '车拖车司机之家计划2026年底构建500+处服务驿站，为货运司机提供24h热水淋浴、免费Wi-Fi、车辆自助检测及温暖生活补给。',
+  keywords: '司机之家, 司机驿站, 货运服务站, 司机补给, 车拖车, 24小时服务',
+  ogImage: '/image/driver/og-driver-home.jpg',
+  canonicalUrl: 'https://newweb.chetuoche.net/driver/home'
 })
-
 
 import { computed, onMounted, ref } from 'vue'
 import {

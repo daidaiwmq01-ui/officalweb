@@ -7,7 +7,7 @@
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
             <img loading="lazy"
               src="/image/home/home-service-small-bg.png"
-              alt="Small Carrier Luxury Transport"
+              alt="小板车尊享托运服务-5秒接单门到门专车直送"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               @error="(e) => handleImageError(e)"
             />

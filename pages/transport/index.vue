@@ -40,21 +40,12 @@ import ValetSection from '@/components/transport/ValetSection.vue'
 import RescueSection from '@/components/transport/RescueSection.vue'
 import TransportComparison from '@/components/transport/TransportComparison.vue'
 
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '汽车托运服务百科 - 大板车/小板车/代驾/救援全解析 | 车拖车',
-  meta: [
-    {
-      name: 'description',
-      content: '车拖车提供全场景汽车托运服务：大板车干线集运（高性价比）、小板车专车托运（极速响应）、专业代驾接驳、24小时道路救援。全国覆盖，安全可靠，价格透明。'
-    },
-    {
-      name: 'keywords',
-      content: '汽车托运,大板车托运,小板车托运,代驾服务,道路救援,车辆运输,笼车运输,汽车物流'
-    }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/transport' }
-  ]
+  description: '车拖车提供全场景汽车托运服务：大板车干线集运（高性价比）、小板车专车托运（极速响应）、专业代驾接驳、24小时道路救援。全国覆盖，安全可靠，价格透明。',
+  keywords: '汽车托运,大板车托运,小板车托运,代驾服务,道路救援,车辆运输,笼车运输,汽车物流',
+  image: '/image/transport/og-transport.jpg'
 })
 
 // Schema.org 结构化数据 - 汽车托运服务百科
@@ -63,7 +54,7 @@ const transportSchema = {
   '@type': 'CollectionPage',
   'name': '汽车托运服务百科 - 大板车/小板车/代驾/救援全解析',
   'description': '车拖车提供全场景汽车托运服务：大板车干线集运、小板车专车托运、专业代驾接驳、24小时道路救援。全国覆盖，安全可靠，价格透明。',
-  'url': 'https://www.ctcapp.com/transport',
+  'url': 'https://newweb.chetuoche.net/transport',
   'mainEntity': {
     '@type': 'ItemList',
     'itemListElement': [
@@ -71,33 +62,33 @@ const transportSchema = {
         '@type': 'ListItem',
         'position': 1,
         'name': '大板车干线集运',
-        'url': 'https://www.ctcapp.com/big-carrier',
+        'url': 'https://newweb.chetuoche.net/big-carrier',
         'description': '高性价比长途批量运输，30000+干线线路'
       },
       {
         '@type': 'ListItem',
         'position': 2,
         'name': '小板车专车托运',
-        'url': 'https://www.ctcapp.com/small-carrier',
+        'url': 'https://newweb.chetuoche.net/small-carrier',
         'description': '1对1门到门，5秒接单极速响应'
       },
       {
         '@type': 'ListItem',
         'position': 3,
         'name': '专业代驾接驳',
-        'url': 'https://www.ctcapp.com/valet',
+        'url': 'https://newweb.chetuoche.net/valet',
         'description': '解决托运最后一公里，第一检测人验车'
       },
       {
         '@type': 'ListItem',
         'position': 4,
         'name': '24小时道路救援',
-        'url': 'https://www.ctcapp.com/rescue',
+        'url': 'https://newweb.chetuoche.net/rescue',
         'description': '故障车拖运、地库救援、事故车运输'
       }
     ]
   },
-  'publisher': { '@id': 'https://www.ctcapp.com/#organization' }
+  'publisher': { '@id': 'https://newweb.chetuoche.net/#organization' }
 }
 
 useSchemaOrg(transportSchema)

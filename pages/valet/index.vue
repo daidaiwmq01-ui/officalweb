@@ -48,16 +48,12 @@ import ValetFaq from '@/components/valet/ValetFaq.vue'
 import ValetSemanticBlock from '@/components/valet/ValetSemanticBlock.vue'
 import type { AdvantageItem, CaseItemTypeA, ReviewItem } from '@/types'
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '汽车代驾取送服务_解决托运最后一公里_长途代驾专人直达 - 车拖车',
-  meta: [
-    { name: 'description', content: '打通汽车托运末端服务盲区，代驾员充当"第一检测人"进行标准化验车。无论是大板车市区接驳，还是专人专车的长途代驾，提供GPS/北斗全流程监控，随停随走，安全无忧。' },
-    { name: 'keywords', content: '汽车代驾取送, 托运末端接驳, 长途代驾价格, 门到门送车服务, 代驾验车' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/valet' }
-  ]
+  description: '打通汽车托运末端服务盲区，代驾员充当"第一检测人"进行标准化验车。无论是大板车市区接驳，还是专人专车的长途代驾，提供GPS/北斗全流程监控，随停随走，安全无忧。',
+  keywords: '汽车代驾取送, 托运末端接驳, 长途代驾价格, 门到门送车服务, 代驾验车',
+  image: '/image/valet/og-valet.jpg'
 })
 
 // Schema.org 结构化数据
@@ -65,7 +61,7 @@ const valetSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '专业汽车代驾取送服务',
-  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
+  'provider': { '@id': 'https://newweb.chetuoche.net/#organization' },
   'serviceType': 'Designated Driving',
   'description': '解决汽车托运"最后一公里"接驳难题。代驾员作为"第一检测人"执行标准化验车，支持长途专人专车直达，点火即走。',
   'serviceOutput': '标准化验车报告',
@@ -97,6 +93,47 @@ const props = defineProps<Props>()
 const setActiveId = (id: string) => {
   props.setActiveId?.(id)
 }
+
+// HowTo Schema - 专业代驾流程
+useSchemaOrg({
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  'name': '如何使用车拖车专业代驾服务',
+  'description': '车拖车专业代驾提供门到门接驳服务，解决大板车无法进城的最后一公里难题。代驾员充当"第一检测人"执行标准化验车。',
+  'step': [
+    {
+      '@type': 'HowToStep',
+      'name': '预约代驾',
+      'text': '通过车拖车APP或400电话预约代驾服务。提供取车和送车地址，系统自动计算费用（起步价150元含20公里）。',
+      'position': 1
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '上门取车',
+      'text': '代驾员准时到达取车地点，进行360°视频验车，记录车辆外观、仪表里程和随车物品。签署电子合同。',
+      'position': 2
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '专人驾驶',
+      'text': '代驾员点火即走，专人专车直达目的地。全程GPS+北斗双模定位，实时查看车速、轨迹及位置。',
+      'position': 3
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '门到门送达',
+      'text': '代驾员将车辆直接送到指定地址（支持地下车库车位）。真正实现门到门无缝衔接，解决最后一公里难题。',
+      'position': 4
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '验车交接',
+      'text': '到达后再次验车，核对车辆状态与里程。确认无误后在APP签收，完成服务。',
+      'position': 5
+    }
+  ],
+  'totalTime': 'PT4H'
+})
 
 const advantages: AdvantageItem[] = [
   {

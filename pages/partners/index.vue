@@ -495,15 +495,12 @@ const navigateToPartnerRecruit = () => {
 }
 
 // SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '生态合作 - 共建数字化运力生态 驱动物流增长 - 车拖车',
-  meta: [
-    { name: 'description', content: '诚邀板车车队、救援公司、代驾服务商入驻。提供海量真实货源、极速结算系统及等保三级数据安全保障，助力合作伙伴效率提升。' },
-    { name: 'keywords', content: '承运商入驻, 救援加盟, 大客户合作, 数字化管车, 货源平台' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/partners' }
-  ]
+  description: '诚邀板车车队、救援公司、代驾服务商入驻。提供海量真实货源、极速结算系统及等保三级数据安全保障，助力合作伙伴效率提升。',
+  keywords: '承运商入驻, 救援加盟, 大客户合作, 数字化管车, 货源平台',
+  image: '/image/partners/og-partners.jpg'
 })
 
 // Schema.org 结构化数据

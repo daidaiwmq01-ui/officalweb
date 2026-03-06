@@ -652,16 +652,12 @@ const navigateToCareers = () => {
   router.push('/careers')
 }
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '关于车拖车 - 用数字技术重塑汽车物流信任标准_等保三级认证企业',
-  meta: [
-    { name: 'description', content: '山东车拖车网络科技有限公司成立于2020年，拥有国家等保三级认证、ISO9001质量认证及亿元级物流责任险。致力于让汽车托运像发快递一样简单，服务用户超167万，GMV近20亿。' },
-    { name: 'keywords', content: '车拖车简介, 数字化物流公司, 汽车托运资质, 临沂汽车数智供应链实验室, 车拖车历程' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/about' }
-  ]
+  description: '山东车拖车网络科技有限公司成立于2020年，拥有国家等保三级认证、ISO9001质量认证及亿元级物流责任险。致力于让汽车托运像发快递一样简单，服务用户超167万，GMV近20亿。',
+  keywords: '车拖车简介, 数字化物流公司, 汽车托运资质, 临沂汽车数智供应链实验室, 车拖车历程',
+  image: '/image/about/og-about.jpg'
 })
 
 // Schema.org 结构化数据

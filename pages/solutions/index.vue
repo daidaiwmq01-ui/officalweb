@@ -62,16 +62,12 @@ import SolutionsFAQ from '@/components/solutions/SolutionsFaq.vue'
 import FinalCTABox from '@/components/solutions/FinalCTABox.vue'
 import { useRouter } from 'vue-router'
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '汽车托运行业解决方案中心_数字化供应链/商业活动/个人旅游 - 车拖车',
-  meta: [
-    { name: 'description', content: '为主机厂、车展方及个人用户提供全场景物流支撑。涵盖OTD可视化供应链、保姆式特种车托运及等保三级金融级安全防护方案。数字化技术重塑汽车物流信任标准。' },
-    { name: 'keywords', content: '汽车供应链方案, 车展物流托运, 高端车定制运输, 物流数据安全, 托运平台等保三级' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/solutions' }
-  ]
+  description: '为主机厂、车展方及个人用户提供全场景物流支撑。涵盖OTD可视化供应链、保姆式特种车托运及等保三级金融级安全防护方案。数字化技术重塑汽车物流信任标准。',
+  keywords: '汽车供应链方案, 车展物流托运, 高端车定制运输, 物流数据安全, 托运平台等保三级',
+  image: '/image/solutions/og-solutions.jpg'
 })
 
 // Schema.org 结构化数据
@@ -87,21 +83,21 @@ const solutionsSchema = {
         '@type': 'ListItem',
         'position': 1,
         'name': '汽车供应链数字化解决方案',
-        'url': 'https://www.ctcapp.com/supply-chain',
+        'url': 'https://newweb.chetuoche.net/supply-chain',
         'description': '缩短OTD周期，实现"零公里"交付，支持4S店动态调拨。'
       },
       {
         '@type': 'ListItem',
         'position': 2,
         'name': '商业活动特种托运方案',
-        'url': 'https://www.ctcapp.com/luxury-transport',
+        'url': 'https://newweb.chetuoche.net/luxury-transport',
         'description': '全封闭厢式车运输，气囊减震，服务车展与超跑巡演。'
       },
       {
         '@type': 'ListItem',
         'position': 3,
         'name': '个人旅游托运方案',
-        'url': 'https://www.ctcapp.com/personal-travel',
+        'url': 'https://newweb.chetuoche.net/personal-travel',
         'description': '让远方触手可及，支持三亚过冬、进藏朝圣等场景。'
       }
     ]

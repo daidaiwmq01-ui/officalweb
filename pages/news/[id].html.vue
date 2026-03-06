@@ -22,7 +22,7 @@
         <div class="flex items-center gap-4 text-white/80 text-[14px] mt-3">
           <span>{{ detail.newsTypeName || detail.category || '新闻资讯' }}</span>
           <span>{{ detail.publishTime || detail.createTime || '' }}</span>
-          <span v-if="detail.source">来源：{{ detail.source }}</span>
+          <span v-if="detail.author || detail.source">作者：{{ detail.author || detail.source }}</span>
         </div>
       </div>
     </section>
@@ -63,6 +63,7 @@ interface NewsItemRaw {
   typeId?: number
   newsTypeName?: string
   source?: string
+  author?: string
 }
 
 const route = useRoute()
@@ -103,7 +104,7 @@ const { data: detail } = await useAsyncData('news-detail', async () => {
   return {}
 })
 
-const BASE_URL = 'https://www.ctcapp.com'
+const BASE_URL = 'https://newweb.chetuoche.net'
 
 function toISODate(dateStr?: string): string | undefined {
   if (!dateStr || typeof dateStr !== 'string') return undefined

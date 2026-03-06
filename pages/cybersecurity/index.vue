@@ -262,15 +262,12 @@ useBreadcrumbSchema(getBreadcrumbsForRoute('/cybersecurity'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/cybersecurity')
 
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '网络安全与数据保护 - 国家等保三级认证 - 车拖车',
-  meta: [
-    { name: 'description', content: '车拖车已通过国家信息系统安全等级保护三级认证（DJCP），在数据脱敏、加密传输及服务器深度加固方面达到金融级安全标准。' },
-    { name: 'keywords', content: '网络安全, 等保三级, 数据保护, 信息安全, 车拖车安全' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/cybersecurity' }
-  ]
+  description: '车拖车已通过国家信息系统安全等级保护三级认证（DJCP），在数据脱敏、加密传输及服务器深度加固方面达到金融级安全标准。',
+  keywords: '网络安全, 等保三级, 数据保护, 信息安全, 车拖车安全',
+  image: '/image/cybersecurity/og-security.jpg'
 })
 
 
@@ -302,7 +299,7 @@ const cybersecuritySchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '托运平台网络安全防护服务',
-  'provider': { '@id': 'https://www.ctcapp.com/#organization' },
+  'provider': { '@id': 'https://newweb.chetuoche.net/#organization' },
   'serviceType': 'Cybersecurity',
   'description': '基于国家等保三级标准构建的物流数据安全堡垒。提供隐私脱敏、真实运力风控及T级抗DDoS防护。',
   'certification': '国家信息安全等级保护三级认证',

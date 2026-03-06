@@ -446,6 +446,16 @@ export interface NewsItemAPI {
   author?: string
 }
 
+/**
+ * 新闻分类类型
+ */
+export interface NewsTypeItem {
+  id: number | string
+  newsType?: string
+  name?: string
+  code?: string
+}
+
 // ============================================================================
 // 通用组件相关类型
 // ============================================================================

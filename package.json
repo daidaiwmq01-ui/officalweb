@@ -27,6 +27,7 @@
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.5.2",
     "autoprefixer": "^10.4.20",
+    "cwebp-bin": "^8.0.0",
     "postcss": "^8.4.49",
     "typescript": "^5.7.3",
     "vue-tsc": "^2.2.0"

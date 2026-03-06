@@ -171,6 +171,15 @@
 import { Calculator, TrendingUp, ShieldCheck, Users, Zap, Sparkles, Star } from 'lucide-vue-next'
 import BaseHero from '~/components/common/BaseHero.vue'
 import { heroConfigs } from '~/data/hero-configs'
+import { usePageSeo } from '@/composables/useSeoMeta'
+
+usePageSeo({
+  title: 'BaseHero 组件测试页面',
+  description: '测试 BaseHero 通用组件的所有功能和配置选项，包括 Props 配置、配置文件方式、Slots 自定义等多种使用方式。',
+  keywords: 'BaseHero, 组件测试, Vue组件, Nuxt组件, 测试页面',
+  ogImage: '/image/test-hero/og-test-hero.jpg',
+  canonicalUrl: 'https://newweb.chetuoche.net/test-hero'
+})
 
 // 测试用面包屑
 const testBreadcrumbs = [
@@ -231,12 +240,4 @@ const handleOrder = () => {
 const handleCustomAction = () => {
   alert('自定义按钮被点击！这是通过 Slots 实现的完全自定义按钮。')
 }
-
-// 页面元数据
-useHead({
-  title: 'BaseHero 组件测试页面',
-  meta: [
-    { name: 'description', content: '测试 BaseHero 通用组件的所有功能和配置选项' }
-  ]
-})
 </script>

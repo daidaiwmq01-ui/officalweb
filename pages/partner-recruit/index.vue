@@ -669,21 +669,12 @@ const tiers = [
 ]
 
 // SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '城市合伙人招募 - 零门槛共享拖车蓝海 | 车拖车',
-  meta: [
-    {
-      name: 'description',
-      content: '车拖车城市合伙人计划，零费准入、全维扶持、最高70%阶梯返利。共享万亿级拖车蓝海，年度成单达标可转公司股权。'
-    },
-    {
-      name: 'keywords',
-      content: '城市合伙人,拖车加盟,汽车物流创业,车拖车招募'
-    }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/partner-recruit' }
-  ]
+  description: '车拖车城市合伙人计划，零费准入、全维扶持、最高70%阶梯返利。共享万亿级拖车蓝海，年度成单达标可转公司股权。',
+  keywords: '城市合伙人,拖车加盟,汽车物流创业,车拖车招募',
+  image: '/image/partner-recruit/og-recruit.jpg'
 })
 
 // Schema.org 结构化数据 - 城市合伙人招募（使用全局 Organization @id）
@@ -695,7 +686,7 @@ const partnerRecruitSchema = {
   'mainEntity': {
     '@type': 'Service',
     'name': '城市合伙人招募',
-    'provider': { '@id': 'https://www.ctcapp.com/#organization' },
+    'provider': { '@id': 'https://newweb.chetuoche.net/#organization' },
     'description': '零费准入、全维扶持、股权激励。阶梯返利最高70%，年度成单达标可转公司股权。'
   }
 }

@@ -7,7 +7,7 @@
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
             <img loading="lazy"
               src="/image/home/home-service-valet-bg.png"
-              alt="Professional Valet Service"
+              alt="专业代驾服务-打通物流最后一公里"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               @error="(e) => handleImageError(e)"
             />

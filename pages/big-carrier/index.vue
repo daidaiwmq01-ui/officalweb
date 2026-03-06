@@ -60,16 +60,12 @@ import BigCarrierFaq from '@/components/big-carrier/BigCarrierFaq.vue'
 import BigCarrierSemanticBlock from '@/components/big-carrier/BigCarrierSemanticBlock.vue'
 import type { AdvantageItem, CaseItemTypeB, ReviewItem } from '@/types'
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '大板车集运_高性价比长途汽车托运_30000+干线物流网点 - 车拖车',
-  meta: [
-    { name: 'description', content: '针对长途搬迁、自驾返程及二手车流转，车拖车大板车托运通过规模效应大幅降低运输成本，提供批量运输方案。1000多家网点覆盖全国，30000条运输线路，支持国家交通局系统实时定位查看。' },
-    { name: 'keywords', content: '大板车托运, 笼车运输价格, 私家车长途集运, 二手车跨省托运, 运车专线' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/big-carrier' }
-  ]
+  description: '针对长途搬迁、自驾返程及二手车流转，车拖车大板车托运通过规模效应大幅降低运输成本，提供批量运输方案。1000多家网点覆盖全国，30000条运输线路，支持国家交通局系统实时定位查看。',
+  keywords: '大板车托运, 笼车运输价格, 私家车长途集运, 二手车跨省托运, 运车专线',
+  image: '/image/big-carrier/og-big-carrier.jpg'
 })
 
 // Schema.org 结构化数据
@@ -231,5 +227,46 @@ useSchemaOrg({
     'reviewBody': r.content,
     'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }
   }))
+})
+
+// HowTo Schema - 大板车托运流程
+useSchemaOrg({
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  'name': '如何使用大板车托运您的汽车',
+  'description': '车拖车大板车托运提供全链路运输流程，从干线集运到末端门到门配送，无缝衔接直达您家楼下。',
+  'step': [
+    {
+      '@type': 'HowToStep',
+      'name': '询价下单',
+      'text': '在车拖车APP或小程序输入起终点和车型，系统自动计算运费。选择大板车模式，确认订单并支付。',
+      'position': 1
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '上门取车',
+      'text': '代驾司机上门取车，进行360°视频验车，记录车辆状态。签署电子合同后，车辆运往集运网点。',
+      'position': 2
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '干线运输',
+      'text': '车辆装载到大板车（笼车）进行长途干线运输。支持国家交通局系统实时定位查询，轨迹透明可查。',
+      'position': 3
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '末端配送',
+      'text': '到达目的地网点后，专业代驾负责最后一公里接驳，将车辆直接送到您指定的地址。',
+      'position': 4
+    },
+    {
+      '@type': 'HowToStep',
+      'name': '验车签收',
+      'text': '收车时核对车辆外观与里程，确认无误后在APP确认收货。如有问题可一键报损，享受保险理赔服务。',
+      'position': 5
+    }
+  ],
+  'totalTime': 'P3D'
 })
 </script>

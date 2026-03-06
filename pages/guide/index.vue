@@ -254,15 +254,12 @@ const breadcrumbItems = getBreadcrumbsForRoute('/guide')
 import { useRouter } from 'vue-router'
 import { useHead } from '#app'
 
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '用户指南 - 汽车托运流程、安全规范与避坑百科 - 车拖车',
-  meta: [
-    { name: 'description', content: '车拖车用户指南：从询价下单、视频验车到保险理赔的全流程拆解，三大托运避坑指南助你避开行业陷阱。' },
-    { name: 'keywords', content: '汽车托运指南, 托运流程, 验车规范, 托运避坑, 车拖车' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.ctcapp.com/guide' }
-  ]
+  description: '车拖车用户指南：从询价下单、视频验车到保险理赔的全流程拆解，三大托运避坑指南助你避开行业陷阱。',
+  keywords: '汽车托运指南, 托运流程, 验车规范, 托运避坑, 车拖车',
+  image: '/image/guide/og-guide.jpg'
 })
 import {
   ChevronRight,
@@ -446,7 +443,7 @@ const schemaMarkup = computed(() => {
       {
         '@type': 'Article',
         'headline': '2026 汽车托运全攻略：避坑指南与验车标准',
-        'author': { '@id': 'https://www.ctcapp.com/#organization' },
+        'author': { '@id': 'https://newweb.chetuoche.net/#organization' },
         'datePublished': '2024-05-20',
         'description': '深度解析小板车与大板车区别，详解随车行李放置规定及运输保险理赔流程。'
       },

@@ -27,7 +27,7 @@ User-agent: Bingbot
 Allow: /
 
 # Sitemap 位置（线上环境）
-Sitemap: https://www.ctcapp.com/sitemap.xml
+Sitemap: https://newweb.chetuoche.net/sitemap.xml
 
 # 爬取频率建议（大部分搜索引擎会忽略，仅作提示）
 Crawl-delay: 1

@@ -3,6 +3,7 @@ import { md5 } from '@/utils/md5'
 
 interface NewsType {
   id?: number | string
+  code?: string
   [key: string]: unknown
 }
 
@@ -65,6 +66,14 @@ export default defineSitemapEventHandler(async () => {
     for (const type of types) {
       const typeId = type?.id ? Number(type.id) : undefined
       if (!typeId) continue
+
+      if (type.code) {
+        urls.push(asSitemapUrl({
+          loc: `/news/${type.code}`,
+          changefreq: 'daily',
+          priority: 0.7
+        }))
+      }
 
       const listResponse = await $fetch<{ data?: { list?: NewsItem[] } | NewsItem[]; list?: NewsItem[] } | NewsItem[]>(
         `${apiBase}/api/home/newsList/1/100`,

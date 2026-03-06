@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   ],
 
   site: {
-    url: 'https://www.ctcapp.com',
+    url: 'https://newweb.chetuoche.net',
     name: '车拖车 - 智能汽车物流生态平台'
   },
 

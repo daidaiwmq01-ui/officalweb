@@ -37,7 +37,7 @@
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
             <img loading="lazy"
               src="/image/home/home-service-big-bg.png"
-              alt="Big Carrier Transport"
+              alt="大板车干线集运服务-覆盖全国30000条线路"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               @error="(e) => handleImageError(e)"
             />

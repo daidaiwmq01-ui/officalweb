@@ -27,7 +27,7 @@ import { ref, watch } from 'vue'
 import NewsArticleList from './NewsArticleList.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 
-import type { NewsItem, NewsItemAPI } from '@/types'
+import type { NewsItem, NewsItemAPI, NewsTypeItem } from '@/types'
 
 interface Props {
   activeTypeId?: number | string
@@ -35,40 +35,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const MOCK_NEWS_LIST: NewsItem[] = [
-  {
-    id: 1,
-    title: "车拖车数字化算法实验室：如何通过 AI 调度提升 15% 的汽车运输周转率？",
-    summary: "在非标物流领域，空驶率一直是制约效率的瓶颈。临沂汽车数智供应链实验室最新发布的调度模型显示，通过多维度路径优化，可大幅降低车辆空载时间。",
-    createTime: "2026-05-12",
-    author: "车拖车研究院",
-    imgUrl: "/image/home/home-hero-bg.png"
-  },
-  {
-    id: 2,
-    title: "2026年清障车市场趋势报告：从传统液压到全数智化驱动的跨越",
-    summary: "随着新能源汽车渗透率提升，托运清障需求正发生结构性变化。本文深入分析了新一代数智化清障车的技术演进路径、核心零部件国产化进程。",
-    createTime: "2026-05-10",
-    author: "产品中心",
-    imgUrl: "/image/solutions/hero.webp"
-  },
-  {
-    id: 3,
-    title: "信息安全升级公告：车拖车正式通过国家信息系统安全等级保护三级认证",
-    summary: "车拖车平台在数据脱敏、加密传输及服务器深度加固方面完成全面升级，正式获得等保三级认证。这标志着平台在保障B端客户业务数据安全方面已达到金融级标准。",
-    createTime: "2026-05-08",
-    author: "信息安全部",
-    imgUrl: "/image/transport/hero.webp"
-  },
-  {
-    id: 4,
-    title: "B2B汽车物流的标准化路径：临沂数智实验室的 300 条专家准则",
-    summary: "非标服务标准化是物流行业的圣杯。我们总结了从交车验车到收车支付的 300 条核心作业准则，旨在打造行业级的透明度标杆与信任基础。",
-    createTime: "2026-05-05",
-    author: "专家组",
-    imgUrl: "/image/home/home-hero-bg.png"
-  }
-]
+const isAllMode = () => props.activeTypeId === 'all'
 
 // --- State ---
 const loading = ref(true)
@@ -78,51 +45,120 @@ const totalPages = ref(1)
 const newsList = ref<NewsItem[]>([])
 const error = ref<string | null>(null)
 
-// --- API Functions ---
-const fetchNews = async () => {
-  if (!props.activeTypeId) return
+const allNewsCache = ref<NewsItem[]>([])
+
+const mapRawToNewsItem = (item: NewsItemAPI): NewsItem => ({
+  id: item.id,
+  title: item.title,
+  summary: (item as { briefIntroduction?: string }).briefIntroduction || item.desc || item.summary || "暂无简介",
+  createTime: (item as { publishTime?: string }).publishTime || item.createTime || new Date().toISOString().split('T')[0],
+  author: item.author || (item as { source?: string }).source || "官方发布",
+  imgUrl: (item as { coverImg?: string }).coverImg || item.imgUrl || item.cover || "/image/home/home-hero-bg.png",
+  typeId: (item as { newsTypeId?: number; newsTypeID?: number; typeId?: number }).newsTypeId
+    ?? (item as { newsTypeID?: number }).newsTypeID
+    ?? (item as { typeId?: number }).typeId
+})
+
+const extractList = (response: any): NewsItemAPI[] => {
+  if (Array.isArray(response)) return response
+  return response?.data?.list || response?.list || response?.data || []
+}
+
+const fetchAllNews = async () => {
+  loading.value = true
+  error.value = null
+
+  try {
+    const typeResponse = await $fetch('/api/home/getAllNewsType')
+    const types: NewsTypeItem[] = Array.isArray(typeResponse)
+      ? typeResponse
+      : ((typeResponse as { data?: NewsTypeItem[] })?.data || [])
+
+    const validTypes = types.filter((t) => t?.id !== undefined && t?.id !== null)
+
+    const allItems: NewsItem[] = []
+    await Promise.all(
+      validTypes.map(async (cat) => {
+        try {
+          const response = await $fetch('/api/home/newsList/1/50', {
+            method: 'POST',
+            body: { newsTypeId: Number(cat.id) }
+          })
+          const rawList = extractList(response) as NewsItemAPI[]
+          rawList.forEach((item) => {
+            if (item?.id && item?.title) {
+              allItems.push(mapRawToNewsItem(item))
+            }
+          })
+        } catch { /* skip failed category */ }
+      })
+    )
+
+    const seen = new Set<number>()
+    allNewsCache.value = allItems
+      .filter((item) => {
+        if (seen.has(item.id)) return false
+        seen.add(item.id)
+        return true
+      })
+      .sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime())
+
+    totalPages.value = Math.max(1, Math.ceil(allNewsCache.value.length / pageSize))
+    paginateAll()
+  } catch {
+    allNewsCache.value = []
+    newsList.value = []
+    totalPages.value = 1
+  } finally {
+    loading.value = false
+  }
+}
+
+const paginateAll = () => {
+  const start = (page.value - 1) * pageSize
+  newsList.value = allNewsCache.value.slice(start, start + pageSize)
+}
+
+const fetchNewsByType = async () => {
+  if (!props.activeTypeId || isAllMode()) return
 
   loading.value = true
   error.value = null
-  
+
   try {
     const response = await $fetch(`/api/home/newsList/${page.value}/${pageSize}`, {
       method: 'POST',
       body: { newsTypeId: Number(props.activeTypeId) }
     })
-    
-    const rawList = Array.isArray(response)
-      ? response
-      : (response?.data?.list || response?.list || response?.data || [])
 
-    const total = Number((response as { total?: number })?.total ?? (response as { data?: { total?: number } })?.data?.total)
+    const rawList = extractList(response) as NewsItemAPI[]
+
+    const total = Number((response as any)?.total ?? (response as any)?.data?.total)
     if (Number.isFinite(total) && total > 0) {
       totalPages.value = Math.max(1, Math.ceil(total / pageSize))
     } else {
-      const pages = Number((response as { pages?: number })?.pages ?? (response as { data?: { pages?: number } })?.data?.pages)
+      const pages = Number((response as any)?.pages ?? (response as any)?.data?.pages)
       totalPages.value = Number.isFinite(pages) && pages > 0 ? pages : 1
     }
-    
-    // Map API fields to UI fields
-    const mappedList: NewsItem[] = rawList.map((item: NewsItemAPI) => ({
-      id: item.id,
-      title: item.title,
-      summary: (item as { briefIntroduction?: string }).briefIntroduction || item.desc || item.summary || "暂无简介",
-      createTime: (item as { publishTime?: string }).publishTime || item.createTime || new Date().toISOString().split('T')[0],
-      author: (item as { source?: string }).source || item.author || "官方发布",
-      imgUrl: (item as { coverImg?: string }).coverImg || item.imgUrl || item.cover || "/image/home/home-hero-bg.png",
-      typeId: (item as { newsTypeId?: number; newsTypeID?: number; typeId?: number }).newsTypeId
-        ?? (item as { newsTypeID?: number }).newsTypeID
-        ?? (item as { typeId?: number }).typeId
-    }))
-    
-    newsList.value = mappedList
-  } catch (err) {
-    // Fallback to mock data
-    newsList.value = MOCK_NEWS_LIST
+
+    newsList.value = rawList.map(mapRawToNewsItem)
+  } catch {
+    newsList.value = []
     totalPages.value = 1
   } finally {
     loading.value = false
+  }
+}
+
+const fetchNews = async () => {
+  if (isAllMode()) {
+    if (allNewsCache.value.length > 0) {
+      paginateAll()
+    } else {
+      await fetchAllNews()
+    }
+  } else {
+    await fetchNewsByType()
   }
 }
 
@@ -149,6 +185,7 @@ watch(
     if (!nextId) return
     if (nextId !== prevId) {
       page.value = 1
+      allNewsCache.value = []
     }
     fetchNews()
   },

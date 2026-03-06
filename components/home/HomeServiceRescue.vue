@@ -48,7 +48,7 @@
           <div class="absolute inset-0 md:-left-20">
             <img loading="lazy"
               src="/image/home/rescue.png"
-              alt="Roadside Rescue"
+              alt="24小时道路救援服务-全天候应急保障"
               class="w-full h-full object-cover object-center"
               @error="(e) => handleImageError(e)"
             />

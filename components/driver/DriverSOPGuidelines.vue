@@ -7,7 +7,7 @@
 
     <div class="container mx-auto max-w-[1200px] px-4 w-full box-border">
       <div class="text-center mb-16">
-        <h2 class="text-[32px] font-bold mb-4">
+        <h2 class="text-[32px] font-bold mb-4 text-white">
           司机接单规范
         </h2>
         <p class="text-white/40 text-[16px]">
@@ -16,9 +16,6 @@
       </div>
 
       <div class="relative">
-        <!-- Timeline Line (Desktop) -->
-        <div class="absolute top-[40px] left-0 w-full h-0.5 bg-white/10 hidden lg:block" />
-
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div
             v-for="(item, idx) in steps"

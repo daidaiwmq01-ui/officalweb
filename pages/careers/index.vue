@@ -391,12 +391,21 @@ import { ref, computed, onMounted } from 'vue'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 import { useBreadcrumbSchema, useFAQPageSchema } from '@/composables/useSchemaOrg'
+import { usePageSeo } from '@/composables/useSeoMeta'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/careers'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/careers')
+
+usePageSeo({
+  title: '加入车拖车 - 连接汽车物流的下一个时代',
+  description: '车拖车正致力于构建一个更透明、更高效的数字化物流生态系统。我们寻找对技术充满热忱、勇于挑战行业痛点的创新者。查看热招岗位，投递简历。',
+  keywords: '车拖车招聘, 物流科技招聘, 智运生计划, 校园招聘, 社会招聘, 技术岗位, 产品经理',
+  ogImage: '/image/careers/og-careers.jpg',
+  canonicalUrl: 'https://newweb.chetuoche.net/careers'
+})
+
 import { useRouter } from 'vue-router'
-import { useHead } from '#app'
 import {
   ChevronRight,
   Search,
@@ -547,46 +556,28 @@ const fetchJobs = async () => {
   loading.value = true
   
   try {
-    const response = await $fetch('/api/home/getAllPost')
+    const response = await $fetch('/api/home/getAllPost/notClassified')
     
-    // 解析响应：兼容多种数据结构
     const res = response as Record<string, unknown>
-    let root: Record<string, unknown> = {}
-    
-    // 尝试多种解析路径
-    if (Array.isArray(res?.data) && res.data.length > 0) {
-      root = res.data[0] as Record<string, unknown>
-    } else if (Array.isArray(response) && (response as unknown[]).length > 0) {
-      root = (response as unknown[])[0] as Record<string, unknown>
-    } else if (res?.data && typeof res.data === 'object') {
-      root = res.data as Record<string, unknown>
-    } else if (res && typeof res === 'object') {
-      root = res
-    }
-    
-    const postTypeList = Array.isArray(root.postTypeList) ? (root.postTypeList as PostTypeItem[]) : []
-    // 解析职位列表和分类
+
+    // notClassified 接口返回 data: [{ postType, postTypeId, postList: [...] }, ...]
+    const dataArray = Array.isArray(res?.data) ? (res.data as PostTypeItem[]) : []
+
     const rows: JobRaw[] = []
     const parsedTabs: Array<{ label: string; value: string }> = [{ label: '全部', value: 'all' }]
-    
-    postTypeList.forEach((typeItem, index) => {
+
+    dataArray.forEach((typeItem, index) => {
       const label = pickString(typeItem.postType || typeItem.postTypeName, `类型${index + 1}`)
       const value = `type-${typeItem.postTypeId ?? index + 1}`
       typeItem._postTypeValue = value
-      
+
       parsedTabs.push({ label, value })
-      
+
       const posts = Array.isArray(typeItem.postList) ? typeItem.postList : []
-      
       posts.forEach((post) => {
         rows.push({ ...post, _postTypeLabel: label, _postTypeValue: value })
       })
     })
-    
-    // 兜底：如果没有数据，尝试其他解析方式
-    if (rows.length === 0 && Array.isArray(response)) {
-      rows.push(...(response as JobRaw[]))
-    }
     
     allJobs.value = normalizeJobs(rows)
     tabs.value = parsedTabs
@@ -700,7 +691,7 @@ const getJobSchema = (job: Job) => {
       name: 'CheTuoChe',
       value: job.id || 'unknown',
     },
-    hiringOrganization: { '@id': 'https://www.ctcapp.com/#organization' },
+    hiringOrganization: { '@id': 'https://newweb.chetuoche.net/#organization' },
     employmentType: 'FULL_TIME',
     jobLocation: {
       '@type': 'Place',
