@@ -36,7 +36,7 @@
         <div class="w-full lg:w-1/2 relative">
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
             <img loading="lazy"
-              src="/image/home/home-service-big-bg.png"
+              src="/image/home/home-service-big-bg.webp"
               alt="大板车干线集运服务-覆盖全国30000条线路"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               @error="(e) => handleImageError(e)"
@@ -61,7 +61,7 @@ const tags = ['价格更低', '每日发车', 'GB1589标准车型']
 
 const handleImageError = (e: Event) => {
   const el = e.target as HTMLImageElement
-  if (el && !el.src.includes('home-service-big-bg')) el.src = '/image/home/home-service-big-bg.png'
+  if (el && !el.src.includes('home-service-big-bg')) el.src = '/image/home/home-service-big-bg.webp'
 }
 
 </script>

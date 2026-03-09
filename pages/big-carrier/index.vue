@@ -65,7 +65,7 @@ usePageSeo({
   title: '大板车集运_高性价比长途汽车托运_30000+干线物流网点 - 车拖车',
   description: '针对长途搬迁、自驾返程及二手车流转，车拖车大板车托运通过规模效应大幅降低运输成本，提供批量运输方案。1000多家网点覆盖全国，30000条运输线路，支持国家交通局系统实时定位查看。',
   keywords: '大板车托运, 笼车运输价格, 私家车长途集运, 二手车跨省托运, 运车专线',
-  image: '/image/big-carrier/og-big-carrier.jpg'
+  image: '/image/big-carrier/og-big-carrier.webp'
 })
 
 // Schema.org 结构化数据
@@ -83,12 +83,24 @@ useServiceSchema({
   },
   faq: [
     {
-      question: '大板车托运多久能到？',
-      answer: '大板车需配载发车，跨省干线通常需3-7天。核心城市（如京沪、广深）开通了每日直达专线，时效更快。'
+      question: '大板车托运一般需要几天？',
+      answer: '时效取决于线路距离。大板车需在集散中心集货，通常省内或邻省 1-2 天，跨省长途（如北京至三亚）约 3-7 天。如需极致时效，建议选择小板车专车服务。'
     },
     {
-      question: '能查到车辆位置吗？',
-      answer: '可以。车拖车大板车接入国家交通局运输系统，提供官方级实时GPS/北斗定位查询，轨迹透明。'
+      question: '大板车进不了市区，怎么实现"门到门"？',
+      answer: '不用担心。对于大板车限行的区域，车拖车提供 "代驾接驳" 服务。大板车停靠在城市边缘物流园，由专业代驾员负责"最后一公里"的取送，真正实现从家门到家门。'
+    },
+    {
+      question: '托运车内可以放行李吗？',
+      answer: '可以。大板车托运支持随车携带非贵重、非易燃易爆的个人物品（如衣物、被褥）。'
+    },
+    {
+      question: '运输途中怎么查看我的车在哪里？',
+      answer: '我们接入了国家交通局运输系统。您只需在车拖车 APP 或小程序即可实时查看车辆的 GPS 定位轨迹，甚至可以查看车辆在主要中转节点的照片。'
+    },
+    {
+      question: '托运费用包含保险吗？',
+      answer: '不包含保险，需要额外购买。保险由太平洋保险和东海保险承保，如您的车辆价值较高，可以购买高额保险。'
     }
   ]
 })
@@ -148,7 +160,7 @@ const advantages: AdvantageItem[] = [
 const cases: CaseItemTypeB[] = [
   {
     tag: '家庭长途搬迁',
-    image: '/image/big-carrier/big-case1.png',
+    image: '/image/big-carrier/big-case1.webp',
     from: '哈尔滨',
     to: '三亚',
     title: '一家三口避寒过冬，车辆提前发运',
@@ -157,7 +169,7 @@ const cases: CaseItemTypeB[] = [
   },
   {
     tag: 'B2B 批量调拨',
-    image: '/image/big-carrier/big-case2.png',
+    image: '/image/big-carrier/big-case2.webp',
     from: '广州',
     to: '成都',
     title: '车行批量采购，6台车一次发运',
@@ -166,7 +178,7 @@ const cases: CaseItemTypeB[] = [
   },
   {
     tag: '自驾游返程',
-    image: '/image/big-carrier/big-case3.png',
+    image: '/image/big-carrier/big-case3.webp',
     from: '乌鲁木齐',
     to: '上海',
     title: '特种兵式旅游结束，人车分离返程',
@@ -181,7 +193,7 @@ const reviews: ReviewItem[] = [
     location: '哈尔滨',
     role: '私家车主',
     scenario: '哈尔滨 → 三亚',
-    avatar: '/image/partner-recruit/avatar1.jpeg',
+    avatar: '/image/partner-recruit/avatar1.webp',
     content: '每年冬天都去海南，以前最头疼大板车进不了市区。这次用了车拖车，代驾直接到楼下取车，到了三亚也是直接送到酒店，全程不用我操心，太方便了！',
     tags: ['#门到门接驳', '#老人友好'],
     car: '车型：丰田汉兰达',
@@ -191,7 +203,7 @@ const reviews: ReviewItem[] = [
     location: '广州',
     role: '车商',
     scenario: '广州 → 成都',
-    avatar: '/image/partner-recruit/avatar2.jpeg',
+    avatar: '/image/partner-recruit/avatar2.webp',
     content: '作为车商最看重时效和票据。车拖车的干线发车频率很高，基本不用等。最重要的是能开增值税专票，物流轨迹在国家交通系统能查到，给客户看很放心。',
     tags: ['#税务合规', '#批量调车'],
     car: '车型：奥迪 A6L x 6',
@@ -201,7 +213,7 @@ const reviews: ReviewItem[] = [
     location: '上海',
     role: '自驾游爱好者',
     scenario: '乌鲁木齐 → 上海',
-    avatar: '/image/partner-recruit/avatar3.jpeg',
+    avatar: '/image/partner-recruit/avatar3.webp',
     content: '新疆自驾玩累了，实在不想开回上海。在大板车和自己开之间犹豫很久，最后看中这里的GPS实时定位。车在笼车上的照片都会发给我，行李也免费随车运回了，省了四千公里油费！',
     tags: ['#GPS定位', '#可放行李'],
     car: '车型：坦克 300',

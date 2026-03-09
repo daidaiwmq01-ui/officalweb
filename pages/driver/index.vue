@@ -238,7 +238,7 @@ usePageSeo({
   title: '司机端入驻 - 全国最大的板车司机接单平台 - 车拖车',
   description: '车拖车司机端汇聚38万+认证司机，海量真实货源，自动听单，极速结算。下载APP即可入驻，开启高收入板车托运事业。',
   keywords: '板车司机, 司机入驻, 司机接单平台, 托运司机, 车拖车司机端',
-  image: '/image/driver/og-driver.jpg'
+  image: '/image/driver/og-driver.webp'
 })
 
 import { 

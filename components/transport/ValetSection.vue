@@ -128,7 +128,7 @@ import DialogDescription from '@/components/ui/DialogDescription.vue'
 const isMiniProgramModalOpen = ref(false)
 const isMobile = ref(false)
 
-const sectionImage = '/image/transport/valet.png'
+const sectionImage = '/image/transport/valet.webp'
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 768

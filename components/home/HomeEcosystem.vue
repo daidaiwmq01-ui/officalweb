@@ -8,7 +8,7 @@
           class="relative h-[400px] rounded-2xl overflow-hidden group cursor-pointer"
         >
           <img loading="lazy"
-            src="/image/supply-chain/hero.png"
+            :src="supplyChainHeroSrc"
             alt="Supply Chain Solutions"
             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             @error="(e) => handleSupplyChainImageError(e)"
@@ -29,7 +29,7 @@
           class="relative h-[400px] rounded-2xl overflow-hidden group cursor-pointer"
         >
           <img loading="lazy"
-            src="/image/home/factory.png"
+            :src="factoryImageSrc"
             alt="Truck Manufacturing"
             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             @error="(e) => handleFactoryImageError(e)"
@@ -57,15 +57,17 @@ interface Props {
 
 const props = defineProps<Props>()
 const router = useRouter()
+const supplyChainHeroSrc = '/image/supply-chain/hero.png'
+const factoryImageSrc = '/image/home/factory.webp'
 
 const handleSupplyChainImageError = (e: Event) => {
   const el = e.target as HTMLImageElement
-  if (el && !el.src.includes('supply-chain/hero')) el.src = '/image/supply-chain/hero.png'
+  if (el && !el.src.includes('supply-chain/hero')) el.src = supplyChainHeroSrc
 }
 
 const handleFactoryImageError = (e: Event) => {
   const el = e.target as HTMLImageElement
-  if (el && !el.src.includes('image/home/factory')) el.src = '/image/home/factory.png'
+  if (el && !el.src.includes('image/home/factory')) el.src = factoryImageSrc
 }
 
 const handleSupplyChainClick = () => {

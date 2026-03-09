@@ -267,7 +267,7 @@ usePageSeo({
   title: '网络安全与数据保护 - 国家等保三级认证 - 车拖车',
   description: '车拖车已通过国家信息系统安全等级保护三级认证（DJCP），在数据脱敏、加密传输及服务器深度加固方面达到金融级安全标准。',
   keywords: '网络安全, 等保三级, 数据保护, 信息安全, 车拖车安全',
-  image: '/image/cybersecurity/og-security.jpg'
+  image: '/image/cybersecurity/og-security.webp'
 })
 
 

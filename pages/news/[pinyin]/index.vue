@@ -146,24 +146,63 @@ usePageSeo({
   title: `${categoryName.value} - 车拖车资讯`,
   description: `车拖车${categoryName.value}频道，为您提供最新的${categoryName.value}相关资讯与行业动态。`,
   keywords: `${categoryName.value}, 物流资讯, 车拖车`,
-  image: '/image/news/og-news.jpg',
+  image: '/image/news/og-news.webp',
 })
+
+const BASE_URL = 'https://newweb.chetuoche.net'
 
 const categorySchema = computed(() => ({
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   'name': `${categoryName.value} - 车拖车资讯`,
-  'description': `车拖车${categoryName.value}频道资讯列表`,
-  'url': `https://newweb.chetuoche.net/news/${currentCode.value}`,
+  'description': `车拖车${categoryName.value}频道，为您提供最新的${categoryName.value}相关资讯与行业动态。`,
+  'url': `${BASE_URL}/news/${currentCode.value}`,
+  'inLanguage': 'zh-CN',
+  'isPartOf': {
+    '@type': 'CollectionPage',
+    '@id': `${BASE_URL}/news`,
+    'name': '车拖车行业资讯'
+  },
   'publisher': {
     '@type': 'Organization',
     'name': '车拖车 (CheTuoChe)',
     'logo': {
       '@type': 'ImageObject',
-      'url': 'https://newweb.chetuoche.net/image/logo/logo.png',
+      'url': `${BASE_URL}/image/logo/logo.webp`,
     },
   },
+  'speakable': {
+    '@type': 'SpeakableSpecification',
+    'cssSelector': ['h1', 'h1 + p']
+  }
 }))
 
 useSchemaOrg(categorySchema)
+
+const categoryBreadcrumbSchema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': '首页',
+      'item': BASE_URL
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': '信息资讯',
+      'item': `${BASE_URL}/news`
+    },
+    {
+      '@type': 'ListItem',
+      'position': 3,
+      'name': categoryName.value,
+      'item': `${BASE_URL}/news/${currentCode.value}`
+    }
+  ]
+}))
+
+useSchemaOrg(categoryBreadcrumbSchema)
 </script>

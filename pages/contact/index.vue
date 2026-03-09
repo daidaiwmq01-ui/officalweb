@@ -266,7 +266,7 @@
                 <p class="text-[12px] text-gray-400 mb-6 leading-relaxed">获取最新运价与行业资讯</p>
                 <div class="w-32 h-32 bg-gray-50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center">
                   <img loading="lazy"
-                    src="/image/qrcode/wechat.png"
+                    :src="wechatQrSrc"
                     alt="车拖车微信公众号二维码-获取行业资讯与运价动态"
                     class="w-24 h-24 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
                   />
@@ -281,7 +281,7 @@
                 <p class="text-[12px] text-gray-400 mb-6 leading-relaxed">观看发车现场与避坑指南</p>
                 <div class="w-32 h-32 bg-gray-50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center">
                   <img loading="lazy"
-                    src="/image/qrcode/douyin.png"
+                    :src="douyinQrSrc"
                     alt="车拖车抖音官方号二维码-观看发车现场与托运避坑指南"
                     class="w-24 h-24 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
                   />
@@ -304,6 +304,9 @@ import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
 useBreadcrumbSchema(getBreadcrumbsForRoute('/contact'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/contact')
+// 使用运行时 URL，避免 Vite 将 public 下的图片解析为 import
+const wechatQrSrc = '/image/qrcode/wechat.png'
+const douyinQrSrc = '/image/qrcode/douyin.png'
 import { useRouter } from 'vue-router'
 import { useHead } from '#app'
 import {
@@ -371,7 +374,7 @@ usePageSeo({
   title: '联系我们 - 车拖车数字化汽车物流专家',
   description: '联系车拖车获取汽车托运咨询。综合服务热线 400-075-1117，技术支持 yunweishu8888@163.com，10分钟内响应。',
   keywords: '联系车拖车, 汽车托运咨询, 客服热线, 商务合作',
-  image: '/image/contact/og-contact.jpg'
+  image: '/image/contact/og-contact.webp'
 })
 
 // Schema.org 结构化数据（统一使用全局 Organization @id）

@@ -148,7 +148,7 @@ import {
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import heroBackground from '@/assets/image/big-carrier/hero.jpg'
+const heroBackground = '/image/big-carrier/hero.webp'
 
 const breadcrumbItems = getBreadcrumbsForRoute('/big-carrier')
 import Dialog from '@/components/ui/Dialog.vue'

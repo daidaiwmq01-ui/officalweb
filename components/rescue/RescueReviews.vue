@@ -90,7 +90,7 @@ const reviews = [
   {
     name: '李女士',
     city: '杭州',
-    avatar: '/image/rescue/avatar1.jpeg',
+    avatar: '/image/rescue/avatar1.webp',
     content: '之前叫救援被黑过，这次车拖车真的很规范。APP上显示170元起步就是170元，没有任何隐形消费，司机也没有乱要小费，这种透明度必须好评！',
     tag: '价格透明',
     tagStyle: 'bg-orange-50 text-orange-600',
@@ -99,7 +99,7 @@ const reviews = [
   {
     name: '张先生',
     city: '上海',
-    avatar: '/image/rescue/avatar2.jpeg',
+    avatar: '/image/rescue/avatar2.webp',
     content: '半夜在地库车坏了，大车进不来。车拖车派了低姿态板车，师傅技术很好，几分钟就弄出来了，直接拖到4S店，效率太高了。',
     tag: '地库救援',
     tagStyle: 'bg-blue-50 text-blue-600',
@@ -108,7 +108,7 @@ const reviews = [
   {
     name: '王先生',
     city: '北京',
-    avatar: '/image/rescue/avatar3.jpeg',
+    avatar: '/image/rescue/avatar3.webp',
     content: '在五环上抛锚，心里很慌。下单后18分钟司机就到了，穿反光背心很专业，帮我摆好警示牌，背车动作非常利索。',
     tag: '极速响应',
     tagStyle: 'bg-green-50 text-green-600',

@@ -139,7 +139,7 @@
             class="relative rounded-[40px] overflow-hidden shadow-2xl border-8 border-white"
           >
             <ImageWithFallback
-              src="/image/driver/mockup.png"
+              src="/image/driver/mockup.webp"
               alt="车拖车平台认证司机在驿站休息"
               class="w-full h-full object-cover"
             />
@@ -153,7 +153,7 @@
     <section class="py-24 bg-[#0B2747] text-white relative overflow-hidden">
       <div class="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
         <ImageWithFallback
-          src="/image/driver/driverhome.png"
+          src="/image/driver/driverhome.webp"
           alt="车拖车全国驿站网络节点覆盖图"
           class="w-full h-full object-cover"
         />
@@ -376,7 +376,7 @@ usePageSeo({
   title: '司机之家 - 全国驿站补给网络',
   description: '车拖车司机之家计划2026年底构建500+处服务驿站，为货运司机提供24h热水淋浴、免费Wi-Fi、车辆自助检测及温暖生活补给。',
   keywords: '司机之家, 司机驿站, 货运服务站, 司机补给, 车拖车, 24小时服务',
-  ogImage: '/image/driver/og-driver-home.jpg',
+  ogImage: '/image/driver/og-driver-home.webp',
   canonicalUrl: 'https://newweb.chetuoche.net/driver/home'
 })
 

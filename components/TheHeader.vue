@@ -12,72 +12,73 @@
       </a>
 
       <!-- Center: Main Navigation Menu -->
-      <nav class="hidden lg:flex items-center gap-8 h-full">
-        <div
-          v-for="item in menuItems"
-          :key="item.label"
-          class="relative h-full flex items-center"
-          @mouseenter="item.hasDropdown && (activeDropdown = item.id || null)"
-          @mouseleave="activeDropdown = null"
-        >
-          <div class="relative flex items-center h-full">
-            <button
-              @click="item.id && handleNavClick(item.id)"
-              :class="[
-                'flex items-center gap-1 text-[16px] transition-colors cursor-pointer outline-none bg-transparent border-none p-0',
-                isActive(item) ? 'text-[#006EFF] font-bold' : 'text-[#4B5563] font-normal hover:text-[#006EFF]'
-              ]"
-            >
-              {{ item.label }}
-              <ChevronDown
-                v-if="item.hasDropdown"
-                :class="[
-                  'w-4 h-4 transition-transform duration-200',
-                  activeDropdown === item.id ? 'rotate-180' : ''
-                ]"
-              />
-              <div
-                v-if="isActive(item)"
-                class="absolute left-0 right-0 bottom-[24px] h-[2px] bg-[#006EFF] rounded-full"
-              />
-            </button>
-          </div>
-
-          <!-- Dropdown Menu -->
-          <Transition
-            enter-active-class="transition-all duration-200"
-            enter-from-class="opacity-0 translate-y-[-10px]"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition-all duration-200"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 translate-y-[-10px]"
+      <nav aria-label="主导航" class="hidden lg:flex items-center gap-8 h-full">
+        <ul class="flex items-center gap-8 h-full list-none m-0 p-0">
+          <li
+            v-for="item in menuItems"
+            :key="item.label"
+            class="relative h-full flex items-center"
+            @mouseenter="item.hasDropdown && (activeDropdown = item.id || null)"
+            @mouseleave="activeDropdown = null"
           >
-            <div
-              v-if="item.hasDropdown && activeDropdown === item.id"
-              :class="[
-                'absolute left-0 top-[80px] bg-white flex flex-col z-[100] shadow-xl border-t-2 border-[#006EFF] rounded-b-xl',
-                item.id === 'download' ? 'w-[160px]' : 'min-w-[200px]'
-              ]"
-            >
-              <div class="p-2 flex flex-col">
-                <a
-                  v-for="child in item.children"
-                  :key="child.label"
-                  :href="child.href"
-                  :target="child.href?.startsWith('http') ? '_blank' : undefined"
-                  :rel="child.href?.startsWith('http') ? 'noopener noreferrer' : undefined"
-                  @click.prevent="handleChildClick(child)"
+            <div class="relative flex items-center h-full">
+              <a
+                :href="getItemHref(item)"
+                @click.prevent="item.id && handleNavClick(item.id)"
+                :class="[
+                  'flex items-center gap-1 text-[16px] transition-colors cursor-pointer no-underline',
+                  isActive(item) ? 'text-[#006EFF] font-bold' : 'text-[#4B5563] font-normal hover:text-[#006EFF]'
+                ]"
+              >
+                {{ item.label }}
+                <ChevronDown
+                  v-if="item.hasDropdown"
                   :class="[
-                    'text-left text-[14px] px-4 py-2.5 rounded-lg transition-colors cursor-pointer',
-                    activeId === child.id ? 'bg-[#F0F7FF] text-[#006EFF] font-bold' : 'text-[#4B5563] hover:bg-[#F0F7FF] hover:text-[#006EFF]'
+                    'w-4 h-4 transition-transform duration-200',
+                    activeDropdown === item.id ? 'rotate-180' : ''
                   ]"
-                >
-                  {{ child.label }}
-                </a>
-              </div>
+                />
+                <div
+                  v-if="isActive(item)"
+                  class="absolute left-0 right-0 bottom-[24px] h-[2px] bg-[#006EFF] rounded-full"
+                />
+              </a>
             </div>
-          </Transition>
-        </div>
+
+            <!-- Dropdown Menu -->
+            <Transition
+              enter-active-class="transition-all duration-200"
+              enter-from-class="opacity-0 translate-y-[-10px]"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition-all duration-200"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 translate-y-[-10px]"
+            >
+              <ul
+                v-if="item.hasDropdown && activeDropdown === item.id"
+                :class="[
+                  'absolute left-0 top-[80px] bg-white flex flex-col z-[100] shadow-xl border-t-2 border-[#006EFF] rounded-b-xl list-none m-0 p-2',
+                  item.id === 'download' ? 'w-[160px]' : 'min-w-[200px]'
+                ]"
+              >
+                <li v-for="child in item.children" :key="child.label">
+                  <a
+                    :href="child.href"
+                    :target="child.href?.startsWith('http') ? '_blank' : undefined"
+                    :rel="child.href?.startsWith('http') ? 'noopener noreferrer' : undefined"
+                    @click.prevent="handleChildClick(child)"
+                    :class="[
+                      'block text-left text-[14px] px-4 py-2.5 rounded-lg transition-colors cursor-pointer no-underline',
+                      activeId === child.id ? 'bg-[#F0F7FF] text-[#006EFF] font-bold' : 'text-[#4B5563] hover:bg-[#F0F7FF] hover:text-[#006EFF]'
+                    ]"
+                  >
+                    {{ child.label }}
+                  </a>
+                </li>
+              </ul>
+            </Transition>
+          </li>
+        </ul>
       </nav>
 
       <!-- Right: Call to Action (CTA) -->
@@ -113,44 +114,47 @@
         v-if="isMobileMenuOpen"
         class="lg:hidden fixed inset-0 top-[80px] bg-white z-[90]"
       >
-        <div class="flex flex-col p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)]">
-          <div
-            v-for="item in menuItems"
-            :key="item.label"
-            class="border-b border-gray-50 last:border-none"
-          >
-            <div class="flex items-center justify-between py-4">
-              <button
-                :class="[
-                  'text-[16px] font-medium transition-colors cursor-pointer outline-none bg-transparent border-none p-0',
-                  activeId === item.id ? 'text-[#006EFF]' : 'text-[#4B5563]'
-                ]"
-                @click="item.id && handleNavClick(item.id)"
-              >
-                {{ item.label }}
-              </button>
-              <ChevronDown
-                v-if="item.hasDropdown"
-                :class="[
-                  'w-4 h-4 transition-colors',
-                  activeId === item.id ? 'text-[#006EFF]' : 'text-gray-400'
-                ]"
-              />
-            </div>
-            <div v-if="item.hasDropdown" class="pl-4 pb-4 flex flex-col gap-3">
-              <a
-                v-for="child in item.children"
-                :key="child.label"
-                :href="child.href"
-                :target="child.href?.startsWith('http') ? '_blank' : undefined"
-                :rel="child.href?.startsWith('http') ? 'noopener noreferrer' : undefined"
-                class="text-left text-[14px] text-[#4B5563] hover:text-[#006EFF] cursor-pointer"
-                @click.prevent="handleChildClick(child)"
-              >
-                {{ child.label }}
-              </a>
-            </div>
-          </div>
+        <nav aria-label="移动端导航" class="flex flex-col p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)]">
+          <ul class="list-none m-0 p-0">
+            <li
+              v-for="item in menuItems"
+              :key="item.label"
+              class="border-b border-gray-50 last:border-none"
+            >
+              <div class="flex items-center justify-between py-4">
+                <a
+                  :href="getItemHref(item)"
+                  :class="[
+                    'text-[16px] font-medium transition-colors cursor-pointer no-underline',
+                    activeId === item.id ? 'text-[#006EFF]' : 'text-[#4B5563]'
+                  ]"
+                  @click.prevent="item.id && handleNavClick(item.id)"
+                >
+                  {{ item.label }}
+                </a>
+                <ChevronDown
+                  v-if="item.hasDropdown"
+                  :class="[
+                    'w-4 h-4 transition-colors',
+                    activeId === item.id ? 'text-[#006EFF]' : 'text-gray-400'
+                  ]"
+                />
+              </div>
+              <ul v-if="item.hasDropdown" class="pl-4 pb-4 flex flex-col gap-3 list-none m-0 p-0">
+                <li v-for="child in item.children" :key="child.label">
+                  <a
+                    :href="child.href"
+                    :target="child.href?.startsWith('http') ? '_blank' : undefined"
+                    :rel="child.href?.startsWith('http') ? 'noopener noreferrer' : undefined"
+                    class="block text-left text-[14px] text-[#4B5563] hover:text-[#006EFF] cursor-pointer no-underline"
+                    @click.prevent="handleChildClick(child)"
+                  >
+                    {{ child.label }}
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
           <div class="pt-6">
             <Button
               @click="handleMobileOrderClick"
@@ -159,7 +163,7 @@
               立即下单
             </Button>
           </div>
-        </div>
+        </nav>
       </div>
     </Transition>
 
@@ -234,7 +238,7 @@ import type { MenuItem } from '@/types'
 /**
  * 品牌 Logo 路径（与 /public/image 目录一致）
  */
-const brandLogo = '/image/logo/logo.png'
+const brandLogo = '/image/logo/logo.webp'
 
 /**
  * 组件属性定义
@@ -274,66 +278,83 @@ const isMobileMenuOpen = ref(false)
 const isMiniProgramModalOpen = ref(false)
 
 const menuItems: MenuItem[] = [
-  { label: '首页', href: '#', id: 'home', hasDropdown: false },
+  { label: '首页', href: '/', id: 'home', hasDropdown: false },
   {
     label: '汽车托运',
+    href: '/transport',
     id: 'transport',
     hasDropdown: true,
     children: [
-      { label: '小板车托运', href: '#', id: 'small-carrier' },
-      { label: '大板车托运', href: '#', id: 'big-carrier' },
-      { label: '汽车救援', href: '#', id: 'rescue' },
-      { label: '代驾', href: '#', id: 'driver' },
+      { label: '小板车托运', href: '/small-carrier', id: 'small-carrier' },
+      { label: '大板车托运', href: '/big-carrier', id: 'big-carrier' },
+      { label: '汽车救援', href: '/rescue', id: 'rescue' },
+      { label: '代驾', href: '/valet', id: 'driver' },
       { label: '价格查询', href: '/pricing#pricing-calculator', id: 'pricing' },
-      { label: '用户指南', href: '#', id: 'guide' },
-      { label: '常见问题', href: '#', id: 'faq' },
+      { label: '用户指南', href: '/guide', id: 'guide' },
+      { label: '常见问题', href: '/guide#faq', id: 'faq' },
     ]
   },
   {
     label: '解决方案',
+    href: '/solutions',
     id: 'solutions',
     hasDropdown: true,
     children: [
-      { label: '汽车供应链', href: '#', id: 'supply-chain' },
-      { label: '商业活动物流', href: '#', id: 'commercial' },
-      { label: '个人旅游托运', href: '#', id: 'personal' },
-      { label: '网络安全防护', href: '#', id: 'cybersecurity' },
+      { label: '汽车供应链', href: '/supply-chain', id: 'supply-chain' },
+      { label: '商业活动物流', href: '/luxury-transport', id: 'commercial' },
+      { label: '个人旅游托运', href: '/personal-travel', id: 'personal' },
+      { label: '网络安全防护', href: '/cybersecurity', id: 'cybersecurity' },
     ]
   },
-  { label: '清障车销售', id: 'truck-sales', href: '#', hasDropdown: false },
+  { label: '清障车销售', id: 'truck-sales', href: '/truck-sales', hasDropdown: false },
   {
     label: '生态合作',
+    href: '/partners',
     id: 'partners',
     hasDropdown: true,
     children: [
-      { label: '城市合伙人招募', href: '#', id: 'partner-recruit' },
-      { label: '司机入驻', href: '#', id: 'driver-join' },
+      { label: '城市合伙人招募', href: '/partner-recruit', id: 'partner-recruit' },
+      { label: '司机入驻', href: '/driver/home', id: 'driver-join' },
       { label: '企业/救援公司登陆', href: 'https://rescue.ctcapp.com/rescue-app/#/entrance', id: 'b2b-login' },
     ]
   },
-  { label: '信息资讯', id: 'news', href: '#', hasDropdown: false },
+  { label: '信息资讯', id: 'news', href: '/news', hasDropdown: false },
   {
     label: '关于我们',
+    href: '/about',
     id: 'about',
     hasDropdown: true,
     children: [
-      { label: '司机之家', href: '#', id: 'driver-home' },
-      { label: '联系我们', href: '#', id: 'contact' },
-      { label: '人才招聘', href: '#', id: 'careers' },
+      { label: '司机之家', href: '/driver/home', id: 'driver-home' },
+      { label: '联系我们', href: '/contact', id: 'contact' },
+      { label: '人才招聘', href: '/careers', id: 'careers' },
     ]
   },
   {
     label: 'APP下载',
     id: 'download',
-    href: '#',
+    href: '/download',
     hasDropdown: true,
     children: [
-      { label: '下载中心', href: '#', id: 'download' },
-      { label: '客户端下载', href: '#', id: 'download-client' },
-      { label: '司机端下载', href: '#', id: 'download-driver' },
+      { label: '下载中心', href: '/download', id: 'download' },
+      { label: '客户端下载', href: '/download/client', id: 'download-client' },
+      { label: '司机端下载', href: '/download/driver', id: 'download-driver' },
     ]
   },
 ]
+
+/**
+ * 获取菜单项的 href 属性
+ *
+ * @param item - 菜单项对象
+ * @returns href 路径
+ *
+ * @description
+ * 返回菜单项的 href 属性，如果没有则返回 '#'
+ */
+const getItemHref = (item: MenuItem) => {
+  return item.href || '#'
+}
 
 /**
  * 检查菜单项是否为激活状态

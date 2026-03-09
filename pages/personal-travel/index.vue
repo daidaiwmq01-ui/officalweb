@@ -58,7 +58,7 @@ usePageSeo({
   title: '个人旅游托运 - 让远方触手可及 | 车拖车',
   description: '车拖车个人旅游托运服务，专业异地运车，告别长途驾驶疲劳。支持西藏转山、三亚度假、洱海环游等场景，200万车主商业险保障，48小时极速交付。',
   keywords: '个人旅游托运,异地运车,汽车托运,自驾游托运,西藏运车,三亚运车,门到门运车',
-  image: '/image/personal-travel/og-travel.jpg'
+  image: '/image/personal-travel/og-travel.webp'
 })
 
 // Schema.org 结构化数据 - 个人旅游托运

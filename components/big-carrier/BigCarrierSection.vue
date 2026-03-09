@@ -64,5 +64,5 @@
 <script setup lang="ts">
 import { CheckCircle2 } from 'lucide-vue-next'
 import ImageWithFallback from '@/components/ImageWithFallback.vue'
-const definitionImg = '/image/big-carrier/big-service.png'
+const definitionImg = '/image/big-carrier/big-service.webp'
 </script>

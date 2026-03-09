@@ -4,7 +4,7 @@
     <div class="absolute inset-0 z-0">
       <img
         loading="eager"
-        src="/image/supply-chain/hero.png" 
+        src="/image/supply-chain/hero.webp" 
         alt="Car Distribution Center" 
         class="w-full h-full object-cover"
       />

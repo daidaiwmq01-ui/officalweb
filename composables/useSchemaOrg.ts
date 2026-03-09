@@ -10,7 +10,7 @@ export const organizationSchema = {
   'name': '车拖车 (CheTuoChe)',
   'legalName': '山东车拖车网络科技有限公司',
   'url': 'https://newweb.chetuoche.net',
-  'logo': 'https://newweb.chetuoche.net/image/logo/logo.png',
+  'logo': 'https://newweb.chetuoche.net/image/logo/logo.webp',
   'slogan': '让汽车托运像发快递一样简单',
   'description': '国内领先的AI智能调度汽车托运平台，连接167万用户与45万运力伙伴。',
   'foundingDate': '2020',
@@ -46,22 +46,46 @@ export function useSchemaOrg(schema: any) {
 
 /**
  * 网站主页 Schema
+ * 包含 Organization + WebSite + WebPage 三层实体
+ * speakable 用于 GEO（语音搜索/AI 引用）
  */
 export function useHomePageSchema() {
+  const baseUrl = 'https://newweb.chetuoche.net'
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
       organizationSchema,
       {
         '@type': 'WebSite',
-        '@id': 'https://newweb.chetuoche.net/#website',
-        'url': 'https://newweb.chetuoche.net',
+        '@id': `${baseUrl}/#website`,
+        'url': baseUrl,
         'name': '车拖车官网 - 全场景AI智能汽车托运调度平台',
-        'publisher': { '@id': 'https://newweb.chetuoche.net/#organization' },
+        'description': '国内领先的AI智能调度汽车托运平台，连接167万用户与45万运力伙伴。',
+        'publisher': { '@id': `${baseUrl}/#organization` },
+        'inLanguage': 'zh-CN',
         'potentialAction': {
           '@type': 'SearchAction',
-          'target': 'https://newweb.chetuoche.net/pricing?q={search_term_string}',
+          'target': `${baseUrl}/pricing?q={search_term_string}`,
           'query-input': 'required name=search_term_string'
+        }
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${baseUrl}/#webpage`,
+        'url': baseUrl,
+        'name': '车拖车(CheTuoChe)官网 - 全场景AI智能汽车托运调度平台',
+        'isPartOf': { '@id': `${baseUrl}/#website` },
+        'about': { '@id': `${baseUrl}/#organization` },
+        'inLanguage': 'zh-CN',
+        'description': '车拖车是国内领先的一站式汽车物流调度平台，依托自研AI智能调度系统，提供大板车干线集运、小板车1对1托运、专业代驾及24h道路救援服务。',
+        'speakable': {
+          '@type': 'SpeakableSpecification',
+          'cssSelector': ['h1', 'h1 + p']
+        },
+        'primaryImageOfPage': {
+          '@type': 'ImageObject',
+          'url': `${baseUrl}/image/home/home-hero-bg.webp`
         }
       }
     ]
@@ -90,17 +114,20 @@ export function useServiceSchema(config: {
         'provider': { '@id': 'https://newweb.chetuoche.net/#organization' },
         'description': config.description,
         'serviceType': config.serviceType || 'Car Transport',
-        'areaServed': config.areaServed || 'CN'
+        'areaServed': config.areaServed || 'CN',
+        'inLanguage': 'zh-CN',
+        'speakable': {
+          '@type': 'SpeakableSpecification',
+          'cssSelector': ['h1', 'h1 + p', 'h2']
+        }
       }
     ]
   }
   
-  // 添加报价信息
   if (config.offers) {
     schema['@graph'][0].offers = config.offers
   }
   
-  // 添加 FAQ
   if (config.faq && config.faq.length > 0) {
     schema['@graph'].push({
       '@type': 'FAQPage',
@@ -124,6 +151,9 @@ export function useServiceSchema(config: {
  * - publisher 包含 name + logo (ImageObject)
  * - image 使用绝对 URL
  * - datePublished / dateModified 使用 ISO 8601 格式
+ * - inLanguage / articleSection / keywords 提升语义丰富度
+ * - speakable 支持 GEO（语音搜索/AI 引用）
+ * - isPartOf 建立页面层级关系
  */
 export function useArticleSchema(article: {
   title: string
@@ -133,6 +163,8 @@ export function useArticleSchema(article: {
   datePublished?: string
   dateModified?: string
   author?: string
+  articleSection?: string
+  keywords?: string
 }) {
   const baseUrl = 'https://newweb.chetuoche.net'
 
@@ -166,10 +198,22 @@ export function useArticleSchema(article: {
         'name': '车拖车 (CheTuoChe)',
         'logo': {
           '@type': 'ImageObject',
-          'url': `${baseUrl}/image/logo/logo.png`
+          'url': `${baseUrl}/image/logo/logo.webp`
         }
       },
-      'description': article.description
+      'description': article.description,
+      'inLanguage': 'zh-CN',
+      'articleSection': article.articleSection || '新闻资讯',
+      'keywords': article.keywords || '车拖车, 汽车托运, 物流资讯',
+      'isPartOf': {
+        '@type': 'CollectionPage',
+        '@id': `${baseUrl}/news`,
+        'name': '车拖车行业资讯'
+      },
+      'speakable': {
+        '@type': 'SpeakableSpecification',
+        'cssSelector': ['h1', '.prose > p:first-of-type']
+      }
     }
   })
   
@@ -183,6 +227,11 @@ export function useAboutPageSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
+    'inLanguage': 'zh-CN',
+    'speakable': {
+      '@type': 'SpeakableSpecification',
+      'cssSelector': ['h1', 'h1 + p']
+    },
     'mainEntity': {
       '@id': 'https://newweb.chetuoche.net/#organization',
       '@type': 'Organization',
@@ -264,6 +313,11 @@ export function useContactPageSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
+    'inLanguage': 'zh-CN',
+    'speakable': {
+      '@type': 'SpeakableSpecification',
+      'cssSelector': ['h1', 'h1 + p']
+    },
     'mainEntity': {
       '@type': 'Organization',
       '@id': 'https://newweb.chetuoche.net/#organization',
@@ -277,9 +331,15 @@ export function useContactPageSchema() {
         },
         {
           '@type': 'ContactPoint',
-          'email': 'tech@autotrans.com',
+          'telephone': '19078975678',
+          'contactType': 'sales',
+          'description': '板车销售专线'
+        },
+        {
+          '@type': 'ContactPoint',
+          'email': 'yunweishu8888@163.com',
           'contactType': 'technical support',
-          'description': '系统对接与安全咨询'
+          'description': '技术与安全支持'
         }
       ]
     }
@@ -337,6 +397,7 @@ export function useHowToSchema(config: {
     'name': config.name,
     'description': config.description,
     'totalTime': config.totalTime || 'PT30M',
+    'inLanguage': 'zh-CN',
     'estimatedCost': config.estimatedCost,
     'step': config.steps.map((step, index) => ({
       '@type': 'HowToStep',
@@ -391,7 +452,7 @@ export function useLocalBusinessSchema(config?: {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     'name': config?.name || '车拖车 (CheTuoChe)',
-    'image': 'https://newweb.chetuoche.net/image/logo/logo.png',
+    'image': 'https://newweb.chetuoche.net/image/logo/logo.webp',
     'telephone': '400-075-1117',
     'email': 'tech@autotrans.com',
     'address': {
@@ -516,12 +577,13 @@ export function useVideoObjectSchema(config: {
     'duration': config.duration,
     'contentUrl': config.contentUrl,
     'embedUrl': config.embedUrl,
+    'inLanguage': 'zh-CN',
     'publisher': {
       '@type': 'Organization',
       'name': '车拖车 (CheTuoChe)',
       'logo': {
         '@type': 'ImageObject',
-        'url': `${baseUrl}/image/logo/logo.png`
+        'url': `${baseUrl}/image/logo/logo.webp`
       }
     }
   }

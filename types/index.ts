@@ -374,6 +374,13 @@ export interface NewsItem {
 
   /** 新闻类型 ID（可选，用于跳转详情） */
   typeId?: number | string
+
+  /**
+   * 文章标签字符串（可选）
+   * 例如："时政1, 娱乐, 新闻"
+   * 用于热门话题筛选文章时进行匹配
+   */
+  tags?: string
 }
 
 /**

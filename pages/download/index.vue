@@ -147,11 +147,11 @@
               </div>
             </div>
 
-            <NuxtLink 
+            <NuxtLink
               to="/download/client"
               class="text-[16px] text-[#006EFF] hover:underline transition-colors flex items-center gap-1 font-bold"
             >
-              了解更多功能详情 <ChevronRight class="w-4 h-4" />
+              了解客户端功能详情 <ChevronRight class="w-4 h-4" />
             </NuxtLink>
           </div>
 
@@ -260,11 +260,11 @@
               </div>
             </div>
 
-            <NuxtLink 
+            <NuxtLink
               to="/download/driver"
               class="text-[16px] text-[#0B2747] hover:underline transition-colors flex items-center gap-1 font-bold"
             >
-              了解更多功能详情 <ChevronRight class="w-4 h-4" />
+              了解司机端功能详情 <ChevronRight class="w-4 h-4" />
             </NuxtLink>
           </div>
 
@@ -354,7 +354,7 @@ usePageSeo({
   title: 'APP下载中心 - 车拖车智能汽车物流平台',
   description: '车拖车数字化终端下载中心，行业领先的 AI 智能调度平台，连接 167 万用户与 45 万运力伙伴。支持iOS、Android及HarmonyOS系统。',
   keywords: 'APP下载, 车拖车下载, 汽车托运APP, 司机端下载, 客户端下载',
-  image: '/image/download/og-download.jpg'
+  image: '/image/download/og-download.webp'
 })
 
 // Schema.org 结构化数据

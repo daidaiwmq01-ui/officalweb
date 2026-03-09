@@ -4,7 +4,7 @@
     <div class="absolute inset-0 z-0">
       <img
         loading="eager"
-        src="/image/solutions/hero.png" 
+        src="/image/solutions/hero.webp" 
         alt="Digital Logistics Network" 
         class="w-full h-full object-cover"
       />

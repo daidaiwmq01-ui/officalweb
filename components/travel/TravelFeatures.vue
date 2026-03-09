@@ -10,7 +10,7 @@
             class="relative rounded-3xl overflow-hidden shadow-2xl"
           >
             <img loading="lazy"
-              src="/image/personal-travel/vacation.png"
+              src="/image/personal-travel/vacation.webp"
               alt="Vacation Travel"
               class="w-full h-auto"
             />

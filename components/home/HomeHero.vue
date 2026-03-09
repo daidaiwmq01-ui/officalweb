@@ -4,7 +4,7 @@
     <div class="absolute inset-0 z-0">
       <img
         loading="eager"
-        src="/image/home/home-hero-bg.png"
+        src="/image/home/home-hero-bg.webp"
         alt="车拖车智能汽车物流生态平台-全国覆盖的托运调度服务"
         class="w-full h-full object-cover"
         @error="handleImageError"
@@ -109,7 +109,7 @@ import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
 
-const HOME_HERO_SRC = '/image/home/home-hero-bg.png'
+const HOME_HERO_SRC = '/image/home/home-hero-bg.webp'
 
 const props = defineProps<{}>()
 
@@ -117,7 +117,7 @@ const isMiniProgramModalOpen = ref(false)
 
 const handleImageError = (e: Event) => {
   const el = e.target as HTMLImageElement
-  if (el && !el.src.includes('home-hero-bg.png')) el.src = HOME_HERO_SRC
+  if (el && !el.src.includes('home-hero-bg')) el.src = HOME_HERO_SRC
 }
 
 </script>

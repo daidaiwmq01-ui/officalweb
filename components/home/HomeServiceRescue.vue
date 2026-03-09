@@ -47,7 +47,7 @@
         <div class="w-full md:w-2/5 h-[300px] md:h-auto relative">
           <div class="absolute inset-0 md:-left-20">
             <img loading="lazy"
-              src="/image/home/rescue.png"
+              src="/image/home/rescue.webp"
               alt="24小时道路救援服务-全天候应急保障"
               class="w-full h-full object-cover object-center"
               @error="(e) => handleImageError(e)"
@@ -72,6 +72,6 @@ const showRescueDialog = ref(false)
 
 const handleImageError = (e: Event) => {
   const el = e.target as HTMLImageElement
-  if (el && !el.src.includes('rescue.png')) el.src = '/image/home/rescue.png'
+  if (el && !el.src.includes('rescue.webp')) el.src = '/image/home/rescue.webp'
 }
 </script>

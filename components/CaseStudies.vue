@@ -118,7 +118,7 @@ import ImageWithFallback from '@/components/ImageWithFallback.vue'
 
 const cases = [
   {
-    image: '/image/small-carrier/case1.jpeg',
+    image: '/image/small-carrier/case1.webp',
     from: '杭州',
     to: '三亚',
     car: '保时捷 911 Carrera',

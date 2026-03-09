@@ -6,7 +6,7 @@
         <div class="w-full lg:w-1/2 relative">
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
             <img loading="lazy"
-              src="/image/home/home-service-small-bg.png"
+              src="/image/home/home-service-small-bg.webp"
               alt="小板车尊享托运服务-5秒接单门到门专车直送"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               @error="(e) => handleImageError(e)"
@@ -91,7 +91,7 @@ const tags = ['5秒极速接单', '38万+ 运力覆盖', '全程保险']
 
 const handleImageError = (e: Event) => {
   const el = e.target as HTMLImageElement
-  if (el && !el.src.includes('home-service-small-bg')) el.src = '/image/home/home-service-small-bg.png'
+  if (el && !el.src.includes('home-service-small-bg')) el.src = '/image/home/home-service-small-bg.webp'
 }
 
 </script>

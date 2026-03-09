@@ -67,7 +67,7 @@ usePageSeo({
   title: '汽车托运行业解决方案中心_数字化供应链/商业活动/个人旅游 - 车拖车',
   description: '为主机厂、车展方及个人用户提供全场景物流支撑。涵盖OTD可视化供应链、保姆式特种车托运及等保三级金融级安全防护方案。数字化技术重塑汽车物流信任标准。',
   keywords: '汽车供应链方案, 车展物流托运, 高端车定制运输, 物流数据安全, 托运平台等保三级',
-  image: '/image/solutions/og-solutions.jpg'
+  image: '/image/solutions/og-solutions.webp'
 })
 
 // Schema.org 结构化数据

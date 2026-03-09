@@ -6,7 +6,7 @@
         <div class="w-full lg:w-1/2 relative">
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
             <img loading="lazy"
-              src="/image/home/home-service-valet-bg.png"
+              src="/image/home/home-service-valet-bg.webp"
               alt="专业代驾服务-打通物流最后一公里"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               @error="(e) => handleImageError(e)"
@@ -61,7 +61,7 @@ const tags = ['第一检测人', '随停随走', '无中转等待']
 
 const handleImageError = (e: Event) => {
   const el = e.target as HTMLImageElement
-  if (el && !el.src.includes('home-service-valet-bg')) el.src = '/image/home/home-service-valet-bg.png'
+  if (el && !el.src.includes('home-service-valet-bg')) el.src = '/image/home/home-service-valet-bg.webp'
 }
 
 const handleBookValet = () => {

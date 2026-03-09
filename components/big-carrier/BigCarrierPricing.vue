@@ -85,11 +85,11 @@
           <Calculator :size="18" />
         </NuxtLink>
         
-        <NuxtLink 
+        <NuxtLink
           to="/pricing#hot-city-routes"
           class="text-[#4B5563] text-sm mt-6 hover:text-[#006EFF] transition-colors border-none bg-transparent cursor-pointer"
         >
-          查看更多城市价格 &gt;
+          查看更多大板车托运价格 &gt;
         </NuxtLink>
         
         <p class="text-[12px] text-gray-400 mt-4 text-center">

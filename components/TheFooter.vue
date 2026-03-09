@@ -6,7 +6,7 @@
         <div>
           <div class="mb-6">
             <img loading="lazy"
-              src="/image/logo/logo.png"
+              src="/image/logo/logo.webp"
               alt="车拖车"
               class="h-10 w-auto brightness-0 invert"
               @error="handleLogoError"
@@ -39,7 +39,7 @@
           <ul class="space-y-3">
             <li>
               <a
-                href="#"
+                href="/small-carrier"
                 @click.prevent="handleNavClick('small-carrier')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -48,7 +48,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/big-carrier"
                 @click.prevent="handleNavClick('big-carrier')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -57,7 +57,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/valet"
                 @click.prevent="handleNavClick('driver')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -66,7 +66,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/rescue"
                 @click.prevent="handleNavClick('rescue')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -75,7 +75,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/supply-chain"
                 @click.prevent="handleNavClick('supply-chain')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -93,7 +93,7 @@
           <ul class="space-y-3">
             <li>
               <a
-                href="#"
+                href="/about"
                 @click.prevent="handleNavClick('about')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -102,7 +102,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/news"
                 @click.prevent="handleNavClick('news')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -111,7 +111,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/driver/home"
                 @click.prevent="handleNavClick('driver-join')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -120,7 +120,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/partner-recruit"
                 @click.prevent="handleNavClick('partner-recruit')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -129,7 +129,7 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/guide"
                 @click.prevent="handleNavClick('guide')"
                 class="text-gray-300 hover:text-[#FF6B00] transition-colors text-sm"
               >
@@ -152,7 +152,7 @@
             <div class="flex flex-col items-center gap-2">
               <div class="w-24 h-24 rounded-lg overflow-hidden">
                 <img loading="lazy"
-                  src="/image/contectQR/douyinQR.png"
+                  src="/image/contectQR/douyinQR.webp"
                   alt="微信公众号"
                   class="w-full h-full object-cover"
                 />
@@ -166,7 +166,7 @@
             <div class="flex flex-col items-center gap-2">
               <div class="w-24 h-24 rounded-lg overflow-hidden">
                 <img loading="lazy"
-                  src="/image/contectQR/gongzhongQR.png"
+                  src="/image/contectQR/gongzhongQR.webp"
                   alt="官方抖音"
                   class="w-full h-full object-cover"
                 />
@@ -322,7 +322,7 @@ const handleNavClick = (id: string) => {
  * @example
  * ```vue
  * <img loading="lazy" 
- *   src="/image/logo/logo.png" 
+ *   src="/image/logo/logo.webp" 
  *   alt="车拖车"
  *   @error="handleLogoError"
  * />

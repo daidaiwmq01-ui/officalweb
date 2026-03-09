@@ -110,7 +110,7 @@ const formatDate = (dateString: string): string => {
 
 const handleImageError = (event: Event) => {
   const target = event.target as HTMLImageElement
-  target.src = '/image/home/home-hero-bg.png'
+  target.src = '/image/home/home-hero-bg.webp'
 }
 
 const handleClick = (article: NewsItem) => {

@@ -123,27 +123,31 @@ function toAbsoluteUrl(path?: string): string {
   return `${BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
 }
 
+const articleUrl = computed(() => `${BASE_URL}/news/${id.value}.html`)
+
 const newsArticleSchema = computed(() => {
   const d = detail.value || {}
   const title = d.title || '新闻详情'
   const image = toAbsoluteUrl(d.coverImg || d.imgUrl || d.cover)
   const desc = d.briefIntroduction || title
-  const articleUrl = `${BASE_URL}/news/${id.value}.html`
+  const published = toISODate(d.publishTime || d.createTime)
+  const modified = toISODate(d.updateTime || d.publishTime || d.createTime)
+  const section = d.newsTypeName || '新闻资讯'
 
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     'mainEntityOfPage': {
       '@type': 'WebPage',
-      '@id': articleUrl
+      '@id': articleUrl.value
     },
     'headline': title.length > 110 ? title.slice(0, 110) : title,
     'image': [image],
-    'datePublished': toISODate(d.publishTime || d.createTime),
-    'dateModified': toISODate(d.updateTime || d.publishTime || d.createTime),
+    'datePublished': published,
+    'dateModified': modified || published,
     'author': {
       '@type': 'Organization',
-      'name': d.author || '车拖车研究院',
+      'name': d.author || d.source || '车拖车研究院',
       'url': BASE_URL
     },
     'publisher': {
@@ -151,34 +155,90 @@ const newsArticleSchema = computed(() => {
       'name': '车拖车 (CheTuoChe)',
       'logo': {
         '@type': 'ImageObject',
-        'url': `${BASE_URL}/image/logo/logo.png`
+        'url': `${BASE_URL}/image/logo/logo.webp`
       }
     },
-    'description': desc
+    'description': desc,
+    'inLanguage': 'zh-CN',
+    'articleSection': section,
+    'keywords': `${section}, 车拖车, 汽车托运, 物流资讯`,
+    'isPartOf': {
+      '@type': 'CollectionPage',
+      '@id': `${BASE_URL}/news`,
+      'name': '车拖车行业资讯'
+    },
+    'speakable': {
+      '@type': 'SpeakableSpecification',
+      'cssSelector': ['h1', '.prose > p:first-of-type']
+    }
   }
 })
 
 useSchemaOrg(newsArticleSchema)
+
+const breadcrumbSchema = computed(() => {
+  const d = detail.value || {}
+  const section = d.newsTypeName || '新闻资讯'
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': '首页',
+        'item': BASE_URL
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': '信息资讯',
+        'item': `${BASE_URL}/news`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': section,
+        'item': `${BASE_URL}/news`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 4,
+        'name': d.title || '新闻详情',
+        'item': articleUrl.value
+      }
+    ]
+  }
+})
+
+useSchemaOrg(breadcrumbSchema)
 
 useHead(computed(() => {
   const d = detail.value || {}
   const title = d.title ? `${d.title} - 车拖车资讯` : '新闻详情 - 车拖车'
   const desc = d.briefIntroduction || d.title || '车拖车行业资讯与技术公告'
   const image = toAbsoluteUrl(d.coverImg || d.imgUrl || d.cover)
-  const url = `${BASE_URL}/news/${id.value}.html`
+  const published = toISODate(d.publishTime || d.createTime)
+  const modified = toISODate(d.updateTime || d.publishTime || d.createTime)
   return {
     title,
     meta: [
       { name: 'description', content: desc },
-      { name: 'keywords', content: '车拖车, 汽车托运, 物流资讯, 行业新闻' },
+      { name: 'keywords', content: `${d.newsTypeName || '新闻资讯'}, 车拖车, 汽车托运, 物流资讯, 行业新闻` },
       { property: 'og:title', content: title },
       { property: 'og:description', content: desc },
       { property: 'og:image', content: image },
-      { property: 'og:url', content: url },
-      { property: 'og:type', content: 'article' }
+      { property: 'og:url', content: articleUrl.value },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:locale', content: 'zh_CN' },
+      { property: 'og:site_name', content: '车拖车' },
+      { property: 'article:published_time', content: published || '' },
+      { property: 'article:modified_time', content: modified || published || '' },
+      { property: 'article:section', content: d.newsTypeName || '新闻资讯' },
+      { property: 'article:author', content: d.author || d.source || '车拖车研究院' }
     ],
     link: [
-      { rel: 'canonical', href: url }
+      { rel: 'canonical', href: articleUrl.value }
     ]
   }
 }))

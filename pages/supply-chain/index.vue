@@ -22,7 +22,7 @@ usePageSeo({
   title: '汽车供应链物流数字化方案_OTD全周期缩短_4S店动态调拨服务 - 车拖车 (CheTuoChe)',
   description: '车拖车为汽车生产商与经销商构建端到端可视化物流体系。通过智能分拨算法与多式联运，使交付周期缩短12%-18%，降低物流成本15%。支持"零公里"交付标准与店间余缺自动调拨，实现新车从生产线到4S店的零延时供货。',
   keywords: '汽车供应链解决方案, OTD交付体系, 整车物流数字化, 4S店补库运输, 智能路径规划, 数字化验车',
-  image: '/image/supply-chain/og-supply-chain.jpg'
+  image: '/image/supply-chain/og-supply-chain.webp'
 })
 
 // Schema.org 结构化数据

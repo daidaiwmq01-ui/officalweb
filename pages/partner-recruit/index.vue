@@ -384,7 +384,7 @@
             title="全维度人才培养"
             desc="提供涵盖新人入职、大客户开发技巧、数字化订单系统操作等全方位培训，让您的团队快速具备盈利能力。"
             :icon="GraduationCap"
-            image="/image/partner-recruit/service.png"
+            image="/image/partner-recruit/service.webp"
             :reverse="false"
             :items="[
               '每周线上集训',
@@ -396,7 +396,7 @@
             title="品牌赋能与营销支持"
             desc="总部承担主流媒体品牌广告投放。免费提供门店装修设计、宣传海报、落地展架等全套视觉物料支持。"
             :icon="Megaphone"
-            image="/image/partner-recruit/support.png"
+            image="/image/partner-recruit/support.webp"
             :reverse="true"
             :items="[
               '千万级广告覆盖',
@@ -408,7 +408,7 @@
             title="专属管家式售后服务"
             desc="设立合伙人专属客服通道，协助处理复杂异常订单，24h 响应投诉，让您专注市场开发无后顾之忧。"
             :icon="Headphones"
-            image="/image/partner-recruit/grewup.png"
+            image="/image/partner-recruit/grewup.webp"
             :reverse="false"
             :items="[
               '理赔绿色通道',
@@ -431,21 +431,21 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <SuccessCard
-            image="/image/partner-recruit/avatar1.jpeg"
+            image="/image/partner-recruit/avatar1.webp"
             name="陈先生"
             location="山东·济南"
             quote="从传统物流转型，首月在平台支持下成交额即突破 30 万，纯收入超 20 万。数字化管理真的省心。"
             income="¥20.5W+"
           />
           <SuccessCard
-            image="/image/partner-recruit/avatar2.jpeg"
+            image="/image/partner-recruit/avatar2.webp"
             name="林女士"
             location="广东·佛山"
             quote="0加盟费政策给了我创业的勇气。现在团队已经扩招到10人，是本地口碑最好的托运服务站。"
             income="¥15.8W+"
           />
           <SuccessCard
-            image="/image/partner-recruit/avatar1.jpeg"
+            image="/image/partner-recruit/avatar1.webp"
             name="王总"
             location="四川·成都"
             quote="正式代理商的区域保护政策非常有竞争力。现在正向年度800万目标冲刺，期待拿原始股权。"
@@ -674,7 +674,7 @@ usePageSeo({
   title: '城市合伙人招募 - 零门槛共享拖车蓝海 | 车拖车',
   description: '车拖车城市合伙人计划，零费准入、全维扶持、最高70%阶梯返利。共享万亿级拖车蓝海，年度成单达标可转公司股权。',
   keywords: '城市合伙人,拖车加盟,汽车物流创业,车拖车招募',
-  image: '/image/partner-recruit/og-recruit.jpg'
+  image: '/image/partner-recruit/og-recruit.webp'
 })
 
 // Schema.org 结构化数据 - 城市合伙人招募（使用全局 Organization @id）

@@ -33,7 +33,7 @@
 
     <!-- 测试 3: 使用 Props 直接配置 -->
     <BaseHero
-      background-image="/image/home/home-hero-bg.png"
+      background-image="/image/home/home-hero-bg.webp"
       image-alt="测试 Hero"
       title="测试标题：<span class='text-brand-blue'>高亮部分</span>"
       subtitle="这是一个测试副标题，验证 BaseHero 组件的基本功能。"
@@ -58,7 +58,7 @@
 
     <!-- 测试 4: 使用 Slots 完全自定义 -->
     <BaseHero
-      background-image="/image/home/home-hero-bg.png"
+      background-image="/image/home/home-hero-bg.webp"
       :breadcrumbs="testBreadcrumbs"
       height="large"
     >
@@ -177,7 +177,7 @@ usePageSeo({
   title: 'BaseHero 组件测试页面',
   description: '测试 BaseHero 通用组件的所有功能和配置选项，包括 Props 配置、配置文件方式、Slots 自定义等多种使用方式。',
   keywords: 'BaseHero, 组件测试, Vue组件, Nuxt组件, 测试页面',
-  ogImage: '/image/test-hero/og-test-hero.jpg',
+  ogImage: '/image/test-hero/og-test-hero.webp',
   canonicalUrl: 'https://newweb.chetuoche.net/test-hero'
 })
 

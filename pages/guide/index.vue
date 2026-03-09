@@ -259,7 +259,7 @@ usePageSeo({
   title: '用户指南 - 汽车托运流程、安全规范与避坑百科 - 车拖车',
   description: '车拖车用户指南：从询价下单、视频验车到保险理赔的全流程拆解，三大托运避坑指南助你避开行业陷阱。',
   keywords: '汽车托运指南, 托运流程, 验车规范, 托运避坑, 车拖车',
-  image: '/image/guide/og-guide.jpg'
+  image: '/image/guide/og-guide.webp'
 })
 import {
   ChevronRight,
@@ -465,12 +465,17 @@ const schemaMarkup = computed(() => {
           {
             '@type': 'Question',
             'name': '汽车托运可以放置随车行李吗？',
-            'acceptedAnswer': { '@type': 'Answer', 'text': '可以。随车行李限重 50-100kg，严禁放置易燃易爆品、现金及贵重物品。' }
+            'acceptedAnswer': { '@type': 'Answer', 'text': '可以。随车行李限重 50-100kg，严禁放置易燃易爆品、现金及贵重物品。随车物品需固定好，避免在装卸过程中移动造成内饰损坏。' }
           },
           {
             '@type': 'Question',
             'name': '为什么有的平台报价极低，中途却加价？',
-            'acceptedAnswer': { '@type': 'Answer', 'text': '部分不规范平台使用"低价钓鱼"，中途勒索转运费。车拖车承诺一口价，下单即最终费用。' }
+            'acceptedAnswer': { '@type': 'Answer', 'text': '这是行业典型的"低价钓鱼"套路。黑中介先报低于成本的价格吸引车主，车辆交出后以各种名义要挟加价。车拖车坚持一口价体系，系统生成的订单金额即最终支付金额。' }
+          },
+          {
+            '@type': 'Question',
+            'name': '运输过程中车辆发生损伤怎么办？',
+            'acceptedAnswer': { '@type': 'Answer', 'text': '收车时请务必先行验车。如发现新增损伤，请第一时间拍摄照片、视频，并在现场联系400客服或在APP内一键报损。由于有独立保险覆盖，理赔专员会全程代办，车主无需面对承运商进行繁琐扯皮。' }
           }
         ]
       },

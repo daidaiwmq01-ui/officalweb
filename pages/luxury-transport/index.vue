@@ -26,7 +26,7 @@ usePageSeo({
   title: '商业活动汽车物流_车展/巡演/豪车特种托运_全封闭厢式板车 - 车拖车',
   description: '专为概念车、超跑、老爷车打造"保姆式"特种托运服务。采用配备气囊减震系统的全封闭厢式板车，确保无尘、无划痕运输。提供高保密协议、定额特种险及专业地勤团队，支持展位精准落位，保障高价值车辆非凡展程。',
   keywords: '车展托运, 高端车定制运输, 全封闭厢式板车, 赛道日托运, 豪车保险, 特种物流执行',
-  image: '/image/luxury-transport/og-luxury.jpg'
+  image: '/image/luxury-transport/og-luxury.webp'
 })
 
 // Schema.org 结构化数据

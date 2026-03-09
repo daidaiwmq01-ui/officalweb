@@ -5,8 +5,8 @@
       <div class="absolute inset-0 z-0">
         <img
           loading="eager"
-          src="/image/truck-sale/hero.webp" 
-          alt="车拖车装备制造清障车生产基地" 
+          :src="heroImageSrc"
+          alt="车拖车装备制造清障车生产基地"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747]/90 via-[#0B2747]/60 to-transparent" />
@@ -73,7 +73,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Truck 1 -->
           <ProductCard 
-            image="/image/truck-sale/hero.webp"
+            :image="heroImageSrc"
             title="3吨蓝牌一拖二清障车"
             tag="C证可开 / 进城无忧"
             specs="轴距 3300mm | 载重 3吨 | 适合城市救援"
@@ -81,7 +81,7 @@
           />
           <!-- Truck 2 -->
           <ProductCard 
-            image="/image/truck-sale/twobase.jpeg"
+            :image="twobaseImageSrc"
             title="全落地液压板清障车"
             tag="豪车/超跑专用"
             specs="零角度上车 | 載重 4-5吨 | 适合长途专车"
@@ -89,7 +89,7 @@
           />
           <!-- Truck 3 -->
           <ProductCard 
-            image="/image/home/factory.png"
+            :image="factoryImageSrc"
             title="厢式运输车 (封闭式)"
             tag="高价值/保密运输"
             specs="全封闭结构 | 气囊减震 | 适合巡展/赛车"
@@ -113,7 +113,7 @@
         </div>
         <div class="flex-1 relative">
           <div class="aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-            <img loading="lazy" src="/image/truck-sale/twobase.jpeg" alt="临沂与随州两大清障车生产基地分布图" class="w-full h-full object-cover" />
+            <img loading="lazy" :src="twobaseImageSrc" alt="临沂与随州两大清障车生产基地分布图" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-[#006EFF]/10 mix-blend-overlay" />
           </div>
           <!-- Decorative Pulse Points -->
@@ -214,6 +214,10 @@ import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
 useBreadcrumbSchema(getBreadcrumbsForRoute('/truck-sales'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/truck-sales')
+// 使用运行时 URL，避免 Vite 将 public 下的图片解析为 import；与实际文件扩展名一致
+const heroImageSrc = '/image/truck-sale/hero.webp'
+const twobaseImageSrc = '/image/truck-sale/twobase.jpeg'
+const factoryImageSrc = '/image/home/factory.webp'
 import { ChevronRight, Factory, Truck, Award, ShieldCheck, TrendingUp, BadgeCheck, Phone, CheckCircle2 } from 'lucide-vue-next'
 import Button from '@/components/ui/Button.vue'
 import ProductCard from '@/components/truck-sales/ProductCard.vue'
@@ -278,7 +282,7 @@ usePageSeo({
   title: '清障车销售 - 源头工厂直销 购车享平台订单 | 车拖车',
   description: '车拖车装备制造，山东临沂/湖北随州两大生产基地年产1500台。3吨蓝牌、全落地液压板、厢式运输车等热销车型，购车即享平台优选订单权益。',
   keywords: '清障车销售,板车销售,轿运车,救援车,车拖车装备',
-  image: '/image/truck-sales/og-truck.jpg'
+  image: '/image/truck-sales/og-truck.webp'
 })
 
 // Schema.org 结构化数据 - 清障车/装备销售

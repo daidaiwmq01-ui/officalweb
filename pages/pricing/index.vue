@@ -1391,7 +1391,7 @@ usePageSeo({
   title: '汽车托运价格查询 - 在线运费计算器 - 车拖车',
   description: '车拖车在线运费计算器，输入出发地与目的地即可获取大板车、小板车托运报价。透明定价，无隐藏费用，覆盖全国30000+条线路。',
   keywords: '汽车托运价格, 托运运费, 板车运费计算, 汽车运输报价, 车拖车价格',
-  image: '/image/pricing/og-pricing.jpg'
+  image: '/image/pricing/og-pricing.webp'
 })
 
 import {

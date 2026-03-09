@@ -155,7 +155,7 @@
               class="relative rounded-2xl sm:rounded-[40px] overflow-hidden shadow-2xl group w-full"
             >
               <ImageWithFallback
-                src="/image/about/about-lab-main.png"
+                src="/image/about/about-lab-main.webp"
                 alt="临沂汽车数智供应链重点实验室"
                 class="w-full h-[280px] sm:h-[500px] object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -657,7 +657,7 @@ usePageSeo({
   title: '关于车拖车 - 用数字技术重塑汽车物流信任标准_等保三级认证企业',
   description: '山东车拖车网络科技有限公司成立于2020年，拥有国家等保三级认证、ISO9001质量认证及亿元级物流责任险。致力于让汽车托运像发快递一样简单，服务用户超167万，GMV近20亿。',
   keywords: '车拖车简介, 数字化物流公司, 汽车托运资质, 临沂汽车数智供应链实验室, 车拖车历程',
-  image: '/image/about/og-about.jpg'
+  image: '/image/about/og-about.webp'
 })
 
 // Schema.org 结构化数据

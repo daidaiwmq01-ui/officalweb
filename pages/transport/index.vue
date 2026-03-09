@@ -45,7 +45,7 @@ usePageSeo({
   title: '汽车托运服务百科 - 大板车/小板车/代驾/救援全解析 | 车拖车',
   description: '车拖车提供全场景汽车托运服务：大板车干线集运（高性价比）、小板车专车托运（极速响应）、专业代驾接驳、24小时道路救援。全国覆盖，安全可靠，价格透明。',
   keywords: '汽车托运,大板车托运,小板车托运,代驾服务,道路救援,车辆运输,笼车运输,汽车物流',
-  image: '/image/transport/og-transport.jpg'
+  image: '/image/transport/og-transport.webp'
 })
 
 // Schema.org 结构化数据 - 汽车托运服务百科

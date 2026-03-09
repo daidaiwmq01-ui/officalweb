@@ -162,7 +162,7 @@ usePageSeo({
   title: '车拖车客户端 - AI智能汽车托运平台',
   description: '车拖车客户端是国内领先的数字化汽车物流平台，已为用户完成1000万次托运。支持安卓、iOS及鸿蒙系统。集成AI智能报价与全流程可视化追踪，让汽车物流更简单、更高效。',
   keywords: '车拖车APP, 汽车托运APP, AI智能报价, 实时轨迹追踪, 电子发票, 买卖板车, 违章处理',
-  ogImage: '/image/download/og-client.jpg',
+  ogImage: '/image/download/og-client.webp',
   canonicalUrl: 'https://newweb.chetuoche.net/download/client'
 })
 

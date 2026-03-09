@@ -7,11 +7,11 @@
           <p class="text-gray-500">了解车拖车最新动态与行业资讯</p>
         </div>
         <a
-          href="#"
+          href="/news"
           @click.prevent="handleViewMore"
           class="flex items-center text-[#006EFF] font-semibold hover:underline cursor-pointer"
         >
-          查看更多 <ArrowRight class="w-4 h-4 ml-1" />
+          查看更多汽车物流资讯 <ArrowRight class="w-4 h-4 ml-1" />
         </a>
       </div>
 
@@ -59,6 +59,7 @@ import { computed } from 'vue'
 import { ArrowRight, Calendar, User } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import { makeNewsPath } from '@/utils/slug'
+import { useSchemaOrg } from '@/composables/useSchemaOrg'
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -84,7 +85,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2026-01-15',
     author: '车拖车研究院',
     category: '企业动态',
-    image: '/image/home/home-hero-bg.png',
+    image: '/image/home/home-hero-bg.webp',
     desc: '本轮融资将用于进一步完善全国运力网络建设及 L4 级自动驾驶干线物流的技术预研。',
     typeId: 1
   },
@@ -94,7 +95,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2025-12-20',
     author: '品牌中心',
     category: '行业荣誉',
-    image: '/image/solutions/hero.png',
+    image: '/image/solutions/hero.webp',
     desc: '凭借独特的"AI+运力"双引擎模式，车拖车在降本增效方面的突出表现获得评审团一致认可。',
     typeId: 1
   },
@@ -190,6 +191,34 @@ const newsItems = computed(() => {
   const list = apiData.value || []
   return list.length > 0 ? list : FALLBACK_NEWS_ITEMS
 })
+
+const BASE_URL = 'https://newweb.chetuoche.net'
+
+const newsItemListSchema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  'name': '车拖车最新资讯',
+  'itemListOrder': 'https://schema.org/ItemListOrderDescending',
+  'numberOfItems': newsItems.value.length,
+  'itemListElement': newsItems.value.map((item, idx) => ({
+    '@type': 'ListItem',
+    'position': idx + 1,
+    'item': {
+      '@type': 'NewsArticle',
+      'headline': item.title,
+      'datePublished': item.date,
+      'author': {
+        '@type': 'Organization',
+        'name': item.author || '车拖车研究院'
+      },
+      'image': item.image?.startsWith('http') ? item.image : `${BASE_URL}${item.image}`,
+      'url': `${BASE_URL}/news/${item.id}.html`,
+      'description': item.desc
+    }
+  }))
+}))
+
+useSchemaOrg(newsItemListSchema)
 
 const router = useRouter()
 

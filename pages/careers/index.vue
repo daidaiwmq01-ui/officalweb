@@ -234,7 +234,7 @@
                   class="h-12 px-8 bg-white border border-blue-100 text-[#006EFF] rounded-xl font-bold shadow-sm hover:bg-blue-50"
                   @click.stop="openJobDetail(job)"
                 >
-                  查看详情
+                  查看职位详情
                 </Button>
                 <Button
                   @click.stop="sendEmail('hr@chetuoche.com')"
@@ -401,7 +401,7 @@ usePageSeo({
   title: '加入车拖车 - 连接汽车物流的下一个时代',
   description: '车拖车正致力于构建一个更透明、更高效的数字化物流生态系统。我们寻找对技术充满热忱、勇于挑战行业痛点的创新者。查看热招岗位，投递简历。',
   keywords: '车拖车招聘, 物流科技招聘, 智运生计划, 校园招聘, 社会招聘, 技术岗位, 产品经理',
-  ogImage: '/image/careers/og-careers.jpg',
+  ogImage: '/image/careers/og-careers.webp',
   canonicalUrl: 'https://newweb.chetuoche.net/careers'
 })
 
@@ -562,7 +562,6 @@ const fetchJobs = async () => {
 
     // notClassified 接口返回 data: [{ postType, postTypeId, postList: [...] }, ...]
     const dataArray = Array.isArray(res?.data) ? (res.data as PostTypeItem[]) : []
-
     const rows: JobRaw[] = []
     const parsedTabs: Array<{ label: string; value: string }> = [{ label: '全部', value: 'all' }]
 
@@ -581,7 +580,6 @@ const fetchJobs = async () => {
     
     allJobs.value = normalizeJobs(rows)
     tabs.value = parsedTabs
-    
   } catch (error) {
     
     allJobs.value = []

@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema, useSchemaOrg } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useSchemaOrg, useFAQPageSchema } from '@/composables/useSchemaOrg'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/rescue'))
 
@@ -52,7 +52,7 @@ usePageSeo({
   title: '24小时道路救援服务_全天候故障/事故车拖车_全状态汽车移动安全底座 - 车拖车官网',
   description: '拖车道路救援提供全场景应急保障，涵盖故障车位移、事故车拖运、地库亏电启动及僵尸车搬迁服务。依托覆盖全国的小板车网络，我们构建了"运输+保障"的闭环体系，解决起运前及到达后"最后一米"的移动难题。救援起步价170元，价格透明，支持全天候快速响应。',
   keywords: '道路救援, 拖车服务, 汽车故障救援, 24小时拖车, 地库拖车救援, 事故车运输, 亏电搭电, 车拖车救援',
-  image: '/image/rescue/og-rescue.jpg'
+  image: '/image/rescue/og-rescue.webp'
 })
 
 // Schema.org 结构化数据
@@ -79,6 +79,25 @@ const rescueSchema = {
 }
 
 useSchemaOrg(rescueSchema)
+
+useFAQPageSchema([
+  {
+    question: '救援起步价 170元 包含什么？',
+    answer: '包含救援车出车费及 10公里内 的拖车里程。超出部分按 8元/公里 计费。无任何隐形出车费。'
+  },
+  {
+    question: '车辆在地库或者轮胎抱死，怎么收费？',
+    answer: '地库作业需使用特殊板车，加收 200元 困难作业费；轮胎抱死需使用辅助轮，加收 100元/个。下单前系统会提示所有加项。'
+  },
+  {
+    question: '救援后可以直接托运到外地吗？',
+    answer: '可以。这是我们的核心优势。救援车可以将故障车直接拖至我们的大板车集散中心，无缝衔接长途托运服务，无需您中转操心。'
+  },
+  {
+    question: '你们多久能到？',
+    answer: '依托平台 70万 运力池，市区通常 15-30分钟 抵达，高速路段视交通状况而定，系统会实时共享司机位置。'
+  }
+])
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -155,7 +174,7 @@ const reviews: ReviewItem[] = [
     location: '杭州',
     role: '私家车主',
     scenario: '拖车救援 (15km)',
-    avatar: '/image/rescue/avatar1.jpeg',
+    avatar: '/image/rescue/avatar1.webp',
     content: '之前叫救援被黑过，这次车拖车真的很规范。APP上显示170元起步就是170元，没有任何隐形消费，司机也没有乱要小费，这种透明度必须好评！',
     tags: ['#价格透明'],
   },
@@ -164,7 +183,7 @@ const reviews: ReviewItem[] = [
     location: '上海',
     role: '私家车主',
     scenario: '地库专项救援',
-    avatar: '/image/rescue/avatar2.jpeg',
+    avatar: '/image/rescue/avatar2.webp',
     content: '半夜在地库车坏了，大车进不来。车拖车派了低姿态板车，师傅技术很好，几分钟就弄出来了，直接拖到4S店，效率太高了。',
     tags: ['#地库救援'],
   },
@@ -173,7 +192,7 @@ const reviews: ReviewItem[] = [
     location: '北京',
     role: '私家车主',
     scenario: '高速应急救援',
-    avatar: '/image/rescue/avatar3.jpeg',
+    avatar: '/image/rescue/avatar3.webp',
     content: '在五环上抛锚，心里很慌。下单后18分钟司机就到了，穿反光背心很专业，帮我摆好警示牌，背车动作非常利索。',
     tags: ['#极速响应'],
   },

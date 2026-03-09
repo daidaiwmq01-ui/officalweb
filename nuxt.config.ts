@@ -1,5 +1,4 @@
 import { resolve } from 'node:path'
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -104,13 +103,15 @@ export default defineNuxtConfig({
 
   vite: {
     resolve: {
-      alias: process.env.NODE_ENV === 'development'
-        ? {
-            // Workaround for intermittent Vite import-analysis failure in dev:
-            // Failed to resolve import "#app-manifest" from nuxt manifest composable.
-            '#app-manifest': resolve(process.cwd(), '.nuxt/manifest/meta/dev.json')
+      alias: {
+            // 使模板中 src="/image/..." 的解析指向 public/image，避免从项目根解析报错
+            '/image': resolve(process.cwd(), 'public/image'),
+            ...(process.env.NODE_ENV === 'development'
+              ? {
+                  '#app-manifest': resolve(process.cwd(), '.nuxt/manifest/meta/dev.json')
+                }
+              : {})
           }
-        : {}
     },
     plugins: [
       {

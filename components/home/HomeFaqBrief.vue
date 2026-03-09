@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts">
+import { useFAQPageSchema } from '@/composables/useSchemaOrg'
+
 const qa = [
   {
     q: '车拖车提供哪些服务？',
@@ -33,4 +35,9 @@ const qa = [
     a: '小板车按公里计费，大板车按线路一口价，救援起步价 170元。'
   }
 ]
+
+useFAQPageSchema(qa.map(item => ({
+  question: item.q,
+  answer: item.a
+})))
 </script>

@@ -31,6 +31,8 @@ import type { NewsItem, NewsItemAPI, NewsTypeItem } from '@/types'
 
 interface Props {
   activeTypeId?: number | string
+  /** 当前选中的热门话题标签（不带 # 前缀） */
+  activeLabel?: string
 }
 
 const props = defineProps<Props>()
@@ -47,6 +49,22 @@ const error = ref<string | null>(null)
 
 const allNewsCache = ref<NewsItem[]>([])
 
+const filterByLabel = (items: NewsItem[]): NewsItem[] => {
+  const raw = (props.activeLabel ?? '').toString().trim()
+  if (!raw) return items
+  const label = raw.replace(/^#/, '')
+  if (!label) return items
+  return items.filter((item) => {
+    const tags = (item as any).tags as string | undefined
+    if (!tags) return false
+    return tags
+      .split(/[,，、\s]+/)
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .some((t) => t === label)
+  })
+}
+
 const mapRawToNewsItem = (item: NewsItemAPI): NewsItem => ({
   id: item.id,
   title: item.title,
@@ -56,7 +74,9 @@ const mapRawToNewsItem = (item: NewsItemAPI): NewsItem => ({
   imgUrl: (item as { coverImg?: string }).coverImg || item.imgUrl || item.cover || "/image/home/home-hero-bg.png",
   typeId: (item as { newsTypeId?: number; newsTypeID?: number; typeId?: number }).newsTypeId
     ?? (item as { newsTypeID?: number }).newsTypeID
-    ?? (item as { typeId?: number }).typeId
+    ?? (item as { typeId?: number }).typeId,
+  // 标签字段来自原始接口（用于热门话题筛选）
+  tags: (item as any).tags as string | undefined
 })
 
 const extractList = (response: any): NewsItemAPI[] => {
@@ -75,7 +95,6 @@ const fetchAllNews = async () => {
       : ((typeResponse as { data?: NewsTypeItem[] })?.data || [])
 
     const validTypes = types.filter((t) => t?.id !== undefined && t?.id !== null)
-
     const allItems: NewsItem[] = []
     await Promise.all(
       validTypes.map(async (cat) => {
@@ -102,8 +121,6 @@ const fetchAllNews = async () => {
         return true
       })
       .sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime())
-
-    totalPages.value = Math.max(1, Math.ceil(allNewsCache.value.length / pageSize))
     paginateAll()
   } catch {
     allNewsCache.value = []
@@ -115,8 +132,10 @@ const fetchAllNews = async () => {
 }
 
 const paginateAll = () => {
+  const source = filterByLabel(allNewsCache.value)
   const start = (page.value - 1) * pageSize
-  newsList.value = allNewsCache.value.slice(start, start + pageSize)
+  newsList.value = source.slice(start, start + pageSize)
+  totalPages.value = Math.max(1, Math.ceil(source.length / pageSize))
 }
 
 const fetchNewsByType = async () => {
@@ -132,16 +151,12 @@ const fetchNewsByType = async () => {
     })
 
     const rawList = extractList(response) as NewsItemAPI[]
+    const mapped = rawList.map(mapRawToNewsItem)
+    const filtered = filterByLabel(mapped)
 
-    const total = Number((response as any)?.total ?? (response as any)?.data?.total)
-    if (Number.isFinite(total) && total > 0) {
-      totalPages.value = Math.max(1, Math.ceil(total / pageSize))
-    } else {
-      const pages = Number((response as any)?.pages ?? (response as any)?.data?.pages)
-      totalPages.value = Number.isFinite(pages) && pages > 0 ? pages : 1
-    }
-
-    newsList.value = rawList.map(mapRawToNewsItem)
+    const total = filtered.length
+    totalPages.value = Math.max(1, Math.ceil(total / pageSize))
+    newsList.value = filtered
   } catch {
     newsList.value = []
     totalPages.value = 1
@@ -195,4 +210,16 @@ watch(
 watch(page, () => {
   fetchNews()
 })
+
+watch(
+  () => props.activeLabel,
+  () => {
+    page.value = 1
+    if (isAllMode()) {
+      paginateAll()
+    } else {
+      fetchNewsByType()
+    }
+  }
+)
 </script>
