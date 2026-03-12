@@ -227,7 +227,7 @@ const reviews: ReviewItem[] = [
     location: '北京',
     role: '私家车主',
     scenario: '大板车进城接驳',
-    avatar: '/image/valet/avatar1.webp',
+    avatar: '/image/home/home-service-valet-bg.webp',
     content: '以前运车最怕去五环外的物流园取车，打车费劲还耽误时间。这次用了车拖车代驾，司机直接把车送到了我家地库。最让我放心的是验车特别仔细，车身的旧划痕都拍得清清楚楚，比我自己看得还细！',
     tags: ['#验车专业', '#省时省力']
   },
@@ -236,7 +236,7 @@ const reviews: ReviewItem[] = [
     location: '上海',
     role: '商务人士',
     scenario: '上海→南京 紧急用车',
-    avatar: '/image/valet/avatar2.webp',
+    avatar: '/image/home/home-service-small-bg.webp',
     content: '因为临时要用车去南京，板车来不及，就试了长途代驾。司机师傅素质很高，穿制服戴白手套，全程没抽烟。APP上能看到车速和位置，3个半小时就到了，确实是时间确定性最高的选择。',
     tags: ['#时效极快', '#服务规范']
   },
@@ -245,7 +245,7 @@ const reviews: ReviewItem[] = [
     location: '杭州',
     role: '某品牌4S店',
     scenario: '跨店调车',
-    avatar: '/image/valet/avatar3.webp',
+    avatar: '/image/home/rescue.webp',
     content: '必须要夸一下第一检测人机制。之前用其他代驾经常因为验车不清产生纠纷，车拖车的司机每一步都按标准流程走，交车时不仅车况完好，连油量和里程都核对无误，对公结算也很方便。',
     tags: ['#第一检测人', '#对公结算']
   }

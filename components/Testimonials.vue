@@ -114,7 +114,7 @@ import ImageWithFallback from '@/components/ImageWithFallback.vue'
 
 const reviews = [
   {
-    avatar: '/image/valet/avatar1.webp',
+    avatar: '/image/home/home-service-valet-bg.webp',
     name: '张先生 (杭州)',
     car: '劳斯莱斯 古思特',
     review:
@@ -123,7 +123,7 @@ const reviews = [
     service: '小板车专送',
   },
   {
-    avatar: '/image/valet/avatar2.webp',
+    avatar: '/image/home/home-service-small-bg.webp',
     name: '李女士 (成都)',
     car: '坦克 300',
     review:
@@ -132,7 +132,7 @@ const reviews = [
     service: '小板车专送',
   },
   {
-    avatar: '/image/valet/avatar3.webp',
+    avatar: '/image/home/rescue.webp',
     name: '赵先生 (武汉)',
     car: '特斯拉 Model Y',
     review:

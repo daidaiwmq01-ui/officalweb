@@ -38,7 +38,7 @@ function toW3CDate(dateStr?: string): string | undefined {
 
 export default defineSitemapEventHandler(async () => {
   const config = useRuntimeConfig()
-  const apiBase = config.public?.apiBase || 'https://git.chetuoche.net/official-website-server'
+  const apiBase = config.apiBase || config.public?.apiBase
 
   const timestamp = Date.now().toString()
   const sign = md5(`${timestamp}web`)

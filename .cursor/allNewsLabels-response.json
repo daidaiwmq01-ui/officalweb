@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "createTime": "2026-03-04 10:05:35",
+      "deleteStatus": 0,
+      "id": 6,
+      "labelCode": "shizheng1",
+      "labelName": "时政1",
+      "updateTime": "2026-03-04 10:15:09"
+    },
+    {
+      "createTime": "2026-03-04 10:05:42",
+      "deleteStatus": 0,
+      "id": 7,
+      "labelCode": "yule",
+      "labelName": "娱乐",
+      "updateTime": "2026-03-06 17:32:02"
+    },
+    {
+      "createTime": "2026-03-04 10:26:44",
+      "deleteStatus": 0,
+      "id": 9,
+      "labelCode": "xinwen",
+      "labelName": "新闻",
+      "updateTime": "2026-03-04 10:26:44"
+    }
+  ],
+  "msg": "成功",
+  "page": 0,
+  "pages": 0,
+  "status": 0,
+  "total": 0
+}

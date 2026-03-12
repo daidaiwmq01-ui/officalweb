@@ -127,8 +127,15 @@ const binl2hex = (binarray: number[]) => {
 }
 
 const utf8ToBytes = (input: string) => {
-  const encoder = new TextEncoder()
-  return encoder.encode(input)
+  // Support both browser and Node.js environments
+  if (typeof TextEncoder !== 'undefined') {
+    const encoder = new TextEncoder()
+    return encoder.encode(input)
+  } else {
+    // Node.js fallback using Buffer
+    const buffer = Buffer.from(input, 'utf8')
+    return new Uint8Array(buffer)
+  }
 }
 
 const bytesToWords = (bytes: Uint8Array) => {

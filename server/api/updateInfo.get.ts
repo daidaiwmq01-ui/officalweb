@@ -13,15 +13,10 @@ const FALLBACK = {
 
 export default defineEventHandler(async () => {
   const config = useRuntimeConfig()
-  const proxyApi = config.public.proxyApi
-  const apiBase = config.public.apiBase
+  const proxyApi = config.proxyApi || config.public.proxyApi
+  const apiBase = config.apiBase || config.public.apiBase
 
-  const baseCandidates = [
-    proxyApi,
-    apiBase,
-    'https://test.chetuoche.net',
-    'https://git.chetuoche.net/official-website-server',
-  ].filter(Boolean) as string[]
+  const baseCandidates = [proxyApi, apiBase].filter(Boolean) as string[]
 
   for (const base of baseCandidates) {
     try {

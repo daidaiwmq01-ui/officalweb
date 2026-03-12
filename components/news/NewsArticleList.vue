@@ -24,11 +24,11 @@
 
     <!-- Article List -->
     <div v-else-if="newsList.length > 0" class="space-y-6">
-      <article
+      <NuxtLink
         v-for="article in newsList"
         :key="article.id"
-        class="bg-white rounded-xl border border-gray-100 hover:border-[#006EFF]/30 hover:shadow-lg transition-all duration-300 overflow-hidden group cursor-pointer"
-        @click="handleClick(article)"
+        :to="makeNewsPath(article.id)"
+        class="block bg-white rounded-xl border border-gray-100 hover:border-[#006EFF]/30 hover:shadow-lg transition-all duration-300 overflow-hidden group cursor-pointer"
       >
         <div class="flex flex-col md:flex-row gap-6 p-6">
           <!-- Article Image -->
@@ -70,7 +70,7 @@
             </div>
           </div>
         </div>
-      </article>
+      </NuxtLink>
     </div>
 
     <!-- Empty State -->
@@ -84,7 +84,6 @@
 <script setup lang="ts">
 import { Calendar, User, FileText } from 'lucide-vue-next'
 import type { NewsItem } from '@/types'
-import { useRouter } from 'vue-router'
 import { makeNewsPath } from '@/utils/slug'
 
 interface Props {
@@ -93,8 +92,6 @@ interface Props {
 }
 
 defineProps<Props>()
-
-const router = useRouter()
 
 const formatDate = (dateString: string): string => {
   try {
@@ -113,7 +110,4 @@ const handleImageError = (event: Event) => {
   target.src = '/image/home/home-hero-bg.webp'
 }
 
-const handleClick = (article: NewsItem) => {
-  router.push({ path: makeNewsPath(article.id) })
-}
 </script>

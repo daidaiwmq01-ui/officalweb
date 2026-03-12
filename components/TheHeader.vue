@@ -8,7 +8,7 @@
         @click.prevent="handleNavClick('home')"
         class="flex items-center hover:opacity-90 transition-opacity flex-shrink-0 pr-10"
       >
-        <img loading="lazy" :src="brandLogo" alt="车拖车" class="h-10 w-auto" />
+        <img :src="brandLogo" alt="车拖车" class="h-10 w-auto" />
       </a>
 
       <!-- Center: Main Navigation Menu -->
@@ -291,7 +291,6 @@ const menuItems: MenuItem[] = [
       { label: '代驾', href: '/valet', id: 'driver' },
       { label: '价格查询', href: '/pricing#pricing-calculator', id: 'pricing' },
       { label: '用户指南', href: '/guide', id: 'guide' },
-      { label: '常见问题', href: '/guide#faq', id: 'faq' },
     ]
   },
   {
@@ -403,6 +402,11 @@ const handleNavClick = (id: string) => {
   emit('update:activeId', id)
   activeDropdown.value = null
   isMobileMenuOpen.value = false
+
+  const item = menuItems.find(m => m.id === id)
+  if (item?.href && item.href !== '#') {
+    router.push(item.href)
+  }
 }
 
 /**

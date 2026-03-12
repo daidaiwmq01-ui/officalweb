@@ -85,10 +85,14 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    // 私有配置，仅服务端可用
+    apiBase: process.env.NUXT_API_BASE || process.env.NUXT_PUBLIC_API_BASE || 'https://git.chetuoche.net/official-website-server',
+    proxyApi: process.env.NUXT_PROXY_API || process.env.NUXT_PUBLIC_PROXY_API || 'https://api.chetuoche.net',
+    // 公共配置，客户端和服务端都可用
     public: {
-      apiBase: process.env.VITE_APP_API || '',
-      proxyApi: process.env.VITE_APP_PROXY_API || '',
-      tmapKey: process.env.TMAP_KEY || '',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://git.chetuoche.net/official-website-server',
+      proxyApi: process.env.NUXT_PUBLIC_PROXY_API || 'https://api.chetuoche.net',
+      tmapKey: process.env.NUXT_PUBLIC_TMAP_KEY || '',
       ga4MeasurementId: process.env.NUXT_PUBLIC_GA4_MEASUREMENT_ID || '',
       baiduHmId: process.env.NUXT_PUBLIC_BAIDU_HM_ID || ''
     }
@@ -139,7 +143,22 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    devProxy: {}
+    devProxy: {},
+    rollupConfig: {
+      plugins: [
+        {
+          name: 'node16-formdata-polyfill',
+          renderChunk(code: string, chunk: { fileName: string }) {
+            // Inject FormData as a module-level var so it's accessible as a bare
+            // identifier in Node 16 ESM (globalThis properties are NOT reachable
+            // as bare identifiers in ESM strict mode on Node 16).
+            if (!chunk.fileName.endsWith('.mjs')) return null
+            const polyfill = `var FormData=typeof globalThis!=="undefined"&&globalThis.FormData?globalThis.FormData:class FormData{constructor(){this._d=[]}append(k,v){this._d.push([k,v])}get(k){const e=this._d.find(([j])=>j===k);return e?e[1]:null}has(k){return this._d.some(([j])=>j===k)}getAll(k){return this._d.filter(([j])=>j===k).map(([,v])=>v)}delete(k){this._d=this._d.filter(([j])=>j!==k)}[Symbol.iterator](){return this._d[Symbol.iterator]()}};\n`
+            return { code: polyfill + code, map: null }
+          }
+        }
+      ]
+    }
   },
 
   devServer: {

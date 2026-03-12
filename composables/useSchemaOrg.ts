@@ -12,7 +12,7 @@ export const organizationSchema = {
   'url': 'https://newweb.chetuoche.net',
   'logo': 'https://newweb.chetuoche.net/image/logo/logo.webp',
   'slogan': '让汽车托运像发快递一样简单',
-  'description': '国内领先的AI智能调度汽车托运平台，连接167万用户与45万运力伙伴。',
+  'description': '国内领先的AI智能调度汽车托运平台，连接70万认证司机，服务280万用户。',
   'foundingDate': '2020',
   'contactPoint': {
     '@type': 'ContactPoint',
@@ -61,7 +61,7 @@ export function useHomePageSchema() {
         '@id': `${baseUrl}/#website`,
         'url': baseUrl,
         'name': '车拖车官网 - 全场景AI智能汽车托运调度平台',
-        'description': '国内领先的AI智能调度汽车托运平台，连接167万用户与45万运力伙伴。',
+        'description': '国内领先的AI智能调度汽车托运平台，连接70万认证司机，服务280万用户。',
         'publisher': { '@id': `${baseUrl}/#organization` },
         'inLanguage': 'zh-CN',
         'potentialAction': {
@@ -237,7 +237,7 @@ export function useAboutPageSchema() {
       '@type': 'Organization',
       'foundingDate': '2020',
       'legalName': '山东车拖车网络科技有限公司',
-      'description': '车拖车致力于用数字技术重塑汽车物流信任标准。现已服务用户超167万，GMV近20亿。',
+      'description': '车拖车致力于用数字技术重塑汽车物流信任标准。现已连接70万认证司机，服务用户超280万，GMV近43亿。',
       'award': [
         '山东省首版次高端软件认证',
         '国家高新技术企业',

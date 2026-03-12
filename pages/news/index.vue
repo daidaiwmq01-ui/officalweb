@@ -139,11 +139,11 @@
                 热门阅读
               </h3>
               <div class="space-y-6">
-                <div 
+                <NuxtLink
                   v-for="(article, idx) in HOT_READS"
                   :key="article.id"
+                  :to="makeNewsPath(article.id)"
                   class="group cursor-pointer flex gap-4"
-                  @click="handleHotReadClick(article)"
                 >
                   <span :class="`shrink-0 w-6 h-6 rounded flex items-center justify-center text-[12px] font-bold ${idx < 3 ? 'bg-[#E6F2FF] text-[#006EFF]' : 'bg-gray-50 text-gray-400'}`">
                     {{ idx + 1 }}
@@ -151,7 +151,7 @@
                   <p class="text-[14px] text-[#4B5563] leading-snug group-hover:text-[#006EFF] transition-colors line-clamp-2">
                     {{ article.title }}
                   </p>
-                </div>
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -188,73 +188,6 @@ usePageSeo({
   image: '/image/news/og-news.webp'
 })
 
-// Schema.org 结构化数据 - 新闻列表页
-const BASE_URL = 'https://newweb.chetuoche.net'
-
-const newsPageSchema = computed(() => {
-  const categories = SIDEBAR_CATEGORIES.value || []
-  const categoryItems = categories
-    .filter((cat: any) => cat.id !== 0 && cat.pinyin)
-    .map((cat: any, idx: number) => ({
-      '@type': 'ListItem',
-      'position': idx + 1,
-      'name': cat.name,
-      'url': `${BASE_URL}/news/${cat.pinyin}`
-    }))
-
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'CollectionPage',
-        '@id': `${BASE_URL}/news`,
-        'name': '车拖车行业资讯与技术公告',
-        'description': '汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。所有内容均由临沂汽车数智供应链实验室专家撰写。',
-        'url': `${BASE_URL}/news`,
-        'inLanguage': 'zh-CN',
-        'isPartOf': {
-          '@type': 'WebSite',
-          '@id': `${BASE_URL}/#website`,
-          'name': '车拖车官网'
-        },
-        'publisher': {
-          '@type': 'Organization',
-          'name': '车拖车 (CheTuoChe)',
-          'logo': {
-            '@type': 'ImageObject',
-            'url': `${BASE_URL}/image/logo/logo.webp`
-          }
-        },
-        'mainEntity': {
-          '@type': 'ItemList',
-          'itemListOrder': 'https://schema.org/ItemListOrderDescending',
-          'name': '资讯分类',
-          'numberOfItems': categoryItems.length,
-          'itemListElement': categoryItems.length > 0 ? categoryItems : [
-            { '@type': 'ListItem', 'position': 1, 'name': '行业深度', 'url': `${BASE_URL}/news` },
-            { '@type': 'ListItem', 'position': 2, 'name': '技术公告', 'url': `${BASE_URL}/news` }
-          ]
-        },
-        'speakable': {
-          '@type': 'SpeakableSpecification',
-          'cssSelector': ['h1', '.bg-\\[\\#F0F7FF\\] p']
-        }
-      },
-      {
-        '@type': 'WebPage',
-        '@id': `${BASE_URL}/news#webpage`,
-        'url': `${BASE_URL}/news`,
-        'name': '汽车托运资讯 - 行业深度、技术公告与物流攻略',
-        'isPartOf': { '@id': `${BASE_URL}/#website` },
-        'about': { '@id': `${BASE_URL}/#organization` },
-        'inLanguage': 'zh-CN'
-      }
-    ]
-  }
-})
-
-useSchemaOrg(newsPageSchema)
-
 // --- Global Assets & Sidebar Constants ---
 const ASSETS = {
   HERO: "/image/news/hero.webp",
@@ -289,7 +222,15 @@ interface HotLabelItem {
   name: string
 }
 
-/** 将 allNewsLabels 接口返回转为热门话题对象数组（包含 code + name） */
+function toSlug(raw: string): string {
+  const base = raw.replace(/^#/, '').trim().toLowerCase()
+  const slug = base
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return slug || 'tag'
+}
+
+/** 将 allNewsLabels 接口返回转为热门话题对象数组（包含 code + name），URL 一律使用英文/拼音 code */
 function normalizeHotTags(raw: unknown): HotLabelItem[] {
   if (!raw) return []
   const list = Array.isArray(raw) ? raw : (raw as { data?: unknown })?.data
@@ -297,20 +238,26 @@ function normalizeHotTags(raw: unknown): HotLabelItem[] {
   return list
     .map((item) => {
       if (typeof item === 'string') {
-        const name = item.trim()
+        const name = item.replace(/^#/, '').trim()
         if (!name) return null
-        return { code: name, name }
+        return { code: toSlug(name), name }
       }
       if (item && typeof item === 'object') {
         const anyItem = item as any
         const name: string | undefined =
           anyItem.labelName ?? anyItem.name ?? anyItem.label ?? anyItem.tag
-        const code: string | undefined = anyItem.labelCode ?? name
         const cleanName = typeof name === 'string' ? name.trim() : ''
-        const cleanCode = typeof code === 'string' ? code.trim() : ''
         if (!cleanName) return null
+
+        const rawCode: string | undefined =
+          typeof anyItem.labelCode === 'string' && anyItem.labelCode.trim()
+            ? anyItem.labelCode.trim()
+            : (typeof anyItem.code === 'string' ? anyItem.code.trim() : undefined)
+
+        const finalCode = rawCode && rawCode.length > 0 ? rawCode : toSlug(cleanName)
+
         return {
-          code: cleanCode || cleanName,
+          code: finalCode,
           name: cleanName
         }
       }
@@ -346,9 +293,6 @@ const activeLabel = computed(() => {
   return typeof raw === 'string' ? raw : ''
 })
 
-const handleHotReadClick = (article: { id: number | string; typeId?: number | string }) => {
-  navigateTo(makeNewsPath(article.id))
-}
 
 const { data: sidebarData } = await useAsyncData('news-sidebar', async () => {
   const typeResponse = await $fetch('/api/home/getAllNewsType')
@@ -427,5 +371,72 @@ const HOT_LABEL_ITEMS = computed<HotLabelItem[]>(() => {
 })
 const TAGS = computed(() => HOT_LABEL_ITEMS.value.map(item => `#${item.name}`))
 const HOT_READS = computed(() => sidebarData.value?.hotReads || FALLBACK_HOT_READS)
+
+// Schema.org 结构化数据 - 新闻列表页（必须在 SIDEBAR_CATEGORIES 声明之后）
+const BASE_URL = 'https://newweb.chetuoche.net'
+
+const newsPageSchema = computed(() => {
+  const categories = SIDEBAR_CATEGORIES.value || []
+  const categoryItems = categories
+    .filter((cat: any) => cat.id !== 0 && cat.pinyin)
+    .map((cat: any, idx: number) => ({
+      '@type': 'ListItem',
+      'position': idx + 1,
+      'name': cat.name,
+      'url': `${BASE_URL}/news/${cat.pinyin}`
+    }))
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': `${BASE_URL}/news`,
+        'name': '车拖车行业资讯与技术公告',
+        'description': '汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。所有内容均由临沂汽车数智供应链实验室专家撰写。',
+        'url': `${BASE_URL}/news`,
+        'inLanguage': 'zh-CN',
+        'isPartOf': {
+          '@type': 'WebSite',
+          '@id': `${BASE_URL}/#website`,
+          'name': '车拖车官网'
+        },
+        'publisher': {
+          '@type': 'Organization',
+          'name': '车拖车 (CheTuoChe)',
+          'logo': {
+            '@type': 'ImageObject',
+            'url': `${BASE_URL}/image/logo/logo.webp`
+          }
+        },
+        'mainEntity': {
+          '@type': 'ItemList',
+          'itemListOrder': 'https://schema.org/ItemListOrderDescending',
+          'name': '资讯分类',
+          'numberOfItems': categoryItems.length,
+          'itemListElement': categoryItems.length > 0 ? categoryItems : [
+            { '@type': 'ListItem', 'position': 1, 'name': '行业深度', 'url': `${BASE_URL}/news` },
+            { '@type': 'ListItem', 'position': 2, 'name': '技术公告', 'url': `${BASE_URL}/news` }
+          ]
+        },
+        'speakable': {
+          '@type': 'SpeakableSpecification',
+          'cssSelector': ['h1', '.bg-\\[\\#F0F7FF\\] p']
+        }
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${BASE_URL}/news#webpage`,
+        'url': `${BASE_URL}/news`,
+        'name': '汽车托运资讯 - 行业深度、技术公告与物流攻略',
+        'isPartOf': { '@id': `${BASE_URL}/#website` },
+        'about': { '@id': `${BASE_URL}/#organization` },
+        'inLanguage': 'zh-CN'
+      }
+    ]
+  }
+})
+
+useSchemaOrg(newsPageSchema)
 
 </script>
