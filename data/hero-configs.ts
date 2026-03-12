@@ -19,7 +19,7 @@ export const createBreadcrumbs = (items: Array<{ label: string; path?: string }>
 // ==================== 大板车托运 Hero ====================
 
 export const bigCarrierHero = {
-  backgroundImage: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2000',
+  backgroundImage: '/image/big-carrier/hero.webp',
   imageAlt: '大板车干线集运',
   breadcrumbs: createBreadcrumbs([
     { label: '首页' },
@@ -68,7 +68,7 @@ export const bigCarrierHero = {
 // ==================== 小板车托运 Hero ====================
 
 export const smallCarrierHero = {
-  backgroundImage: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2000',
+  backgroundImage: '/image/small-carrier/hero.webp',
   imageAlt: '车拖车小板车托运',
   breadcrumbs: createBreadcrumbs([
     { label: '首页' },
@@ -113,7 +113,7 @@ export const smallCarrierHero = {
 // ==================== 代驾服务 Hero ====================
 
 export const valetHero = {
-  backgroundImage: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2000',
+  backgroundImage: '/image/small-carrier/hero.webp',
   imageAlt: 'Professional Valet Service',
   breadcrumbs: createBreadcrumbs([
     { label: '首页' },

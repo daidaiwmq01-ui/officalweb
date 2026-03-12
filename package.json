@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "imports": {
+    "#internal/nuxt/paths": "./nuxt-internal-paths.mjs"
+  },
   "scripts": {
+    "predev": "nuxt prepare",
+    "convert-to-webp": "node scripts/convert-to-webp.mjs",
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "start": "node .output/server/index.mjs",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -20,13 +26,16 @@
     "lucide-vue-next": "^0.487.0",
     "nuxt": "^3.14.0",
     "tailwind-merge": "^3.2.0",
+    "undici": "^7.22.0",
     "vue": "^3.4.0",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.5.2",
     "autoprefixer": "^10.4.20",
+    "cwebp-bin": "^8.0.0",
     "postcss": "^8.4.49",
+    "sharp": "^0.33.5",
     "typescript": "^5.7.3",
     "vue-tsc": "^2.2.0"
   }

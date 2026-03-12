@@ -45,11 +45,20 @@ export const useDownloadInfo = () => {
       const payload = (data as any)?.data || data || {}
 
       state.value.customerAndroidDownload =
-        payload.customerAndroidDownload || ''
-      state.value.customerIosDownload = payload.customerIosDownload || ''
+        payload.customerAndroidDownload ||
+        payload.customerAndroidWebUpgradeLink ||
+        ''
+      state.value.customerIosDownload =
+        payload.customerIosDownload ||
+        'itms-apps://itunes.apple.com/cn/app/id1528692467?mt=8'
       state.value.driverAndroidDownload =
-        payload.driverAndroidDownload || ''
-      state.value.driverIosDownload = payload.driverIosDownload || ''
+        payload.driverAndroidDownload ||
+        payload.driverAndroidWebUpgradeLink ||
+        ''
+      state.value.driverIosDownload =
+        payload.driverIosDownload ||
+        state.value.customerIosDownload ||
+        ''
 
       state.value.loaded = true
     } catch (e) {

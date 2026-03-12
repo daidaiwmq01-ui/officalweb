@@ -5,11 +5,11 @@
         <!-- Image Left -->
         <div class="w-full lg:w-1/2 relative">
           <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
-            <img
-              :src="serviceImage"
-              alt="Professional Valet Service"
+            <img loading="lazy"
+              src="/image/home/home-service-valet-bg.webp"
+              alt="专业代驾服务-打通物流最后一公里"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-              @error="handleImageError"
+              @error="(e) => handleImageError(e)"
             />
           </div>
         </div>
@@ -51,9 +51,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ArrowRight, CheckCircle2 } from 'lucide-vue-next'
-// Import image from images mapping (Agent B's work)
-import { SERVICE_DRIVER, EXTERNAL_ASSETS } from '@/utils/images'
-
 interface Props {
   setActiveId?: (id: string) => void
 }
@@ -61,10 +58,10 @@ interface Props {
 const props = defineProps<Props>()
 
 const tags = ['第一检测人', '随停随走', '无中转等待']
-const serviceImage = ref(SERVICE_DRIVER || EXTERNAL_ASSETS.VALET_HANDOVER)
 
-const handleImageError = () => {
-  serviceImage.value = EXTERNAL_ASSETS.VALET_HANDOVER
+const handleImageError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && !el.src.includes('home-service-valet-bg')) el.src = '/image/home/home-service-valet-bg.webp'
 }
 
 const handleBookValet = () => {

@@ -17,6 +17,8 @@ logs
 .DS_Store
 .fleet
 .idea
+.cache-backup-*
+assets/image.zip
 
 # Local env files
 .env

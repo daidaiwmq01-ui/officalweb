@@ -3,7 +3,8 @@
     <!-- Hero Section -->
     <section class="relative w-full h-[350px] overflow-hidden mt-[-80px] pt-[80px]">
       <div class="absolute inset-0 z-0">
-        <img 
+        <img
+          loading="eager"
           :src="ASSETS.HERO" 
           alt="车拖车新闻资讯中心-汽车物流行业深度解析与技术公告" 
           class="w-full h-full object-cover"
@@ -77,7 +78,7 @@
       <div class="flex flex-col lg:flex-row gap-12">
         <!-- Left Column: News Feed (800px) -->
         <main class="lg:w-[800px] shrink-0">
-          <NewsFeedContainer :active-type-id="activeTypeId" />
+          <NewsFeedContainer :active-type-id="activeTypeId" :active-label="activeLabel" />
         </main>
 
         <!-- Right Column: Sidebar (350px) -->
@@ -90,22 +91,26 @@
                 资讯分类
               </h3>
               <div class="space-y-1">
-                <button 
+                <NuxtLink
+                  to="/news"
+                  class="w-full flex justify-between items-center px-4 py-3 rounded-xl hover:bg-[#F0F7FF] group transition-all text-left block"
+                >
+                  <span class="text-[15px] transition-colors text-[#006EFF] font-semibold">
+                    全部资讯
+                  </span>
+                </NuxtLink>
+                <NuxtLink 
                   v-for="cat in SIDEBAR_CATEGORIES"
-                  :key="cat.name"
-                  class="w-full flex justify-between items-center px-4 py-3 rounded-xl hover:bg-[#F0F7FF] group transition-all cursor-pointer text-left"
-                  @click="handleCategoryClick(cat)"
+                  :key="cat.id"
+                  :to="cat.pinyin ? `/news/${cat.pinyin}` : '/news'"
+                  class="w-full flex justify-between items-center px-4 py-3 rounded-xl hover:bg-[#F0F7FF] group transition-all text-left block"
                 >
                   <span
-                    :class="[
-                      'text-[15px] transition-colors',
-                      cat.id === activeTypeId ? 'text-[#006EFF] font-semibold' : 'text-[#4B5563] group-hover:text-[#006EFF]'
-                    ]"
+                    class="text-[15px] transition-colors text-[#4B5563] group-hover:text-[#006EFF]"
                   >
                     {{ cat.name }}
                   </span>
-                  <span class="text-[12px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full group-hover:bg-[#E6F2FF] group-hover:text-[#006EFF] transition-colors">{{ cat.count }}</span>
-                </button>
+                </NuxtLink>
               </div>
             </div>
 
@@ -116,13 +121,14 @@
                 热门话题
               </h3>
               <div class="flex flex-wrap gap-3">
-                <button 
-                  v-for="tag in TAGS"
-                  :key="tag"
+                <NuxtLink
+                  v-for="item in HOT_LABEL_ITEMS"
+                  :key="item.code || item.name"
+                  :to="`/news/label/${encodeURIComponent(item.code || item.name)}`"
                   class="px-4 py-2 rounded-full bg-gray-50 text-[13px] text-[#4B5563] hover:bg-[#E6F2FF] hover:text-[#006EFF] transition-all cursor-pointer border border-transparent hover:border-[#006EFF]/20"
                 >
-                  {{ tag }}
-                </button>
+                  #{{ item.name }}
+                </NuxtLink>
               </div>
             </div>
 
@@ -133,11 +139,11 @@
                 热门阅读
               </h3>
               <div class="space-y-6">
-                <div 
+                <NuxtLink
                   v-for="(article, idx) in HOT_READS"
                   :key="article.id"
+                  :to="makeNewsPath(article.id)"
                   class="group cursor-pointer flex gap-4"
-                  @click="handleHotReadClick(article)"
                 >
                   <span :class="`shrink-0 w-6 h-6 rounded flex items-center justify-center text-[12px] font-bold ${idx < 3 ? 'bg-[#E6F2FF] text-[#006EFF]' : 'bg-gray-50 text-gray-400'}`">
                     {{ idx + 1 }}
@@ -145,7 +151,7 @@
                   <p class="text-[14px] text-[#4B5563] leading-snug group-hover:text-[#006EFF] transition-colors line-clamp-2">
                     {{ article.title }}
                   </p>
-                </div>
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -156,7 +162,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
@@ -166,65 +173,31 @@ useBreadcrumbSchema(getBreadcrumbsForRoute('/news'))
 const breadcrumbItems = getBreadcrumbsForRoute('/news')
 import { 
   Search, 
-  ChevronRight, 
   TrendingUp,
   Hash,
 } from 'lucide-vue-next'
 import Input from '@/components/ui/Input.vue'
-import ImageWithFallback from '@/components/ImageWithFallback.vue'
 import NewsFeedContainer from '@/components/news/NewsFeedContainer.vue'
-import { useRouter } from 'vue-router'
 import { makeNewsPath } from '@/utils/slug'
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '汽车托运资讯 - 行业深度、技术公告与物流攻略 - 车拖车',
-  meta: [
-    { name: 'description', content: '来自车拖车的权威新闻与资讯。汇总行业趋势、数字化物流算法公告、清障车销售动态，通过结构化数据（JSON-LD）建立专业可信的品牌形象。' },
-    { name: 'keywords', content: '物流资讯, 行业新闻, 托运百科, 数字化物流, 车拖车动态' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/news' }
-  ]
+  description: '来自车拖车的权威新闻与资讯。汇总行业趋势、数字化物流算法公告、清障车销售动态，通过结构化数据（JSON-LD）建立专业可信的品牌形象。',
+  keywords: '物流资讯, 行业新闻, 托运百科, 数字化物流, 车拖车动态',
+  image: '/image/news/og-news.webp'
 })
-
-// Schema.org 结构化数据
-const newsListSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  'name': '车拖车行业资讯与技术公告',
-  'description': '汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。',
-  'url': 'https://www.chetuoche.com/news',
-  'mainEntity': {
-    '@type': 'ItemList',
-    'itemListElement': [
-      {
-        '@type': 'SiteNavigationElement',
-        'position': 1,
-        'name': '行业深度',
-        'url': 'https://www.chetuoche.com/news'
-      },
-      {
-        '@type': 'SiteNavigationElement',
-        'position': 2,
-        'name': '技术公告',
-        'url': 'https://www.chetuoche.com/news'
-      }
-    ]
-  }
-}
-
-useSchemaOrg(newsListSchema)
 
 // --- Global Assets & Sidebar Constants ---
 const ASSETS = {
-  HERO: "https://images.unsplash.com/photo-1733948351315-688870d89e66?auto=format&fit=crop&q=80&w=1200",
+  HERO: "/image/news/hero.webp",
 }
 
 interface NewsTypeItem {
   id?: number | string
   newsType?: string
   name?: string
+  code?: string
 }
 
 interface NewsItemRaw {
@@ -244,6 +217,64 @@ const FALLBACK_CATEGORIES = [
 
 const FALLBACK_TAGS = ["#数字化物流", "#等保三级", "#清障车价格", "#供应链优化", "#新能源运输"]
 
+interface HotLabelItem {
+  code: string
+  name: string
+}
+
+function toSlug(raw: string): string {
+  const base = raw.replace(/^#/, '').trim().toLowerCase()
+  const slug = base
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return slug || 'tag'
+}
+
+/** 将 allNewsLabels 接口返回转为热门话题对象数组（包含 code + name），URL 一律使用英文/拼音 code */
+function normalizeHotTags(raw: unknown): HotLabelItem[] {
+  if (!raw) return []
+  const list = Array.isArray(raw) ? raw : (raw as { data?: unknown })?.data
+  if (!Array.isArray(list)) return []
+  return list
+    .map((item) => {
+      if (typeof item === 'string') {
+        const name = item.replace(/^#/, '').trim()
+        if (!name) return null
+        return { code: toSlug(name), name }
+      }
+      if (item && typeof item === 'object') {
+        const anyItem = item as any
+        const name: string | undefined =
+          anyItem.labelName ?? anyItem.name ?? anyItem.label ?? anyItem.tag
+        const cleanName = typeof name === 'string' ? name.trim() : ''
+        if (!cleanName) return null
+
+        const rawCode: string | undefined =
+          typeof anyItem.labelCode === 'string' && anyItem.labelCode.trim()
+            ? anyItem.labelCode.trim()
+            : (typeof anyItem.code === 'string' ? anyItem.code.trim() : undefined)
+
+        const finalCode = rawCode && rawCode.length > 0 ? rawCode : toSlug(cleanName)
+
+        return {
+          code: finalCode,
+          name: cleanName
+        }
+      }
+      return null
+    })
+    .filter((item): item is HotLabelItem => !!item)
+}
+
+const { data: hotTagsData } = await useAsyncData('news-hot-tags', async () => {
+  try {
+    const res = await $fetch('/api/home/allNewsLabels')
+    return normalizeHotTags(res)
+  } catch {
+    return []
+  }
+})
+
 const FALLBACK_HOT_READS = [
   { id: 1, title: "深度：2026年临沂汽车物流数字化转型白皮书" },
   { id: 2, title: "车拖车是如何实现 100% 运输轨迹全实时覆盖的？" },
@@ -252,28 +283,16 @@ const FALLBACK_HOT_READS = [
   { id: 5, title: "清障车选购指南：如何平衡性能、价格与维护成本" }
 ]
 
-interface Props {
-  setActiveId?: (id: string) => void
-}
-
-const props = defineProps<Props>()
-
 const searchQuery = ref("")
+const route = useRoute()
 const router = useRouter()
-const activeTypeId = ref<number | string | undefined>(undefined)
 
-const handleSetActiveId = (id: string) => {
-  props.setActiveId?.(id)
-}
+const activeTypeId = ref<number | string>('all')
+const activeLabel = computed(() => {
+  const raw = route.query.label
+  return typeof raw === 'string' ? raw : ''
+})
 
-const handleCategoryClick = (cat: { id?: number | string }) => {
-  if (cat?.id === undefined || cat?.id === null) return
-  activeTypeId.value = cat.id
-}
-
-const handleHotReadClick = (article: { id: number | string; typeId?: number | string }) => {
-  router.push({ path: makeNewsPath(article.id) })
-}
 
 const { data: sidebarData } = await useAsyncData('news-sidebar', async () => {
   const typeResponse = await $fetch('/api/home/getAllNewsType')
@@ -286,6 +305,7 @@ const { data: sidebarData } = await useAsyncData('news-sidebar', async () => {
     .map((item) => ({
       id: item.id as number | string,
       name: item.newsType || item.name || '新闻资讯',
+      pinyin: item.code || '',
       count: 0
     }))
 
@@ -339,18 +359,84 @@ const { data: sidebarData } = await useAsyncData('news-sidebar', async () => {
 })
 
 const SIDEBAR_CATEGORIES = computed(() => sidebarData.value?.categories || FALLBACK_CATEGORIES)
-const TAGS = computed(() => sidebarData.value?.tags || FALLBACK_TAGS)
+const HOT_LABEL_ITEMS = computed<HotLabelItem[]>(() => {
+  if (hotTagsData.value && hotTagsData.value.length > 0) {
+    return hotTagsData.value
+  }
+  const fallback = sidebarData.value?.tags || FALLBACK_TAGS
+  return fallback.map((tag) => {
+    const name = tag.replace(/^#/, '')
+    return { code: name, name }
+  })
+})
+const TAGS = computed(() => HOT_LABEL_ITEMS.value.map(item => `#${item.name}`))
 const HOT_READS = computed(() => sidebarData.value?.hotReads || FALLBACK_HOT_READS)
 
-watch(
-  SIDEBAR_CATEGORIES,
-  (cats) => {
-    if (activeTypeId.value !== undefined) return
-    const first = cats?.[0]
-    if (first?.id !== undefined && first?.id !== null) {
-      activeTypeId.value = first.id
-    }
-  },
-  { immediate: true }
-)
+// Schema.org 结构化数据 - 新闻列表页（必须在 SIDEBAR_CATEGORIES 声明之后）
+const BASE_URL = 'https://newweb.chetuoche.net'
+
+const newsPageSchema = computed(() => {
+  const categories = SIDEBAR_CATEGORIES.value || []
+  const categoryItems = categories
+    .filter((cat: any) => cat.id !== 0 && cat.pinyin)
+    .map((cat: any, idx: number) => ({
+      '@type': 'ListItem',
+      'position': idx + 1,
+      'name': cat.name,
+      'url': `${BASE_URL}/news/${cat.pinyin}`
+    }))
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': `${BASE_URL}/news`,
+        'name': '车拖车行业资讯与技术公告',
+        'description': '汇总汽车物流行业深度报道、车拖车数字化算法技术公告及清障车市场动态。所有内容均由临沂汽车数智供应链实验室专家撰写。',
+        'url': `${BASE_URL}/news`,
+        'inLanguage': 'zh-CN',
+        'isPartOf': {
+          '@type': 'WebSite',
+          '@id': `${BASE_URL}/#website`,
+          'name': '车拖车官网'
+        },
+        'publisher': {
+          '@type': 'Organization',
+          'name': '车拖车 (CheTuoChe)',
+          'logo': {
+            '@type': 'ImageObject',
+            'url': `${BASE_URL}/image/logo/logo.webp`
+          }
+        },
+        'mainEntity': {
+          '@type': 'ItemList',
+          'itemListOrder': 'https://schema.org/ItemListOrderDescending',
+          'name': '资讯分类',
+          'numberOfItems': categoryItems.length,
+          'itemListElement': categoryItems.length > 0 ? categoryItems : [
+            { '@type': 'ListItem', 'position': 1, 'name': '行业深度', 'url': `${BASE_URL}/news` },
+            { '@type': 'ListItem', 'position': 2, 'name': '技术公告', 'url': `${BASE_URL}/news` }
+          ]
+        },
+        'speakable': {
+          '@type': 'SpeakableSpecification',
+          'cssSelector': ['h1', '.bg-\\[\\#F0F7FF\\] p']
+        }
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${BASE_URL}/news#webpage`,
+        'url': `${BASE_URL}/news`,
+        'name': '汽车托运资讯 - 行业深度、技术公告与物流攻略',
+        'isPartOf': { '@id': `${BASE_URL}/#website` },
+        'about': { '@id': `${BASE_URL}/#organization` },
+        'inLanguage': 'zh-CN'
+      }
+    ]
+  }
+})
+
+useSchemaOrg(newsPageSchema)
+
 </script>

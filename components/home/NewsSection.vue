@@ -7,11 +7,11 @@
           <p class="text-gray-500">了解车拖车最新动态与行业资讯</p>
         </div>
         <a
-          href="#"
+          href="/news"
           @click.prevent="handleViewMore"
           class="flex items-center text-[#006EFF] font-semibold hover:underline cursor-pointer"
         >
-          查看更多 <ArrowRight class="w-4 h-4 ml-1" />
+          查看更多汽车物流资讯 <ArrowRight class="w-4 h-4 ml-1" />
         </a>
       </div>
 
@@ -23,7 +23,7 @@
           @click="handleNewsClick(item)"
         >
           <div class="relative overflow-hidden rounded-xl mb-4 aspect-[16/10]">
-            <img
+            <img loading="lazy"
               :src="item.image"
               :alt="item.title"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
@@ -59,6 +59,7 @@ import { computed } from 'vue'
 import { ArrowRight, Calendar, User } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import { makeNewsPath } from '@/utils/slug'
+import { useSchemaOrg } from '@/composables/useSchemaOrg'
 
 interface Props {
   setActiveId?: (id: string) => void
@@ -84,7 +85,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2026-01-15',
     author: '车拖车研究院',
     category: '企业动态',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800',
+    image: '/image/home/home-hero-bg.webp',
     desc: '本轮融资将用于进一步完善全国运力网络建设及 L4 级自动驾驶干线物流的技术预研。',
     typeId: 1
   },
@@ -94,7 +95,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2025-12-20',
     author: '品牌中心',
     category: '行业荣誉',
-    image: 'https://images.unsplash.com/photo-1578574577315-3fbeb0ce88be?q=80&w=800',
+    image: '/image/solutions/hero.webp',
     desc: '凭借独特的"AI+运力"双引擎模式，车拖车在降本增效方面的突出表现获得评审团一致认可。',
     typeId: 1
   },
@@ -104,7 +105,7 @@ const FALLBACK_NEWS_ITEMS: HomeNewsItem[] = [
     date: '2026-01-28',
     author: '运营中心',
     category: '服务公告',
-    image: 'https://images.unsplash.com/photo-1625218377718-4c5991443cc6?q=80&w=800',
+    image: '/image/transport/hero.webp',
     desc: '为保障春节期间车主返乡需求，平台已调度储备 3000+ 辆应急救援车与小板车运力。',
     typeId: 1
   }
@@ -147,7 +148,7 @@ const mapHomeNewsItems = (rawList: NewsItemRaw[], typeMap: Map<string, string>) 
       id: item.id ?? `${typeId || 'news'}-${item.title}`,
       title: item.title || '暂无标题',
       date: normalizeDate(item.publishTime || item.createTime),
-      author: item.source || item.author || '官方发布',
+      author: item.author || item.source || '官方发布',
       category,
       image: item.coverImg || item.imgUrl || item.cover || FALLBACK_NEWS_ITEMS[0].image,
       desc: item.briefIntroduction || item.desc || item.summary || '暂无简介',
@@ -190,6 +191,34 @@ const newsItems = computed(() => {
   const list = apiData.value || []
   return list.length > 0 ? list : FALLBACK_NEWS_ITEMS
 })
+
+const BASE_URL = 'https://newweb.chetuoche.net'
+
+const newsItemListSchema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  'name': '车拖车最新资讯',
+  'itemListOrder': 'https://schema.org/ItemListOrderDescending',
+  'numberOfItems': newsItems.value.length,
+  'itemListElement': newsItems.value.map((item, idx) => ({
+    '@type': 'ListItem',
+    'position': idx + 1,
+    'item': {
+      '@type': 'NewsArticle',
+      'headline': item.title,
+      'datePublished': item.date,
+      'author': {
+        '@type': 'Organization',
+        'name': item.author || '车拖车研究院'
+      },
+      'image': item.image?.startsWith('http') ? item.image : `${BASE_URL}${item.image}`,
+      'url': `${BASE_URL}/news/${item.id}.html`,
+      'description': item.desc
+    }
+  }))
+}))
+
+useSchemaOrg(newsItemListSchema)
 
 const router = useRouter()
 

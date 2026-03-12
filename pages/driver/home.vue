@@ -4,8 +4,9 @@
     <section class="relative h-[550px] overflow-hidden bg-[#0B2747]">
       <div class="absolute inset-0 z-0">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1764743474959-9146e86c809c"
-          alt="Logistics Rest Station at Dusk"
+          src="/image/driver/hero.webp"
+          alt="车拖车司机之家夜间驿站全景"
+        loading="eager"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-r from-[#0B2747] via-[#0B2747]/70 to-transparent" />
@@ -138,8 +139,8 @@
             class="relative rounded-[40px] overflow-hidden shadow-2xl border-8 border-white"
           >
             <ImageWithFallback
-              src="https://images.unsplash.com/photo-1766524790783-7915025f453a"
-              alt="Chinese Driver with Truck Logo"
+              src="/image/driver/mockup.webp"
+              alt="车拖车平台认证司机在驿站休息"
               class="w-full h-full object-cover"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -152,8 +153,8 @@
     <section class="py-24 bg-[#0B2747] text-white relative overflow-hidden">
       <div class="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1584291527905-f930791fb1ce"
-          alt="Network Nodes Background"
+          src="/image/driver/driverhome.webp"
+          alt="车拖车全国驿站网络节点覆盖图"
           class="w-full h-full object-cover"
         />
       </div>
@@ -364,12 +365,20 @@
 <script setup lang="ts">
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useFAQPageSchema } from '@/composables/useSchemaOrg'
+import { usePageSeo } from '@/composables/useSeoMeta'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/driver/home'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/driver/home')
 
+usePageSeo({
+  title: '司机之家 - 全国驿站补给网络',
+  description: '车拖车司机之家计划2026年底构建500+处服务驿站，为货运司机提供24h热水淋浴、免费Wi-Fi、车辆自助检测及温暖生活补给。',
+  keywords: '司机之家, 司机驿站, 货运服务站, 司机补给, 车拖车, 24小时服务',
+  ogImage: '/image/driver/og-driver-home.webp',
+  canonicalUrl: 'https://newweb.chetuoche.net/driver/home'
+})
 
 import { computed, onMounted, ref } from 'vue'
 import {
@@ -508,4 +517,5 @@ const driverHomeSchema = {
 }
 
 useSchemaOrg(driverHomeSchema)
+useFAQPageSchema(faqData.map(f => ({ question: f.q, answer: f.a })))
 </script>

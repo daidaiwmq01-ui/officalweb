@@ -4,7 +4,7 @@ import { md5 } from '@/utils/md5'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const apiBase = config.public?.apiBase || 'https://git.chetuoche.net/official-website-server'
+  const apiBase = config.apiBase || config.public?.apiBase
 
   const timestamp = Date.now().toString()
   const sign = md5(`${timestamp}web`)

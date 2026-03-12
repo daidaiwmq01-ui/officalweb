@@ -21,7 +21,7 @@
     </div>
     <div class="lg:w-1/2">
       <div class="rounded-[40px] overflow-hidden shadow-2xl">
-        <img
+        <img loading="lazy"
           :src="image"
           :alt="title"
           class="w-full h-[400px] object-cover"

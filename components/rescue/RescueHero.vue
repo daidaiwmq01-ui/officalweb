@@ -6,8 +6,9 @@
     <!-- Background Image with Optimized Brand Navy Overlay -->
     <div class="absolute inset-0 z-0">
       <ImageWithFallback
-        :src="heroBg"
+        src="/image/rescue/hero.webp"
         alt="Roadside Rescue Service"
+        loading="eager"
         class="w-full h-full object-cover"
       />
       <!-- Brand Mask: Left to Right Navy Gradient -->
@@ -138,9 +139,6 @@ import DialogContent from '@/components/ui/DialogContent.vue'
 import DialogDescription from '@/components/ui/DialogDescription.vue'
 import DialogHeader from '@/components/ui/DialogHeader.vue'
 import DialogTitle from '@/components/ui/DialogTitle.vue'
-
-// EXTERNAL_ASSETS for hero background
-const heroBg = 'https://images.unsplash.com/photo-1644442076205-627648a62844?q=80&w=2000'
 
 interface Props {
   setActiveId?: (id: string) => void

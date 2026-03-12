@@ -53,21 +53,12 @@ const scenarios = [
   { title: "跨省搬家", desc: "全家出行不将就，爱车与大件行李一站式送达。", tag: "门到门" }
 ]
 
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '个人旅游托运 - 让远方触手可及 | 车拖车',
-  meta: [
-    {
-      name: 'description',
-      content: '车拖车个人旅游托运服务，专业异地运车，告别长途驾驶疲劳。支持西藏转山、三亚度假、洱海环游等场景，200万车主商业险保障，48小时极速交付。'
-    },
-    {
-      name: 'keywords',
-      content: '个人旅游托运,异地运车,汽车托运,自驾游托运,西藏运车,三亚运车,门到门运车'
-    }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/personal-travel' }
-  ]
+  description: '车拖车个人旅游托运服务，专业异地运车，告别长途驾驶疲劳。支持西藏转山、三亚度假、洱海环游等场景，200万车主商业险保障，48小时极速交付。',
+  keywords: '个人旅游托运,异地运车,汽车托运,自驾游托运,西藏运车,三亚运车,门到门运车',
+  image: '/image/personal-travel/og-travel.webp'
 })
 
 // Schema.org 结构化数据 - 个人旅游托运
@@ -75,7 +66,7 @@ const personalTravelSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   'name': '个人旅游托运服务',
-  'provider': { '@id': 'https://www.chetuoche.com/#organization' },
+  'provider': { '@id': 'https://newweb.chetuoche.net/#organization' },
   'serviceType': 'Car Transport',
   'description': '专业异地运车，告别长途驾驶疲劳。支持西藏转山、三亚度假、洱海环游等场景，200万车主商业险保障，48小时极速交付。',
   'areaServed': 'CN',

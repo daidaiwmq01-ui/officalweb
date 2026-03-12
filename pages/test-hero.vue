@@ -33,7 +33,7 @@
 
     <!-- 测试 3: 使用 Props 直接配置 -->
     <BaseHero
-      background-image="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2000"
+      background-image="/image/home/home-hero-bg.webp"
       image-alt="测试 Hero"
       title="测试标题：<span class='text-brand-blue'>高亮部分</span>"
       subtitle="这是一个测试副标题，验证 BaseHero 组件的基本功能。"
@@ -58,7 +58,7 @@
 
     <!-- 测试 4: 使用 Slots 完全自定义 -->
     <BaseHero
-      background-image="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2000"
+      background-image="/image/home/home-hero-bg.webp"
       :breadcrumbs="testBreadcrumbs"
       height="large"
     >
@@ -171,6 +171,15 @@
 import { Calculator, TrendingUp, ShieldCheck, Users, Zap, Sparkles, Star } from 'lucide-vue-next'
 import BaseHero from '~/components/common/BaseHero.vue'
 import { heroConfigs } from '~/data/hero-configs'
+import { usePageSeo } from '@/composables/useSeoMeta'
+
+usePageSeo({
+  title: 'BaseHero 组件测试页面',
+  description: '测试 BaseHero 通用组件的所有功能和配置选项，包括 Props 配置、配置文件方式、Slots 自定义等多种使用方式。',
+  keywords: 'BaseHero, 组件测试, Vue组件, Nuxt组件, 测试页面',
+  ogImage: '/image/test-hero/og-test-hero.webp',
+  canonicalUrl: 'https://newweb.chetuoche.net/test-hero'
+})
 
 // 测试用面包屑
 const testBreadcrumbs = [
@@ -231,12 +240,4 @@ const handleOrder = () => {
 const handleCustomAction = () => {
   alert('自定义按钮被点击！这是通过 Slots 实现的完全自定义按钮。')
 }
-
-// 页面元数据
-useHead({
-  title: 'BaseHero 组件测试页面',
-  meta: [
-    { name: 'description', content: '测试 BaseHero 通用组件的所有功能和配置选项' }
-  ]
-})
 </script>

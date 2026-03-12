@@ -87,15 +87,10 @@
           <!-- QR Code Container -->
           <div class="relative w-[180px] h-[180px] bg-white border-2 border-[#0B2747]/5 rounded-xl flex items-center justify-center mb-6 shadow-inner">
             <ImageWithFallback
-              src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://chetuoche.com/miniprogram"
+              src="/image/contectQR/liteprogress.webp"
               alt="WeChat Mini Program QR"
               class="w-full h-full p-2"
             />
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center p-1 border border-gray-100">
-                <MessageCircle class="w-6 h-6 text-[#07C160] fill-current" />
-              </div>
-            </div>
           </div>
 
           <div class="text-[14px] text-gray-400 mb-6 font-medium">
@@ -147,7 +142,7 @@ const faqData = [
   {
     question: '托运费用包含保险吗？',
     answer:
-      '包含。大板车报价为"一口价"，已包含 20万以内的基础运输保险（由 PICC 或东海保险承保）。如您的车辆价值较高，可在下单时按需增加保额。',
+      '不包含保险，需要额外购买。保险由太平洋保险和东海保险承保，如您的车辆价值较高，可以购买高额保险。',
   },
 ]
 

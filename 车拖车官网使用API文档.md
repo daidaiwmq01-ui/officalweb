@@ -10,8 +10,8 @@
 
 - **开发环境**: `VITE_APP_API=https://git.chetuoche.net/official-website-server`
 - **生产环境**: `VITE_APP_API=https://www.chetuoche.net/official-website-server`
-- **埋点开发环境**: `https://api.chetuoche.net`
-- **埋点生产环境**: `https://test.chetuoche.net`
+- **埋点声残环境**: `https://api.chetuoche.net`
+- **埋点开发环境**: `https://test.chetuoche.net`
 
 ### HTTP请求配置
 

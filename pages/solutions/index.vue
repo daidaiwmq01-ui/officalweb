@@ -12,7 +12,7 @@
         '库存预警与动态调拨：基于大数据算法的智能仓储建议'
       ]"
       cta-text="查看供应链方案"
-      :image-src="EXTERNAL_ASSETS.SOLUTIONS_DASHBOARD"
+      :image-src="'/image/solutions/solution-1.webp'"
       @cta-click="handleCtaClick('/supply-chain')"
     />
     
@@ -22,7 +22,7 @@
       subtitle="面向车展、巡演及车友会活动"
       :tags="['全封闭厢式板车', '保密协议', '定额特种险']"
       cta-text="定制车展方案"
-      :image-src="EXTERNAL_ASSETS.SOLUTIONS_LUXURY"
+      :image-src="'/image/solutions/solution-2.webp'"
       :reverse="true"
       bg-color="bg-[#F8F9FB]"
       @cta-click="handleCtaClick('/luxury-transport')"
@@ -38,7 +38,7 @@
         '门到门取送：专业司机上门接送车，全程管家式服务'
       ]"
       cta-text="开始托运"
-      :image-src="EXTERNAL_ASSETS.SOLUTIONS_FAMILY"
+      :image-src="'/image/solutions/solution-3.webp'"
       @cta-click="handleCtaClick('/personal-travel')"
     />
 
@@ -60,19 +60,14 @@ import SolutionZigZag from '@/components/solutions/SolutionsZigzag.vue'
 import SecurityMoat from '@/components/solutions/SecurityMoat.vue'
 import SolutionsFAQ from '@/components/solutions/SolutionsFaq.vue'
 import FinalCTABox from '@/components/solutions/FinalCTABox.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
 import { useRouter } from 'vue-router'
 
-// SEO Meta Tags
-useHead({
+// SEO Meta Tags - 使用新的 usePageSeo
+usePageSeo({
   title: '汽车托运行业解决方案中心_数字化供应链/商业活动/个人旅游 - 车拖车',
-  meta: [
-    { name: 'description', content: '为主机厂、车展方及个人用户提供全场景物流支撑。涵盖OTD可视化供应链、保姆式特种车托运及等保三级金融级安全防护方案。数字化技术重塑汽车物流信任标准。' },
-    { name: 'keywords', content: '汽车供应链方案, 车展物流托运, 高端车定制运输, 物流数据安全, 托运平台等保三级' }
-  ],
-  link: [
-    { rel: 'canonical', href: 'https://www.chetuoche.com/solutions' }
-  ]
+  description: '为主机厂、车展方及个人用户提供全场景物流支撑。涵盖OTD可视化供应链、保姆式特种车托运及等保三级金融级安全防护方案。数字化技术重塑汽车物流信任标准。',
+  keywords: '汽车供应链方案, 车展物流托运, 高端车定制运输, 物流数据安全, 托运平台等保三级',
+  image: '/image/solutions/og-solutions.webp'
 })
 
 // Schema.org 结构化数据
@@ -88,21 +83,21 @@ const solutionsSchema = {
         '@type': 'ListItem',
         'position': 1,
         'name': '汽车供应链数字化解决方案',
-        'url': 'https://www.chetuoche.com/supply-chain',
+        'url': 'https://newweb.chetuoche.net/supply-chain',
         'description': '缩短OTD周期，实现"零公里"交付，支持4S店动态调拨。'
       },
       {
         '@type': 'ListItem',
         'position': 2,
         'name': '商业活动特种托运方案',
-        'url': 'https://www.chetuoche.com/luxury-transport',
+        'url': 'https://newweb.chetuoche.net/luxury-transport',
         'description': '全封闭厢式车运输，气囊减震，服务车展与超跑巡演。'
       },
       {
         '@type': 'ListItem',
         'position': 3,
         'name': '个人旅游托运方案',
-        'url': 'https://www.chetuoche.com/personal-travel',
+        'url': 'https://newweb.chetuoche.net/personal-travel',
         'description': '让远方触手可及，支持三亚过冬、进藏朝圣等场景。'
       }
     ]

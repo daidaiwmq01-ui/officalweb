@@ -2,8 +2,9 @@
   <section class="relative w-full h-[450px] overflow-hidden font-['Noto_Sans_SC']">
     <!-- Background with Premium Overlay -->
     <div class="absolute inset-0 z-0">
-      <img 
-        :src="EXTERNAL_ASSETS.LUXURY_HERO" 
+      <img
+        loading="eager"
+        src="/image/luxury-transport/hero.webp" 
         alt="Premium Luxury Enclosed Transport" 
         class="w-full h-full object-cover object-center"
       />
@@ -61,8 +62,6 @@ import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
 
 const breadcrumbItems = getBreadcrumbsForRoute('/luxury-transport')
 import Button from '@/components/ui/Button.vue'
-import { EXTERNAL_ASSETS } from '@/utils/images'
-
 const scrollToQuoteForm = () => {
   if (typeof window === 'undefined') return
   const target = document.getElementById('luxury-quote-form')

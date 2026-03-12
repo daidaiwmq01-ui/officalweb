@@ -158,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { Car, Database, GitMerge, Map, CheckCircle2, ArrowRight, Headset, MessageCircle, ChevronDown, HelpCircle } from 'lucide-vue-next'
+import { Car, Database, GitMerge, Map, CheckCircle2, ArrowRight, Headset, ChevronDown, HelpCircle } from 'lucide-vue-next'
 
 interface Props {
   setActiveId?: (id: string) => void

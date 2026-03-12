@@ -3,8 +3,7 @@ import { md5 } from '@/utils/md5'
 
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const apiBase =
-    config.public?.apiBase || 'https://git.chetuoche.net/official-website-server'
+  const apiBase = config.public?.apiBase
 
   const getAuthHeaders = () => {
     const timestamp = Date.now().toString()

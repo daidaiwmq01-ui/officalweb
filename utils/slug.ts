@@ -4,3 +4,5 @@ export const parseNewsId = (value: string) => {
   if (!value) return value
   return value.replace(/\.html$/i, '')
 }
+
+export const makeCategoryPath = (code: string) => `/news/${code}`

@@ -114,6 +114,19 @@ project/
 
 ## 🔧 配置说明
 
+### 访问统计（GA4 / 百度统计）
+
+在 `.env` 中配置任一 ID 即可启用，支持同时开启：
+
+```bash
+NUXT_PUBLIC_GA4_MEASUREMENT_ID=G-XXXXXXXXXX
+NUXT_PUBLIC_BAIDU_HM_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+- GA4：自动注入 `gtag.js`，并在 Nuxt 路由切换时上报 `page_view`
+- 百度统计：自动注入 `hm.js`，并在 Nuxt 路由切换时上报 `_trackPageview`
+- 未配置时不会加载任何统计脚本
+
 ### 品牌颜色
 
 ```css

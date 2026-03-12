@@ -3,7 +3,7 @@
     class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-2 duration-300"
   >
     <div class="aspect-[16/10] bg-[#F8F9FB] relative">
-      <img :src="image" :alt="title" class="w-full h-full object-cover" />
+      <img loading="lazy" :src="image" :alt="title" class="w-full h-full object-cover" />
       <div class="absolute top-4 left-4 bg-[#006EFF] text-white text-[12px] font-bold px-3 py-1 rounded-md">
         {{ tag }}
       </div>

@@ -28,7 +28,7 @@ import BaseHero from '~/components/common/BaseHero.vue'
 ```vue
 <template>
   <BaseHero
-    background-image="https://images.unsplash.com/photo-123456"
+    background-image="/image/home/home-hero-bg.png"
     image-alt="服务背景图"
     :breadcrumbs="breadcrumbs"
     title="您的标题内容"
@@ -88,7 +88,7 @@ import { heroConfigs } from '~/data/hero-configs'
 ```vue
 <template>
   <BaseHero
-    background-image="https://images.unsplash.com/photo-123456"
+    background-image="/image/home/home-hero-bg.png"
     :breadcrumbs="breadcrumbs"
   >
     <template #title>
@@ -187,7 +187,7 @@ interface FeatureItem {
 ```vue
 <template>
   <BaseHero
-    background-image="https://images.unsplash.com/photo-1601584115197"
+    background-image="/image/home/home-hero-bg.png"
     image-alt="大板车干线集运"
     :breadcrumbs="breadcrumbs"
     :title="title"

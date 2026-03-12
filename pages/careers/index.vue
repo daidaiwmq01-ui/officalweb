@@ -4,8 +4,9 @@
     <section class="relative h-[500px] overflow-hidden bg-gradient-to-b from-[#0B2747] to-[#111827]">
       <div class="absolute inset-0 opacity-20">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1764350126579-46f4c33cd12c"
-          alt="Hero Background"
+          src="/image/about/hero.webp"
+          alt="加入车拖车团队 - 创造数字化物流未来"
+        loading="eager"
           class="w-full h-full object-cover"
         />
       </div>
@@ -133,8 +134,8 @@
             class="relative rounded-[40px] overflow-hidden shadow-2xl"
           >
             <ImageWithFallback
-              src="https://images.unsplash.com/photo-1622016579436-14c1844c99ec"
-              alt="CheTuoChe Team"
+              src="/image/partner-recruit/hero.webp"
+              alt="车拖车研发团队工作现场"
               class="w-full h-[500px] object-cover"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-[#0B2747]/60 to-transparent" />
@@ -233,7 +234,7 @@
                   class="h-12 px-8 bg-white border border-blue-100 text-[#006EFF] rounded-xl font-bold shadow-sm hover:bg-blue-50"
                   @click.stop="openJobDetail(job)"
                 >
-                  查看详情
+                  查看职位详情
                 </Button>
                 <Button
                   @click.stop="sendEmail('hr@chetuoche.com')"
@@ -389,13 +390,22 @@
 import { ref, computed, onMounted } from 'vue'
 import BreadcrumbNav from '@/components/common/BreadcrumbNav.vue'
 import { getBreadcrumbsForRoute } from '@/config/breadcrumbs'
-import { useBreadcrumbSchema } from '@/composables/useSchemaOrg'
+import { useBreadcrumbSchema, useFAQPageSchema } from '@/composables/useSchemaOrg'
+import { usePageSeo } from '@/composables/useSeoMeta'
 
 useBreadcrumbSchema(getBreadcrumbsForRoute('/careers'))
 
 const breadcrumbItems = getBreadcrumbsForRoute('/careers')
+
+usePageSeo({
+  title: '加入车拖车 - 连接汽车物流的下一个时代',
+  description: '车拖车正致力于构建一个更透明、更高效的数字化物流生态系统。我们寻找对技术充满热忱、勇于挑战行业痛点的创新者。查看热招岗位，投递简历。',
+  keywords: '车拖车招聘, 物流科技招聘, 智运生计划, 校园招聘, 社会招聘, 技术岗位, 产品经理',
+  ogImage: '/image/careers/og-careers.webp',
+  canonicalUrl: 'https://newweb.chetuoche.net/careers'
+})
+
 import { useRouter } from 'vue-router'
-import { useHead } from '#app'
 import {
   ChevronRight,
   Search,
@@ -480,7 +490,7 @@ const formatDateLabel = (value: unknown) => {
         return `${year}-${month}-${day}`
       }
     } catch (error) {
-      console.warn('🔍 [Careers] 日期格式化失败:', value, error)
+      // silently ignore date format errors
     }
   }
   return text
@@ -489,7 +499,7 @@ const formatDateLabel = (value: unknown) => {
 const normalizeJobs = (rows: JobRaw[]): JobDetail[] => {
   // 防御性检查：确保 rows 是数组
   if (!Array.isArray(rows)) {
-    console.warn('🔍 [Careers] normalizeJobs 接收到非数组参数:', rows)
+    
     return []
   }
   
@@ -546,61 +556,32 @@ const fetchJobs = async () => {
   loading.value = true
   
   try {
-    const response = await $fetch('/api/home/getAllPost')
-    console.log('🔍 [Careers] API 原始响应:', response)
+    const response = await $fetch('/api/home/getAllPost/notClassified')
     
-    // 解析响应：兼容多种数据结构
     const res = response as Record<string, unknown>
-    let root: Record<string, unknown> = {}
-    
-    // 尝试多种解析路径
-    if (Array.isArray(res?.data) && res.data.length > 0) {
-      root = res.data[0] as Record<string, unknown>
-    } else if (Array.isArray(response) && (response as unknown[]).length > 0) {
-      root = (response as unknown[])[0] as Record<string, unknown>
-    } else if (res?.data && typeof res.data === 'object') {
-      root = res.data as Record<string, unknown>
-    } else if (res && typeof res === 'object') {
-      root = res
-    }
-    
-    console.log('🔍 [Careers] 解析得到的 root:', root)
-    
-    const postTypeList = Array.isArray(root.postTypeList) ? (root.postTypeList as PostTypeItem[]) : []
-    console.log('🔍 [Careers] postTypeList 数量:', postTypeList.length)
-    
-    // 解析职位列表和分类
+
+    // notClassified 接口返回 data: [{ postType, postTypeId, postList: [...] }, ...]
+    const dataArray = Array.isArray(res?.data) ? (res.data as PostTypeItem[]) : []
     const rows: JobRaw[] = []
     const parsedTabs: Array<{ label: string; value: string }> = [{ label: '全部', value: 'all' }]
-    
-    postTypeList.forEach((typeItem, index) => {
+
+    dataArray.forEach((typeItem, index) => {
       const label = pickString(typeItem.postType || typeItem.postTypeName, `类型${index + 1}`)
       const value = `type-${typeItem.postTypeId ?? index + 1}`
       typeItem._postTypeValue = value
-      
+
       parsedTabs.push({ label, value })
-      
+
       const posts = Array.isArray(typeItem.postList) ? typeItem.postList : []
-      console.log(`🔍 [Careers] 类型 "${label}" 下有 ${posts.length} 个职位`)
-      
       posts.forEach((post) => {
         rows.push({ ...post, _postTypeLabel: label, _postTypeValue: value })
       })
     })
     
-    // 兜底：如果没有数据，尝试其他解析方式
-    if (rows.length === 0 && Array.isArray(response)) {
-      console.log('🔍 [Careers] 使用兜底解析')
-      rows.push(...(response as JobRaw[]))
-    }
-    
-    console.log('🔍 [Careers] 最终 rows 数量:', rows.length)
-    
     allJobs.value = normalizeJobs(rows)
     tabs.value = parsedTabs
-    
   } catch (error) {
-    console.error('❌ [Careers] API 请求失败:', error)
+    
     allJobs.value = []
     tabs.value = [{ label: '全部', value: 'all' }]
   } finally {
@@ -610,7 +591,6 @@ const fetchJobs = async () => {
 
 // 页面加载时获取数据
 onMounted(() => {
-  console.log('🔍 [Careers] 组件挂载，开始获取职位数据')
   fetchJobs()
 })
 
@@ -618,7 +598,6 @@ const filteredJobs = computed(() => {
   if (loading.value || !allJobs.value) return []
   
   let jobs = activeTab.value === 'all' ? allJobs.value : allJobs.value.filter((j) => j && j.category === activeTab.value)
-  console.log(`🔍 [Careers] filteredJobs - activeTab: ${activeTab.value}, 过滤后: ${jobs.length} 个`)
   
   if (searchQuery.value) {
     jobs = jobs.filter(
@@ -629,7 +608,6 @@ const filteredJobs = computed(() => {
           (j.dept && j.dept.includes(searchQuery.value))
         )
     )
-    console.log(`🔍 [Careers] filteredJobs - 搜索"${searchQuery.value}"后: ${jobs.length} 个`)
   }
   
   return jobs.filter(j => j !== null && j !== undefined)
@@ -711,7 +689,7 @@ const getJobSchema = (job: Job) => {
       name: 'CheTuoChe',
       value: job.id || 'unknown',
     },
-    hiringOrganization: { '@id': 'https://www.chetuoche.com/#organization' },
+    hiringOrganization: { '@id': 'https://newweb.chetuoche.net/#organization' },
     employmentType: 'FULL_TIME',
     jobLocation: {
       '@type': 'Place',
@@ -742,7 +720,8 @@ const openJobDetail = (job: JobDetail) => {
   isJobDialogOpen.value = true
 }
 
-// 只在有 schema 数据时才添加到 head
+useFAQPageSchema(faqs.map(f => ({ question: f.question, answer: f.answer })))
+
 useHead(() => ({
   script: allJobSchemas.value.length > 0 ? [
     {
